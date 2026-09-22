@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Gob laid - Club de Jeux</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            /* Lora is great for reading medieval/fantasy text */
+            font-family: 'Lora', serif;
+            /* Couleur parchemin clair */
+            background-color: #fbf7f0; 
+            background-image: radial-gradient(#e5d9c5 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #3e2723; /* Marron très foncé presque noir */
+        }
+        h1, h2, h3, h4, .brand-font {
+            /* Cinzel for that epic fantasy feel */
+            font-family: 'Cinzel', serif;
+        }
+        .parchment-card {
+            background-color: #ffffff;
+            border: 1px solid #e2d5c3;
+            box-shadow: 0 4px 6px -1px rgba(139, 115, 85, 0.1), 0 2px 4px -1px rgba(139, 115, 85, 0.06);
+        }
+        .header-bg {
+            background-color: #fdfaf5;
+            border-bottom: 2px solid #d4c5b0;
+        }
+        .text-goblin {
+            color: #2f855a; /* Green 700 */
+        }
+        .bg-goblin {
+            background-color: #38a169; /* Green 600 */
+        }
+        .bg-goblin:hover {
+            background-color: #2f855a; /* Green 700 */
+        }
+        
+        /* Custom scrollbar for light theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fbf7f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a3b18a; /* Vert très doux */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #588157;
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <header class="header-bg shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-24">
+                
+                <!-- Logo et Titre -->
+                <div class="flex items-center space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('club')">
+                    <!-- EXACT LOGO TAG AS REQUESTED -->
+                    <img src="Gemini_Generated_Image_161qbl161qbl161q.png" class="h-20 w-auto object-contain" alt="Logo Le Gob laid" />
+                    <span class="brand-font font-bold text-2xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm">Le Gob' laid</span>
+                </div>
+                
+                <!-- Navigation Desktop -->
+                <nav class="hidden md:flex space-x-8">
+                    <button onclick="switchTab('club')" class="nav-btn text-[#5d4037] hover:text-green-700 font-semibold transition-colors duration-200 text-lg" data-target="club">Le Club</button>
+                    <button onclick="switchTab('news')" class="nav-btn text-[#5d4037] hover:text-green-700 font-semibold transition-colors duration-200 text-lg" data-target="news">Actualités</button>
+                    <button onclick="switchTab('events')" class="nav-btn text-[#5d4037] hover:text-green-700 font-semibold transition-colors duration-200 text-lg" data-target="events">Gestion des Soirées</button>
+                </nav>
+                
+                <!-- Bouton Mobile -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-[#5d4037] hover:text-green-700 focus:outline-none">
+                        <i class="fa-solid fa-bars text-3xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#fdfaf5] border-t border-[#d4c5b0] shadow-inner absolute w-full left-0">
+            <div class="px-4 py-3 space-y-2">
+                <button onclick="switchTab('club'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-[#5d4037] hover:bg-[#f0e6d2] hover:text-green-700">Le Club</button>
+                <button onclick="switchTab('news'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-[#5d4037] hover:bg-[#f0e6d2] hover:text-green-700">Actualités</button>
+                <button onclick="switchTab('events'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-[#5d4037] hover:bg-[#f0e6d2] hover:text-green-700">Gestion des Soirées</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-white text-[#3e2723] px-6 py-4 rounded-lg shadow-xl border-l-4 border-green-600 flex items-center space-x-3 pointer-events-none">
+        <i class="fa-solid fa-bell text-green-600 text-xl"></i>
+        <span id="toast-message" class="font-medium">Notification</span>
+    </div>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
+        
+        <!-- SECTION: Le Club -->
+        <section id="club" class="tab-content active">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-goblin mb-4 drop-shadow-sm">Bienvenue dans l'Antre !</h1>
+                <p class="text-lg sm:text-xl max-w-3xl mx-auto text-[#5d4037] leading-relaxed">Le Gob' laid est l'association de référence pour tous les passionnés de jeux de société, jeux de rôles et wargames de la région.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-10 items-center">
+                <div class="space-y-6">
+                    <div class="parchment-card p-8 rounded-xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-green-600"></div>
+                        <h2 class="text-2xl font-bold text-[#3e2723] mb-4 flex items-center brand-font">
+                            <i class="fa-solid fa-dice-d20 text-green-600 mr-3 text-xl"></i> Qui sommes-nous ?
+                        </h2>
+                        <p class="text-[#5d4037] leading-relaxed text-lg">
+                            Fondé par des passionnés, "Le Gob' laid" est un refuge pour les stratèges, les rôlistes et les lanceurs de dés du dimanche. Que vous cherchiez à conquérir des galaxies, explorer des donjons obscurs ou simplement partager un moment convivial autour d'un jeu d'ambiance, notre taverne vous est grande ouverte !
+                        </p>
+                    </div>
+                    
+                    <div class="parchment-card p-8 rounded-xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-2 h-full bg-amber-600"></div>
+                        <h2 class="text-2xl font-bold text-[#3e2723] mb-4 flex items-center brand-font">
+                            <i class="fa-solid fa-map-location-dot text-amber-600 mr-3 text-xl"></i> Notre Repaire
+                        </h2>
+                        <p class="text-[#5d4037] leading-relaxed text-lg">
+                            Nous nous réunissons tous les vendredis et samedis soirs à la salle polyvalente de Bourg-la-Cave. L'entrée se fait par la porte dérobée (celle avec l'écriteau "Attention au Gobelin").
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative group">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-green-200 to-amber-200 rounded-2xl blur opacity-40 group-hover:opacity-60 transition duration-500"></div>
+                    <img src="https://placehold.co/600x450/e2d5c3/3e2723?text=Illustration+Taverne+du+Gobelin" alt="La Taverne" class="relative rounded-2xl shadow-xl border-4 border-white w-full object-cover">
+                </div>
+            </div>
+
+            <div class="mt-20 text-center">
+                <h2 class="text-3xl font-bold text-goblin mb-10 brand-font flex items-center justify-center">
+                    <i class="fa-solid fa-leaf text-green-500 mr-3 text-xl"></i> Nos Valeurs <i class="fa-solid fa-leaf text-green-500 ml-3 text-xl"></i>
+                </h2>
+                <div class="grid sm:grid-cols-3 gap-8">
+                    <div class="parchment-card p-8 rounded-xl text-center hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-200">
+                            <i class="fa-solid fa-hand-holding-heart text-3xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#3e2723] mb-3 brand-font">Partage</h3>
+                        <p class="text-[#5d4037]">On explique les règles avec patience (même quand le livret fait 40 pages).</p>
+                    </div>
+                    <div class="parchment-card p-8 rounded-xl text-center hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-amber-200">
+                            <i class="fa-regular fa-face-grin-squint-tears text-3xl text-amber-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#3e2723] mb-3 brand-font">Bonne Humeur</h3>
+                        <p class="text-[#5d4037]">Le fair-play et les rires sont obligatoires. La mauvaise foi est tolérée, avec humour.</p>
+                    </div>
+                    <div class="parchment-card p-8 rounded-xl text-center hover:-translate-y-2 transition-transform duration-300">
+                        <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-purple-200">
+                            <i class="fa-solid fa-dragon text-3xl text-purple-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-[#3e2723] mb-3 brand-font">Épique</h3>
+                        <p class="text-[#5d4037]">Chaque partie est une nouvelle aventure dont nous sommes les véritables héros.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="news" class="tab-content">
+            <h1 class="text-4xl font-bold text-goblin mb-10 text-center brand-font">Dernières Missives</h1>
+            
+            <div class="grid gap-8 max-w-4xl mx-auto">
+                <!-- News Item 1 -->
+                <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
+                    <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#e8f5e9] flex items-center justify-center border-r border-[#e2d5c3]">
+                        <i class="fa-solid fa-chess-rook text-7xl text-green-700 opacity-80"></i>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="text-sm text-green-700 mb-2 font-bold uppercase tracking-wider">Le 25 Septembre 2026</div>
+                        <h2 class="text-2xl font-bold text-[#3e2723] mb-3 brand-font">Tournoi de Warhammer 40k</h2>
+                        <p class="text-[#5d4037] mb-5 text-lg">Préparez vos armées ! Le club organise un tournoi amical en 1000 points. Peinture non obligatoire mais fortement encouragée (les dés sont plus cléments avec de belles figurines).</p>
+                        <button class="text-green-700 hover:text-green-900 font-bold text-sm transition-colors border-b-2 border-green-700 pb-1">Lire la suite <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+                </article>
+
+                <!-- News Item 2 -->
+                <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
+                    <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#f3e5f5] flex items-center justify-center border-r border-[#e2d5c3]">
+                        <i class="fa-solid fa-ghost text-7xl text-purple-700 opacity-80"></i>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="text-sm text-purple-700 mb-2 font-bold uppercase tracking-wider">Le 18 Septembre 2026</div>
+                        <h2 class="text-2xl font-bold text-[#3e2723] mb-3 brand-font">Soirée Spéciale : Horreur à Arkham</h2>
+                        <p class="text-[#5d4037] mb-5 text-lg">À l'approche de la fin de l'année, les investigateurs sont convoqués pour repousser les Grands Anciens. Ambiance tamisée et frissons garantis au programme.</p>
+                        <button class="text-purple-700 hover:text-purple-900 font-bold text-sm transition-colors border-b-2 border-purple-700 pb-1">Lire la suite <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+                </article>
+
+                 <!-- News Item 3 -->
+                 <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
+                    <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#fff8e1] flex items-center justify-center border-r border-[#e2d5c3]">
+                        <i class="fa-solid fa-box-open text-7xl text-amber-600 opacity-80"></i>
+                    </div>
+                    <div class="p-8 md:w-2/3">
+                        <div class="text-sm text-amber-700 mb-2 font-bold uppercase tracking-wider">Le 10 Septembre 2026</div>
+                        <h2 class="text-2xl font-bold text-[#3e2723] mb-3 brand-font">Nouvel arrivage ludique !</h2>
+                        <p class="text-[#5d4037] mb-5 text-lg">Grâce à vos cotisations, le comité a fait des emplettes. Découvrez 'Dune: Imperium', 'Ark Nova' et la nouvelle extension de 'Root' dès ce vendredi.</p>
+                        <button class="text-amber-700 hover:text-amber-900 font-bold text-sm transition-colors border-b-2 border-amber-700 pb-1">Voir la liste complète <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="events" class="tab-content">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-bold text-goblin mb-4 brand-font">L'Agenda de la Taverne</h1>
+                <p class="text-lg text-[#5d4037] max-w-2xl mx-auto">Consultez les tables prévues ou proposez la vôtre pour recruter des joueurs vaillants.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                
+                <!-- Formulaire de proposition -->
+                <div class="lg:col-span-1">
+                    <div class="parchment-card rounded-xl p-6 sticky top-28">
+                        <h2 class="text-2xl font-bold text-[#3e2723] mb-6 border-b-2 border-[#e2d5c3] pb-3 brand-font flex items-center">
+                            <i class="fa-solid fa-feather-pointed text-green-600 mr-2"></i> Proposer une Table
+                        </h2>
+                        
+                        <form id="propose-table-form" class="space-y-5">
+                            <div>
+                                <label for="gameName" class="block text-sm font-bold text-[#5d4037] mb-1">Nom du Jeu *</label>
+                                <input type="text" id="gameName" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm" placeholder="Ex: Zombicide, D&D...">
+                            </div>
+                            
+                            <div>
+                                <label for="hostName" class="block text-sm font-bold text-[#5d4037] mb-1">Votre Nom / Pseudo *</label>
+                                <input type="text" id="hostName" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm" placeholder="Maître Gobelin">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="tableDate" class="block text-sm font-bold text-[#5d4037] mb-1">Date *</label>
+                                    <input type="date" id="tableDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm">
+                                </div>
+                                <div>
+                                    <label for="tableTime" class="block text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
+                                    <input type="time" id="tableTime" required value="20:00" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="maxPlayers" class="block text-sm font-bold text-[#5d4037] mb-1">Nombre de joueurs (vous inclus) *</label>
+                                <input type="number" id="maxPlayers" min="2" max="20" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm" placeholder="Ex: 5">
+                            </div>
+                            
+                            <div>
+                                <label for="description" class="block text-sm font-bold text-[#5d4037] mb-1">Description (Optionnel)</label>
+                                <textarea id="description" rows="3" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm" placeholder="Campagne niv 1, ou extension incluse..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-goblin text-white font-bold py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-lg mt-4">
+                                <i class="fa-solid fa-scroll mr-2"></i> Placarder l'annonce
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Liste des soirées -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white/50 rounded-xl p-2 sm:p-6 min-h-[500px]">
+                        <div class="flex justify-between items-end mb-6 border-b-2 border-[#d4c5b0] pb-3 px-2 sm:px-0">
+                            <h2 class="text-2xl font-bold text-[#3e2723] brand-font"><i class="fa-regular fa-calendar-days text-green-600 mr-2"></i> Tables Prévues</h2>
+                            <div class="text-sm font-medium text-amber-700" id="loading-indicator">
+                                <i class="fa-solid fa-compass fa-spin mr-1"></i> Lecture du registre...
+                            </div>
+                        </div>
+
+                        <div id="tables-container" class="space-y-5">
+                            <!-- Les tables seront injectées ici par JS -->
+                        </div>
+                        
+                        <div id="empty-state" class="hidden flex-col items-center justify-center py-16 text-amber-800/60">
+                            <i class="fa-solid fa-spider text-7xl mb-4 opacity-30"></i>
+                            <p class="text-xl font-bold brand-font text-amber-900/50">Le tableau des quêtes est vide.</p>
+                            <p class="text-md mt-2">Soyez le premier à proposer une table !</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="header-bg border-t-2 border-[#d4c5b0] mt-auto py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0 flex items-center space-x-3">
+                <!-- EXACT LOGO TAG AS REQUESTED -->
+                <img src="Gemini_Generated_Image_161qbl161qbl161q.png" class="h-20 w-auto object-contain" alt="Logo Le Gob laid" />
+                <span class="brand-font font-bold text-xl text-[#5d4037]">Le Gob' laid © 2026</span>
+            </div>
+            <div class="flex space-x-6 text-[#8d6e63]">
+                <a href="#" class="hover:text-green-700 transition-colors"><i class="fa-brands fa-discord text-2xl"></i></a>
+                <a href="#" class="hover:text-green-700 transition-colors"><i class="fa-brands fa-facebook text-2xl"></i></a>
+                <a href="#" class="hover:text-green-700 transition-colors"><i class="fa-brands fa-instagram text-2xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Variables d'environnement
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
+        let firebaseConfig = null;
+        
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                firebaseConfig = JSON.parse(__firebase_config);
+            } else {
+                firebaseConfig = { apiKey: "mock", authDomain: "mock", projectId: "mock" };
+            }
+        } catch (e) { console.error(e); }
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentUser = null;
+
+        // Fonction Toast
+        window.showToast = function(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = message;
+            
+            if (isError) {
+                toast.classList.replace('border-green-600', 'border-red-600');
+                toast.querySelector('i').classList.replace('fa-bell', 'fa-circle-exclamation');
+                toast.querySelector('i').classList.replace('text-green-600', 'text-red-600');
+            } else {
+                toast.classList.replace('border-red-600', 'border-green-600');
+                toast.querySelector('i').classList.replace('fa-circle-exclamation', 'fa-bell');
+                toast.querySelector('i').classList.replace('text-red-600', 'text-green-600');
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+        };
+
+        // Authentification
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                currentUser = auth.currentUser;
+                initFirestoreListeners();
+            } catch (error) {
+                console.error("Auth error:", error);
+                document.getElementById('loading-indicator').innerHTML = "<span class='text-red-600'>Erreur de connexion</span>";
+            }
+        }
+
+        const tablesCollection = collection(db, 'artifacts', appId, 'public', 'data', 'tables');
+        let currentTables = [];
+
+        function initFirestoreListeners() {
+            if (!currentUser) return;
+            onSnapshot(tablesCollection, (snapshot) => {
+                currentTables = [];
+                snapshot.forEach((doc) => { currentTables.push({ id: doc.id, ...doc.data() }); });
+                
+                currentTables.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+                renderTables();
+                
+                const loader = document.getElementById('loading-indicator');
+                if(loader) loader.style.display = 'none';
+            }, (error) => {
+                console.error("Firestore error:", error);
+                showToast("Erreur de lecture du registre.", true);
+            });
+        }
+
+        // Ajout de table
+        document.getElementById('propose-table-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentUser) return showToast("Connexion requise.", true);
+
+            const gameName = document.getElementById('gameName').value.trim();
+            const hostName = document.getElementById('hostName').value.trim();
+            const date = document.getElementById('tableDate').value;
+            const time = document.getElementById('tableTime').value;
+            const maxPlayers = parseInt(document.getElementById('maxPlayers').value, 10);
+            const description = document.getElementById('description').value.trim();
+
+            if (new Date(date + 'T' + time) < new Date()) {
+                return showToast("La date doit être dans le futur !", true);
+            }
+
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Écriture...';
+            btn.disabled = true;
+
+            try {
+                await addDoc(tablesCollection, {
+                    gameName, hostName, date, time, maxPlayers,
+                    currentPlayers: 1, description, creatorId: currentUser.uid,
+                    createdAt: new Date().toISOString()
+                });
+                showToast("Annonce placardée avec succès !");
+                e.target.reset();
+                document.getElementById('tableTime').value = "20:00";
+            } catch (error) {
+                console.error(error);
+                showToast("Erreur lors de l'ajout.", true);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
+        });
+
+        // Actions sur les tables
+        window.joinTable = async function(tableId, currentPlayers, maxPlayers) {
+            if (!currentUser || currentPlayers >= maxPlayers) return;
+            try {
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', tableId), { currentPlayers: currentPlayers + 1 });
+                showToast("Vous avez rejoint la table !");
+            } catch(e) { showToast("Erreur d'inscription.", true); }
+        };
+
+        window.deleteTable = async function(tableId) {
+            if (!currentUser) return;
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', tableId));
+                showToast("Annonce retirée.");
+            } catch(e) { showToast("Erreur de suppression.", true); }
+        };
+
+        function renderTables() {
+            const container = document.getElementById('tables-container');
+            const emptyState = document.getElementById('empty-state');
+            container.innerHTML = '';
+            
+            const today = new Date(new Date().setHours(0,0,0,0));
+            const upcomingTables = currentTables.filter(t => new Date(t.date) >= today);
+
+            if (upcomingTables.length === 0) {
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+
+                upcomingTables.forEach(table => {
+                    const dateObj = new Date(table.date);
+                    const formattedDate = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                    const isFull = table.currentPlayers >= table.maxPlayers;
+                    const isCreator = currentUser && table.creatorId === currentUser.uid;
+
+                    const card = document.createElement('div');
+                    card.className = `parchment-card p-5 sm:p-6 rounded-xl border-l-4 ${isFull ? 'border-l-red-500' : 'border-l-green-600'} shadow hover:shadow-md transition-shadow relative overflow-hidden`;
+                    
+                    card.innerHTML = `
+                        <div class="flex flex-col md:flex-row justify-between md:items-start gap-5">
+                            <div class="flex-grow z-10">
+                                <div class="flex flex-wrap justify-between items-start gap-2 mb-2">
+                                    <h3 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font">${table.gameName}</h3>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${isFull ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}">
+                                        <i class="fa-solid fa-users mr-1.5"></i> ${table.currentPlayers} / ${table.maxPlayers}
+                                    </span>
+                                </div>
+                                <div class="text-[#5d4037] font-medium mt-3 flex flex-wrap items-center gap-x-6 gap-y-2">
+                                    <span class="flex items-center"><i class="fa-regular fa-calendar text-amber-600 mr-2"></i> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</span>
+                                    <span class="flex items-center"><i class="fa-regular fa-clock text-amber-600 mr-2"></i> ${table.time}</span>
+                                </div>
+                                <div class="text-[#5d4037] mt-2">
+                                    <span class="flex items-center"><i class="fa-solid fa-chess-knight text-amber-600 mr-2"></i> Maître de jeu : <strong class="ml-1">${table.hostName}</strong></span>
+                                </div>
+                                ${table.description ? `<p class="text-[#5d4037] mt-4 bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] italic text-sm"><i class="fa-solid fa-quote-left text-gray-300 mr-2"></i>${table.description}</p>` : ''}
+                            </div>
+                            <div class="flex flex-col space-y-3 min-w-[140px] z-10 mt-4 md:mt-0">
+                                ${!isCreator && !isFull ? 
+                                    `<button onclick="joinTable('${table.id}', ${table.currentPlayers}, ${table.maxPlayers})" class="bg-white hover:bg-green-50 text-green-700 border-2 border-green-600 font-bold text-sm py-2.5 px-4 rounded-lg transition-colors w-full shadow-sm flex justify-center items-center">
+                                        <i class="fa-solid fa-right-to-bracket mr-2"></i> Rejoindre
+                                    </button>` : ''}
+                                ${isFull && !isCreator ? 
+                                    `<button disabled class="bg-gray-100 text-gray-500 font-bold text-sm py-2.5 px-4 rounded-lg cursor-not-allowed w-full border border-gray-200 flex justify-center items-center">
+                                        <i class="fa-solid fa-ban mr-2"></i> Complet
+                                    </button>` : ''}
+                                ${isCreator ? 
+                                    `<button onclick="deleteTable('${table.id}')" class="bg-white hover:bg-red-50 text-red-600 border-2 border-red-200 hover:border-red-600 font-bold text-sm py-2.5 px-4 rounded-lg transition-colors w-full shadow-sm flex justify-center items-center">
+                                        <i class="fa-solid fa-trash-can mr-2"></i> Annuler
+                                    </button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        // Navigation
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.target === tabId) {
+                    btn.classList.add('text-green-700');
+                    btn.classList.remove('text-[#5d4037]');
+                } else {
+                    btn.classList.remove('text-green-700');
+                    btn.classList.add('text-[#5d4037]');
+                }
+            });
+        };
+
+        window.toggleMobileMenu = function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        };
+
+        // Lancement
+        window.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('tableDate').setAttribute('min', today);
+            document.getElementById('tableDate').value = today;
+        });
+    </script>
+</body>
+</html>
