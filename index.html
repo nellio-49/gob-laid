@@ -334,18 +334,19 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
         let firebaseConfig = null;
         
-        try {
+       try {
             if (typeof __firebase_config !== 'undefined') {
                 firebaseConfig = JSON.parse(__firebase_config);
             } else {
-                firebaseConfig ={
-  apiKey: "AIzaSyBIoi9ziM-v5eQ54LgRoCBLQ22m5QHBLAQ",
-  authDomain: "site-gob-laid.firebaseapp.com",
-  projectId: "site-gob-laid",
-  storageBucket: "site-gob-laid.firebasestorage.app",
-  messagingSenderId: "57060942174",
-  appId: "1:57060942174:web:30d9f8cda4ffb5300f6fcf"
-};
+                firebaseConfig = {
+                    apiKey: "AIzaSyBIoi9ziM-v5eQ54LgRoCBLQ22m5QHBLAQ",
+                    authDomain: "site-gob-laid.firebaseapp.com",
+                    projectId: "site-gob-laid",
+                    storageBucket: "site-gob-laid.firebasestorage.app",
+                    messagingSenderId: "57060942174",
+                    appId: "1:57060942174:web:30d9f8cda4ffb5300f6fcf"
+                };
+            } // <-- C'est cette accolade qui manquait !
         } catch (e) { console.error(e); }
 
         const app = initializeApp(firebaseConfig);
