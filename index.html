@@ -13,16 +13,13 @@
     
     <style>
         body {
-            /* Lora is great for reading medieval/fantasy text */
             font-family: 'Lora', serif;
-            /* Couleur parchemin clair */
             background-color: #fbf7f0; 
             background-image: radial-gradient(#e5d9c5 1px, transparent 1px);
             background-size: 20px 20px;
-            color: #3e2723; /* Marron très foncé presque noir */
+            color: #3e2723;
         }
         h1, h2, h3, h4, .brand-font {
-            /* Cinzel for that epic fantasy feel */
             font-family: 'Cinzel', serif;
         }
         .parchment-card {
@@ -35,16 +32,15 @@
             border-bottom: 2px solid #d4c5b0;
         }
         .text-goblin {
-            color: #2f855a; /* Green 700 */
+            color: #2f855a;
         }
         .bg-goblin {
-            background-color: #38a169; /* Green 600 */
+            background-color: #38a169;
         }
         .bg-goblin:hover {
-            background-color: #2f855a; /* Green 700 */
+            background-color: #2f855a;
         }
         
-        /* Custom scrollbar for light theme */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -52,7 +48,7 @@
             background: #fbf7f0;
         }
         ::-webkit-scrollbar-thumb {
-            background: #a3b18a; /* Vert très doux */
+            background: #a3b18a;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
@@ -78,21 +74,17 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-24">
                 
-                <!-- Logo et Titre -->
                 <div class="flex items-center space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('club')">
-                    <!-- EXACT LOGO TAG AS REQUESTED -->
                     <img src="Gemini_Generated_Image_161qbl161qbl161q.png" class="h-20 w-auto object-contain" alt="Logo Le Gob laid" />
                     <span class="brand-font font-bold text-2xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm">Le Gob' laid</span>
                 </div>
                 
-                <!-- Navigation Desktop -->
                 <nav class="hidden md:flex space-x-8">
                     <button onclick="switchTab('club')" class="nav-btn text-[#5d4037] hover:text-green-700 font-semibold transition-colors duration-200 text-lg" data-target="club">Le Club</button>
                     <button onclick="switchTab('news')" class="nav-btn text-[#5d4037] hover:text-green-700 font-semibold transition-colors duration-200 text-lg" data-target="news">Actualités</button>
                     <button onclick="switchTab('events')" class="nav-btn text-[#5d4037] hover:text-green-700 font-semibold transition-colors duration-200 text-lg" data-target="events">Gestion des Soirées</button>
                 </nav>
                 
-                <!-- Bouton Mobile -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-[#5d4037] hover:text-green-700 focus:outline-none">
                         <i class="fa-solid fa-bars text-3xl"></i>
@@ -101,7 +93,6 @@
             </div>
         </div>
         
-        <!-- Menu Mobile -->
         <div id="mobile-menu" class="hidden md:hidden bg-[#fdfaf5] border-t border-[#d4c5b0] shadow-inner absolute w-full left-0">
             <div class="px-4 py-3 space-y-2">
                 <button onclick="switchTab('club'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-[#5d4037] hover:bg-[#f0e6d2] hover:text-green-700">Le Club</button>
@@ -111,7 +102,6 @@
         </div>
     </header>
 
-    <!-- Notification Toast -->
     <div id="toast" class="fixed bottom-5 right-5 transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-white text-[#3e2723] px-6 py-4 rounded-lg shadow-xl border-l-4 border-green-600 flex items-center space-x-3 pointer-events-none">
         <i class="fa-solid fa-bell text-green-600 text-xl"></i>
         <span id="toast-message" class="font-medium">Notification</span>
@@ -119,7 +109,6 @@
 
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
         
-        <!-- SECTION: Le Club -->
         <section id="club" class="tab-content active">
             <div class="text-center mb-12">
                 <h1 class="text-4xl md:text-5xl font-bold text-goblin mb-4 drop-shadow-sm">Bienvenue dans l'Antre !</h1>
@@ -189,7 +178,6 @@
             <h1 class="text-4xl font-bold text-goblin mb-10 text-center brand-font">Dernières Missives</h1>
             
             <div class="grid gap-8 max-w-4xl mx-auto">
-                <!-- News Item 1 -->
                 <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
                     <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#e8f5e9] flex items-center justify-center border-r border-[#e2d5c3]">
                         <i class="fa-solid fa-chess-rook text-7xl text-green-700 opacity-80"></i>
@@ -202,7 +190,6 @@
                     </div>
                 </article>
 
-                <!-- News Item 2 -->
                 <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
                     <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#f3e5f5] flex items-center justify-center border-r border-[#e2d5c3]">
                         <i class="fa-solid fa-ghost text-7xl text-purple-700 opacity-80"></i>
@@ -211,11 +198,11 @@
                         <div class="text-sm text-purple-700 mb-2 font-bold uppercase tracking-wider">Début d'année 2027</div>
                         <h2 class="text-2xl font-bold text-[#3e2723] mb-3 brand-font">Campagne Malhya - Lands of Legends</h2>
                         <p class="text-[#5d4037] mb-5 text-lg">Une grande aventure Malhya débute au club début 2027. Incarnez votre héros et rejoignez la campagne !
-                            Parcourez le monde fantastique de Malhya et vivez de nombreuses aventures avec votre équipe de héros. Grâce à une astucieuse mécanique de «livre dont vous êtes le héros», alternez entre des phases d’exploration du monde, des phases d’infiltration, de combat, des énigmes, ou de découverte de donjons... Et tentez de rétablir l’équilibre de Malhya !.</p>
-                         </div>
+                            Parcourez le monde fantastique de Malhya et vivez de nombreuses aventures avec votre équipe de héros. Grâce à une astucieuse mécanique de « livre dont vous êtes le héros », alternez entre des phases d’exploration du monde, d’infiltration, de combat, d'énigmes ou de découverte de donjons...</p>
+                        <button class="text-purple-700 hover:text-purple-900 font-bold text-sm transition-colors border-b-2 border-purple-700 pb-1">En savoir plus <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    </div>
                 </article>
 
-                 <!-- News Item 3 -->
                  <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
                     <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#fff8e1] flex items-center justify-center border-r border-[#e2d5c3]">
                         <i class="fa-solid fa-box-open text-7xl text-amber-600 opacity-80"></i>
@@ -238,7 +225,6 @@
 
             <div class="grid lg:grid-cols-3 gap-8">
                 
-                <!-- Formulaire de proposition -->
                 <div class="lg:col-span-1">
                     <div class="parchment-card rounded-xl p-6 sticky top-28">
                         <h2 class="text-2xl font-bold text-[#3e2723] mb-6 border-b-2 border-[#e2d5c3] pb-3 brand-font flex items-center">
@@ -252,7 +238,7 @@
                             </div>
                             
                             <div>
-                                <label for="hostName" class="block text-sm font-bold text-[#5d4037] mb-1">Votre Nom / Pseudo *</label>
+                                <label for="hostName" class="block text-sm font-bold text-[#5d4037] mb-1">Votre Nom / Pseudo (Meneur) *</label>
                                 <input type="text" id="hostName" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm" placeholder="Maître Gobelin">
                             </div>
 
@@ -268,7 +254,7 @@
                             </div>
 
                             <div>
-                                <label for="maxPlayers" class="block text-sm font-bold text-[#5d4037] mb-1">Nombre de joueurs (vous inclus) *</label>
+                                <label for="maxPlayers" class="block text-sm font-bold text-[#5d4037] mb-1">Nombre de joueurs max (meneur inclus) *</label>
                                 <input type="number" id="maxPlayers" min="2" max="20" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2.5 px-3 text-[#3e2723] focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-colors shadow-sm" placeholder="Ex: 5">
                             </div>
                             
@@ -284,7 +270,6 @@
                     </div>
                 </div>
 
-                <!-- Liste des soirées -->
                 <div class="lg:col-span-2">
                     <div class="bg-white/50 rounded-xl p-2 sm:p-6 min-h-[500px]">
                         <div class="flex justify-between items-end mb-6 border-b-2 border-[#d4c5b0] pb-3 px-2 sm:px-0">
@@ -313,7 +298,6 @@
     <footer class="header-bg border-t-2 border-[#d4c5b0] mt-auto py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
             <div class="mb-4 md:mb-0 flex items-center space-x-3">
-                <!-- EXACT LOGO TAG AS REQUESTED -->
                 <img src="Gemini_Generated_Image_161qbl161qbl161q.png" class="h-20 w-auto object-contain" alt="Logo Le Gob laid" />
                 <span class="brand-font font-bold text-xl text-[#5d4037]">Le Gob' laid © 2026</span>
             </div>
@@ -327,14 +311,13 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-        // Variables d'environnement
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
         let firebaseConfig = null;
         
-       try {
+        try {
             if (typeof __firebase_config !== 'undefined') {
                 firebaseConfig = JSON.parse(__firebase_config);
             } else {
@@ -346,7 +329,7 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
                     messagingSenderId: "57060942174",
                     appId: "1:57060942174:web:30d9f8cda4ffb5300f6fcf"
                 };
-            } // <-- C'est cette accolade qui manquait !
+            }
         } catch (e) { console.error(e); }
 
         const app = initializeApp(firebaseConfig);
@@ -354,7 +337,6 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
         const db = getFirestore(app);
         let currentUser = null;
 
-        // Fonction Toast
         window.showToast = function(message, isError = false) {
             const toast = document.getElementById('toast');
             const msgEl = document.getElementById('toast-message');
@@ -374,7 +356,6 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
             setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         };
 
-        // Authentification
         async function initAuth() {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -433,8 +414,14 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
 
             try {
                 await addDoc(tablesCollection, {
-                    gameName, hostName, date, time, maxPlayers,
-                    currentPlayers: 1, description, creatorId: currentUser.uid,
+                    gameName, 
+                    hostName, 
+                    date, 
+                    time, 
+                    maxPlayers,
+                    playersList: [hostName], // Le meneur est le 1er joueur inscrit
+                    description, 
+                    creatorId: currentUser.uid,
                     createdAt: new Date().toISOString()
                 });
                 showToast("Annonce placardée avec succès !");
@@ -449,15 +436,53 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
             }
         });
 
-        // Actions sur les tables
-        window.joinTable = async function(tableId, currentPlayers, maxPlayers) {
-            if (!currentUser || currentPlayers >= maxPlayers) return;
+        // Ajouter un joueur à la table
+        window.joinTable = async function(tableId, inputId, maxPlayers) {
+            if (!currentUser) return showToast("Connexion requise.", true);
+            const inputEl = document.getElementById(inputId);
+            const playerName = inputEl ? inputEl.value.trim() : '';
+
+            if (!playerName) return showToast("Saisissez votre nom/pseudo !", true);
+
+            const table = currentTables.find(t => t.id === tableId);
+            const playersList = table?.playersList || [];
+
+            if (playersList.length >= maxPlayers) {
+                return showToast("La table est déjà complète !", true);
+            }
+
+            if (playersList.includes(playerName)) {
+                return showToast("Ce nom est déjà inscrit à la table !", true);
+            }
+
             try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'tables', tableId), { currentPlayers: currentPlayers + 1 });
-                showToast("Vous avez rejoint la table !");
-            } catch(e) { showToast("Erreur d'inscription.", true); }
+                const tableRef = doc(db, 'artifacts', appId, 'public', 'data', 'tables', tableId);
+                await updateDoc(tableRef, {
+                    playersList: arrayUnion(playerName)
+                });
+                showToast(`${playerName} a rejoint la table !`);
+            } catch(e) { 
+                console.error(e);
+                showToast("Erreur d'inscription.", true); 
+            }
         };
 
+        // Désinscrire un joueur
+        window.leaveTable = async function(tableId, playerName) {
+            if (!currentUser) return;
+            try {
+                const tableRef = doc(db, 'artifacts', appId, 'public', 'data', 'tables', tableId);
+                await updateDoc(tableRef, {
+                    playersList: arrayRemove(playerName)
+                });
+                showToast(`${playerName} s'est désinscrit.`);
+            } catch(e) { 
+                console.error(e);
+                showToast("Erreur lors du retrait du joueur.", true); 
+            }
+        };
+
+        // Supprimer complètement la table
         window.deleteTable = async function(tableId) {
             if (!currentUser) return;
             try {
@@ -484,8 +509,19 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
                 upcomingTables.forEach(table => {
                     const dateObj = new Date(table.date);
                     const formattedDate = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-                    const isFull = table.currentPlayers >= table.maxPlayers;
+                    
+                    const playersList = table.playersList || [table.hostName];
+                    const currentPlayersCount = playersList.length;
+                    const isFull = currentPlayersCount >= table.maxPlayers;
                     const isCreator = currentUser && table.creatorId === currentUser.uid;
+
+                    // Liste HTML des joueurs inscrits
+                    const playersHtml = playersList.map((p, index) => `
+                        <li class="flex justify-between items-center py-1 border-b border-[#e2d5c3]/40 last:border-0 text-sm">
+                            <span><i class="fa-solid fa-user-tag text-xs text-amber-700 mr-2"></i><strong>${p}</strong> ${index === 0 ? '<span class="text-xs text-amber-600 italic">(Meneur)</span>' : ''}</span>
+                            ${isCreator && index !== 0 ? `<button onclick="leaveTable('${table.id}', '${p.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 text-xs px-2" title="Retirer ce joueur">&times;</button>` : ''}
+                        </li>
+                    `).join('');
 
                     const card = document.createElement('div');
                     card.className = `parchment-card p-5 sm:p-6 rounded-xl border-l-4 ${isFull ? 'border-l-red-500' : 'border-l-green-600'} shadow hover:shadow-md transition-shadow relative overflow-hidden`;
@@ -496,31 +532,44 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
                                 <div class="flex flex-wrap justify-between items-start gap-2 mb-2">
                                     <h3 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font">${table.gameName}</h3>
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${isFull ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}">
-                                        <i class="fa-solid fa-users mr-1.5"></i> ${table.currentPlayers} / ${table.maxPlayers}
+                                        <i class="fa-solid fa-users mr-1.5"></i> ${currentPlayersCount} / ${table.maxPlayers}
                                     </span>
                                 </div>
                                 <div class="text-[#5d4037] font-medium mt-3 flex flex-wrap items-center gap-x-6 gap-y-2">
                                     <span class="flex items-center"><i class="fa-regular fa-calendar text-amber-600 mr-2"></i> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</span>
                                     <span class="flex items-center"><i class="fa-regular fa-clock text-amber-600 mr-2"></i> ${table.time}</span>
                                 </div>
-                                <div class="text-[#5d4037] mt-2">
-                                    <span class="flex items-center"><i class="fa-solid fa-chess-knight text-amber-600 mr-2"></i> Maître de jeu : <strong class="ml-1">${table.hostName}</strong></span>
+                                
+                                ${table.description ? `<p class="text-[#5d4037] mt-3 bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] italic text-sm"><i class="fa-solid fa-quote-left text-gray-300 mr-2"></i>${table.description}</p>` : ''}
+
+                                <div class="mt-4 bg-[#fbf7f0] p-3 rounded-lg border border-[#e2d5c3]">
+                                    <span class="text-xs font-bold uppercase tracking-wider text-amber-800 block mb-2"><i class="fa-solid fa-list-check mr-1"></i> Joueurs inscrits :</span>
+                                    <ul class="space-y-1">${playersHtml}</ul>
                                 </div>
-                                ${table.description ? `<p class="text-[#5d4037] mt-4 bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] italic text-sm"><i class="fa-solid fa-quote-left text-gray-300 mr-2"></i>${table.description}</p>` : ''}
+
+                                ${!isFull ? `
+                                    <div class="mt-4 pt-3 border-t border-[#e2d5c3]">
+                                        <label for="join-input-${table.id}" class="block text-xs font-bold text-[#5d4037] mb-1">Rejoindre cette table :</label>
+                                        <div class="flex gap-2">
+                                            <input type="text" id="join-input-${table.id}" placeholder="Votre nom ou pseudo" class="flex-grow bg-white border border-[#d4c5b0] rounded-md py-1.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-500">
+                                            <button onclick="joinTable('${table.id}', 'join-input-${table.id}',${table.maxPlayers})" class="bg-goblin hover:bg-green-700 text-white font-bold text-xs px-3 py-1.5 rounded-md transition-colors shadow-sm flex items-center whitespace-nowrap">
+                                                <i class="fa-solid fa-user-plus mr-1"></i> S'inscrire
+                                            </button>
+                                        </div>
+                                    </div>
+                                ` : `
+                                    <div class="mt-4 pt-2 text-center bg-red-50 border border-red-200 text-red-700 text-xs font-bold py-2 rounded-md">
+                                        <i class="fa-solid fa-ban mr-1"></i> Table complète
+                                    </div>
+                                `}
                             </div>
-                            <div class="flex flex-col space-y-3 min-w-[140px] z-10 mt-4 md:mt-0">
-                                ${!isCreator && !isFull ? 
-                                    `<button onclick="joinTable('${table.id}', ${table.currentPlayers}, ${table.maxPlayers})" class="bg-white hover:bg-green-50 text-green-700 border-2 border-green-600 font-bold text-sm py-2.5 px-4 rounded-lg transition-colors w-full shadow-sm flex justify-center items-center">
-                                        <i class="fa-solid fa-right-to-bracket mr-2"></i> Rejoindre
-                                    </button>` : ''}
-                                ${isFull && !isCreator ? 
-                                    `<button disabled class="bg-gray-100 text-gray-500 font-bold text-sm py-2.5 px-4 rounded-lg cursor-not-allowed w-full border border-gray-200 flex justify-center items-center">
-                                        <i class="fa-solid fa-ban mr-2"></i> Complet
-                                    </button>` : ''}
-                                ${isCreator ? 
-                                    `<button onclick="deleteTable('${table.id}')" class="bg-white hover:bg-red-50 text-red-600 border-2 border-red-200 hover:border-red-600 font-bold text-sm py-2.5 px-4 rounded-lg transition-colors w-full shadow-sm flex justify-center items-center">
-                                        <i class="fa-solid fa-trash-can mr-2"></i> Annuler
-                                    </button>` : ''}
+
+                            <div class="flex flex-col space-y-3 min-w-[120px] z-10 mt-4 md:mt-0">
+                                ${isCreator ? `
+                                    <button onclick="deleteTable('${table.id}')" class="bg-white hover:bg-red-50 text-red-600 border-2 border-red-200 hover:border-red-600 font-bold text-xs py-2 px-3 rounded-lg transition-colors w-full shadow-sm flex justify-center items-center">
+                                        <i class="fa-solid fa-trash-can mr-2"></i> Annuler la table
+                                    </button>
+                                ` : ''}
                             </div>
                         </div>
                     `;
@@ -529,7 +578,6 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
             }
         }
 
-        // Navigation
         window.switchTab = function(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
@@ -549,7 +597,6 @@ import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc
             document.getElementById('mobile-menu').classList.toggle('hidden');
         };
 
-        // Lancement
         window.addEventListener('DOMContentLoaded', () => {
             initAuth();
             const today = new Date().toISOString().split('T')[0];
