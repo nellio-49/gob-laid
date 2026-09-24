@@ -140,7 +140,6 @@
 
                 <div class="relative group">
                     <div class="absolute -inset-2 bg-gradient-to-r from-green-200 to-amber-200 rounded-2xl blur opacity-40 group-hover:opacity-60 transition duration-500"></div>
-                    <!-- C'est ici que l'image taverne.jpg a été ajoutée -->
                     <img src="taverne.webp" alt="La Taverne du Gob'laid" class="relative rounded-2xl shadow-xl border-4 border-white w-full object-cover">
                 </div>
             </div>
@@ -178,7 +177,6 @@
         <section id="news" class="tab-content">
             <h1 class="text-4xl font-bold text-goblin mb-10 text-center brand-font">Dernières Missives</h1>
             
-            <!-- News Item 1 : dreadball -->
             <div class="grid gap-8 max-w-4xl mx-auto">
                 <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
                     <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#e8f5e9] flex items-center justify-center border-r border-[#e2d5c3] p-4">
@@ -189,12 +187,10 @@
                         <h2 class="text-2xl font-bold text-[#3e2723] mb-3 brand-font">League Dreadball</h2>
                         <p class="text-[#5d4037] mb-5 text-lg">Préparez vos équipes ! Le club organise une nouvelle league Dreadball, pour la remise en jeu du titre de champion 2025, remporté par l'équipe des Ratz coaché par Fred. Cette ligue se jouera avec les règles de la saison 2.</p>
                         
-                        <!-- Bouton transformé en lien -->
                         <a href="https://nellio-49.github.io/Drealball/" target="_blank" rel="noopener noreferrer" class="text-purple-700 hover:text-purple-900 font-bold text-sm transition-colors border-b-2 border-purple-700 pb-1 inline-block">Lire la suite <i class="fa-solid fa-arrow-right ml-1"></i></a>
                     </div>
                 </article>
 
-               <!-- News Item 2 : Malhya -->
                 <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
                     <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#f3e5f5] flex items-center justify-center border-r border-[#e2d5c3] p-4">
                         <img src="malhya.jpg" alt="Jeu Malhya - Lands of Legends" class="max-h-48 w-auto object-contain drop-shadow-md">
@@ -204,12 +200,10 @@
                         <h2 class="text-2xl font-bold text-[#3e2723] mb-3 brand-font">Campagne Malhya - Lands of Legends</h2>
                         <p class="text-[#5d4037] mb-5 text-lg">Une grande aventure Malhya débute au club début 2027. Incarnez votre héros et rejoignez la campagne !</p>
         
-                        <!-- Bouton transformé en lien -->
                         <a href="https://www.laboitedejeu.fr/malhya/" target="_blank" rel="noopener noreferrer" class="text-purple-700 hover:text-purple-900 font-bold text-sm transition-colors border-b-2 border-purple-700 pb-1 inline-block">En savoir plus <i class="fa-solid fa-arrow-right ml-1"></i></a>
                     </div>
                 </article>
 
-                 <!-- News Item 3 : Nouveaux jeux -->
                 <article class="parchment-card rounded-xl overflow-hidden flex flex-col md:flex-row hover:shadow-lg transition-shadow">
                     <div class="w-full md:w-1/3 h-48 md:h-auto bg-[#fff8e1] flex items-center justify-center border-r border-[#e2d5c3] p-4">
                         <img src="gobliste.webp" alt="Nouveaux jeux de société" class="max-h-48 w-auto object-contain drop-shadow-md">
@@ -219,9 +213,7 @@
                         <h2 class="text-2xl font-bold text-[#3e2723] mb-3 brand-font">Le Butin des Gobs !</h2>
                         <p class="text-[#5d4037] mb-5 text-lg">Nos membres ont mis la main à la pâte (et au portefeuille) : venez découvrir la liste des jeux disponibles !</p>
                         
-                        <!-- Voici le lien corrigé vers Gamefound -->
                         <a href="https://nellio-49.github.io/Listes-jeux/" target="_blank" rel="noopener noreferrer" class="text-amber-700 hover:text-amber-900 font-bold text-sm transition-colors border-b-2 border-amber-700 pb-1 inline-block">Voir la liste complète <i class="fa-solid fa-arrow-right ml-1"></i></a>
-                        
                     </div>
                 </article>
             </div>
@@ -526,11 +518,11 @@
                     const isFull = currentPlayersCount >= table.maxPlayers;
                     const isCreator = currentUser && table.creatorId === currentUser.uid;
 
-                    // Liste HTML des joueurs inscrits
+                    // Liste HTML des joueurs inscrits (désormais avec bouton de retrait pour tout le monde sauf le meneur)
                     const playersHtml = playersList.map((p, index) => `
                         <li class="flex justify-between items-center py-1 border-b border-[#e2d5c3]/40 last:border-0 text-sm">
                             <span><i class="fa-solid fa-user-tag text-xs text-amber-700 mr-2"></i><strong>${p}</strong> ${index === 0 ? '<span class="text-xs text-amber-600 italic">(Meneur)</span>' : ''}</span>
-                            ${isCreator && index !== 0 ? `<button onclick="leaveTable('${table.id}', '${p.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 text-xs px-2" title="Retirer ce joueur">&times;</button>` : ''}
+                            ${index !== 0 ? `<button onclick="leaveTable('${table.id}', '${p.replace(/'/g, "\\'")}')" class="text-red-500 hover:text-red-700 font-bold text-base px-2 rounded hover:bg-red-50 transition-colors" title="Se désinscrire ou retirer ce joueur">&times;</button>` : ''}
                         </li>
                     `).join('');
 
