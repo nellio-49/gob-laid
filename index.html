@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Gob' laid - Club de Jeux</title>
+    <title>Le Gob'Laid - Le repère du Club</title>
     
     <!-- Icône du site et pour écran d'accueil smartphone -->
     <link rel="icon" type="image/webp" href="gob.webp">
@@ -13,7 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -30,6 +30,12 @@
         h1, h2, h3, h4, .brand-font {
             font-family: 'Cinzel', serif;
         }
+        .dripping-text {
+            font-family: 'Rubik Wet Paint', cursive, serif;
+            color: #2f855a;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
+            letter-spacing: 0.05em;
+        }
         .parchment-card {
             background-color: rgba(255, 255, 255, 0.95);
             border: 1px solid #e2d5c3;
@@ -42,7 +48,7 @@
             backdrop-filter: blur(4px);
         }
         
-        /* Thème Le Gob' laid (Verts) */
+        /* Thème Le Gob'Laid (Verts) */
         .text-goblin { color: #2f855a; }
         .bg-goblin { background-color: #38a169; }
         .bg-goblin:hover { background-color: #2f855a; }
@@ -86,10 +92,10 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row justify-between items-center py-2.5 lg:h-24 gap-3 lg:gap-0">
                 <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('tables-page')">
-                    <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
+                    <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob'Laid" />
                     <div>
-                        <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
-                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase">Club de Jeux</span>
+                        <span class="dripping-text text-2xl sm:text-4xl block leading-tight">Le Gob'Laid</span>
+                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase">Le repère du Club</span>
                     </div>
                 </div>
 
@@ -231,7 +237,7 @@
                                 <div>
                                     <label for="tableTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
                                     <div class="relative flex items-center">
-                                        <input type="time" id="tableTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <input type="time" id="tableTime" required value="18:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
                                         <i class="fa-regular fa-clock absolute right-2.5 text-green-700 pointer-events-none text-xs sm:text-sm"></i>
                                     </div>
                                 </div>
@@ -366,7 +372,7 @@
                                 <div>
                                     <label for="eventTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
                                     <div class="relative flex items-center">
-                                        <input type="time" id="eventTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <input type="time" id="eventTime" required value="18:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
                                         <i class="fa-regular fa-clock absolute right-2.5 text-green-700 pointer-events-none text-xs sm:text-sm"></i>
                                     </div>
                                 </div>
@@ -436,8 +442,8 @@
     <footer class="header-bg border-t-2 border-[#d4c5b0] mt-auto py-6 sm:py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
             <div class="flex items-center space-x-3">
-                <img src="gob.webp" class="h-14 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
-                <span class="brand-font font-bold text-base sm:text-xl text-[#5d4037]">Le Gob' laid © 2026</span>
+                <img src="gob.webp" class="h-14 sm:h-20 w-auto object-contain" alt="Logo Le Gob'Laid" />
+                <span class="dripping-text font-bold text-base sm:text-xl">Le Gob'Laid © 2026</span>
             </div>
             <div class="flex space-x-6 text-[#8d6e63]">
                 <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-green-700 transition-colors" title="Notre page Facebook">
@@ -451,7 +457,7 @@
         </div>
     </footer>
 
-    <!-- Application Unifiée - Firebase Le Gob' laid -->
+    <!-- Application Unifiée - Firebase Le Gob'Laid -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
@@ -460,7 +466,7 @@
         const MASTER_PIN = "9999";
 
         // ==========================================
-        // CONFIGURATION FIREBASE LE GOB' LAID
+        // CONFIGURATION FIREBASE LE GOB'LAID
         // ==========================================
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
         let firebaseConfig = null;
@@ -710,16 +716,13 @@
                             const eventRef = getDocRef('events', targetEvent.id);
                             await updateDoc(eventRef, { playersList: arrayUnion(hostName) });
                         } else {
-                            const dateObj = new Date(date + 'T00:00:00');
-                            const isFridayOrSaturday = (dateObj.getDay() === 5 || dateObj.getDay() === 6);
-                            const eventId = isFridayOrSaturday ? `soiree-${date}` : `event-${date}`;
-                            const eventRef = getDocRef('events', eventId);
+                            const eventRef = getDocRef('events', `soiree-${date}`);
                             
                             await setDoc(eventRef, {
                                 title: "Soirée jeux",
                                 type: "Soirée jeux",
                                 date: date,
-                                time: "20:00",
+                                time: "18:00",
                                 location: "Salle polyvalente de Bourg-la-Cave",
                                 description: "Rencontre hebdomadaire du club",
                                 creatorId: 'system',
@@ -734,7 +737,7 @@
 
                     showToast("Annonce placardée et inscription à la soirée enregistrée !");
                     e.target.reset();
-                    document.getElementById('tableTime').value = "20:00";
+                    document.getElementById('tableTime').value = "18:00";
                     toggleTableForm();
                 } catch (error) {
                     console.error(error);
@@ -772,16 +775,13 @@
                         const eventRef = getDocRef('events', targetEvent.id);
                         await updateDoc(eventRef, { playersList: arrayUnion(playerName) });
                     } else {
-                        const dateObj = new Date(date + 'T00:00:00');
-                        const isFridayOrSaturday = (dateObj.getDay() === 5 || dateObj.getDay() === 6);
-                        const eventId = isFridayOrSaturday ? `soiree-${date}` : `event-${date}`;
-                        const eventRef = getDocRef('events', eventId);
+                        const eventRef = getDocRef('events', `soiree-${date}`);
 
                         await setDoc(eventRef, {
                             title: "Soirée jeux",
                             type: "Soirée jeux",
                             date: date,
-                            time: "20:00",
+                            time: "18:00",
                             location: "Salle polyvalente de Bourg-la-Cave",
                             description: "Rencontre hebdomadaire du club",
                             creatorId: 'system',
@@ -965,22 +965,7 @@
 
         // ================= SECTION ÉVÉNEMENTS & CALENDRIER =================
         function getEventById(eventId) {
-            let ev = currentEvents.find(e => e.id === eventId);
-            if (!ev && eventId.startsWith('soiree-')) {
-                const dateFormatted = eventId.replace('soiree-', '');
-                ev = {
-                    id: eventId,
-                    title: "Soirée jeux",
-                    type: "Soirée jeux",
-                    date: dateFormatted,
-                    time: "20:00",
-                    location: "Salle polyvalente de Bourg-la-Cave",
-                    description: "Rencontre hebdomadaire du club",
-                    playersList: [],
-                    isDefault: true
-                };
-            }
-            return ev;
+            return currentEvents.find(e => e.id === eventId);
         }
 
         const proposeEventForm = document.getElementById('propose-event-form');
@@ -1007,7 +992,7 @@
                     });
                     showToast("Événement ajouté au calendrier !");
                     e.target.reset();
-                    document.getElementById('eventTime').value = "20:00";
+                    document.getElementById('eventTime').value = "18:00";
                     calendarDate = new Date(date);
                     renderCalendar();
                     toggleEventForm();
@@ -1122,29 +1107,12 @@
             if (playersList.includes(playerName)) return showToast("Ce nom est déjà inscrit à l'événement !", true);
 
             try {
-                const existingInFirestore = currentEvents.some(e => e.id === eventId);
+                const eventRef = getDocRef('events', eventId);
+                await updateDoc(eventRef, {
+                    playersList: arrayUnion(playerName),
+                    cancelled: false
+                });
 
-                if (!existingInFirestore && (ev.isDefault || eventId.startsWith('soiree-'))) {
-                    const eventRef = getDocRef('events', eventId);
-                    await setDoc(eventRef, {
-                        title: ev.title,
-                        type: ev.type,
-                        date: ev.date,
-                        time: ev.time,
-                        location: ev.location,
-                        description: ev.description,
-                        creatorId: 'system',
-                        createdAt: new Date().toISOString(),
-                        playersList: [playerName],
-                        cancelled: false
-                    });
-                } else {
-                    const eventRef = getDocRef('events', eventId);
-                    await updateDoc(eventRef, {
-                        playersList: arrayUnion(playerName),
-                        cancelled: false
-                    });
-                }
                 showToast(`${playerName} est inscrit à l'événement !`);
                 openEventModal(eventId);
             } catch(e) {
@@ -1169,23 +1137,7 @@
         window.deleteEvent = async function(eventId) {
             if (!currentUser) return;
             try {
-                if (eventId.startsWith('soiree-')) {
-                    const ev = getEventById(eventId);
-                    const eventRef = getDocRef('events', eventId);
-                    await setDoc(eventRef, {
-                        title: ev.title || "Soirée jeux",
-                        type: ev.type || "Soirée jeux",
-                        date: ev.date,
-                        time: ev.time || "20:00",
-                        location: ev.location || "Salle polyvalente de Bourg-la-Cave",
-                        description: ev.description || "Rencontre hebdomadaire du club",
-                        cancelled: true,
-                        creatorId: currentUser.uid,
-                        createdAt: new Date().toISOString()
-                    });
-                } else {
-                    await deleteDoc(getDocRef('events', eventId));
-                }
+                await deleteDoc(getDocRef('events', eventId));
                 closeEventModal();
                 showToast("Événement annulé.");
             } catch(e) {
@@ -1242,24 +1194,6 @@
                         td.appendChild(dayHeader);
 
                         let dayEvents = currentEvents.filter(e => e.date === dateFormatted && !e.cancelled);
-
-                        if (dayCol === 4 || dayCol === 5) { // Vendredi (4) et Samedi (5) pour Le Gob' laid
-                            const soireeRecord = currentEvents.find(e => e.id === `soiree-${dateFormatted}`);
-                            const hasSoiree = dayEvents.some(e => e.type === 'Soirée jeux');
-                            if (!soireeRecord && !hasSoiree) {
-                                dayEvents.push({
-                                    id: `soiree-${dateFormatted}`,
-                                    title: 'Soirée jeux',
-                                    type: 'Soirée jeux',
-                                    date: dateFormatted,
-                                    time: '20:00',
-                                    location: 'Salle polyvalente de Bourg-la-Cave',
-                                    description: 'Rencontre hebdomadaire du club',
-                                    playersList: [],
-                                    isDefault: true
-                                });
-                            }
-                        }
 
                         if (dayEvents.length > 0) {
                             const eventsContainer = document.createElement('div');
