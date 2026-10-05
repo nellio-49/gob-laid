@@ -19,8 +19,8 @@
         body {
             font-family: 'Lora', serif;
             background-color: #fbf7f0; 
-            /* Arrière-plan Taverne avec calque parchemin à 78 % d'opacité */
-            background-image: linear-gradient(rgba(251, 247, 240, 0.78), rgba(251, 247, 240, 0.78)), url('taverne.jpg');
+            /* Arrière-plan Taverne au format WebP avec calque parchemin à 35 % d'opacité */
+            background-image: linear-gradient(rgba(251, 247, 240, 0.35), rgba(251, 247, 240, 0.35)), url('taverne.webp');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -1104,7 +1104,7 @@
             const ev = getEventById(eventId);
             const playersList = ev?.playersList || [];
 
-            if (playersList.includes(playerName)) return showToast("Ce nom est déjà inscrit à l'événement !", true);
+            if (playersList.includes(playerName)) return showToast("Ce nom est déjà inscrit à l me/s'inscrire !", true);
 
             try {
                 const eventRef = getDocRef('events', eventId);
@@ -1171,3 +1171,421 @@
             for (let weekRow = 0; weekRow < 6; weekRow++) {
                 if (dayCounter > totalDays) break;
                 const tr = document.createElement('tr');
+
+                const weekNumTd = document.createElement('td');
+                const weekNumDate = new Date(year, month, dayCounter);
+                weekNumTd.className = "py-1 px-0.5 text-[10px] sm:text-xs text-gray-400 italic bg-[#fdfaf5] border-r border-[#e2d5c3]/50";
+                weekNumTd.textContent = getISOWeekNumber(weekNumDate);
+                tr.appendChild(weekNumTd);
+
+                for (let dayCol = 0; dayCol < 7; dayCol++) {
+                    const td = document.createElement('td');
+                    td.className = "cal-day-cell border border-[#e2d5c3]/40 p-0.5 sm:p-1 relative text-left transition-colors hover:bg-amber-50/50";
+
+                    if ((weekRow === 0 && dayCol < startingDay) || dayCounter > totalDays) {
+                        td.className += " bg-gray-50/40 opacity-40";
+                    } else {
+                        const dateFormatted = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
+                        const isToday = todayStr === dateFormatted;
+
+                        const dayHeader = document.createElement('div');
+                        dayHeader.className = `text-[10px] sm:text-xs font-bold ${isToday ? 'bg-green-700 text-white w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center' : (dayCol >= 5 ? 'text-red-700' : 'text-[#3e2723]')}`;
+                        dayHeader.textContent = dayCounter;
+                        td.appendChild(dayHeader);
+
+                        let dayEvents = currentEvents.filter(e => e.date === dateFormatted && !e.cancelled);
+
+                        if (dayEvents.length > 0) {
+                            const eventsContainer = document.createElement('div');
+                            eventsContainer.className = "mt-0.5 sm:mt-1 space-y-0.5 sm:space-y-1";
+                            dayEvents.forEach(ev => {
+                                const colorConfig = typeColorMap[ev.type] || typeColorMap['Autre'];
+                                const count = (ev.playersList || []).length;
+                                const evBadge = document.createElement('button');
+                                evBadge.className = `w-full text-left text-[9px] sm:text-[11px] font-bold p-0.5 sm:p-1 rounded ${colorConfig.badge} shadow-sm hover:opacity-90 transition-opacity flex items-center justify-between gap-1 min-w-0`;
+                                evBadge.title = ev.title.replace(/"/g, '&quot;');
+                                evBadge.innerHTML = `
+                                    <span class="truncate min-w-0"><span class="opacity-80 hidden sm:inline">${ev.time}</span> ${ev.title}</span>
+                                    <span class="shrink-0 bg-black/20 text-white text-[8px] sm:text-[10px] px-1 py-0.5 rounded-full font-bold flex items-center leading-none" title="${count} inscrit(s)">
+                                        <i class="fa-solid fa-user text-[7px] sm:text-[8px] mr-0.5"></i>${count}
+                                    </span>
+                                `;
+                                evBadge.onclick = (e) => { e.stopPropagation(); openEventModal(ev.id); };
+                                eventsContainer.appendChild(evBadge);
+                            });
+                            td.appendChild(eventsContainer);
+                        }
+                        dayCounter++;
+                    }
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+        }
+
+        // ================= SECTION LUDOTHÈQUE DU CLUB =================
+        function getUnlockedPins() {
+            try { return JSON.parse(localStorage.getItem('gob_unlocked_pins') || '{}'); } catch(e) { return {}; }
+        }
+        function saveUnlockedPin(playerId, pin) {
+            const pins = getUnlockedPins();
+            pins[playerId] = pin;
+            localStorage.setItem('gob_unlocked_pins', JSON.stringify(pins));
+        }
+
+        window.lockPlayerList = function(playerId) {
+            const pins = getUnlockedPins();
+            delete pins[playerId];
+            localStorage.setItem('gob_unlocked_pins', JSON.stringify(pins));
+            const player = allPlayers.find(p => p.id === playerId);
+            showToast(`Liste de ${player ? player.name : ''} verrouillée.`);
+            renderLudoUI();
+        };
+
+        function focusGameInput(playerId) {
+            setTimeout(() => {
+                const inputEl = document.getElementById(`input-game-${playerId}`);
+                if (inputEl) inputEl.focus();
+            }, 80);
+        }
+
+        window.openCreatePlayerModal = () => document.getElementById('modal-create-player').classList.remove('hidden');
+        window.closeCreatePlayerModal = () => document.getElementById('modal-create-player').classList.add('hidden');
+
+        window.openUnlockModal = (playerId, playerName) => {
+            document.getElementById('unlock-player-id').value = playerId;
+            document.getElementById('unlock-player-title').textContent = playerName;
+            document.getElementById('modal-unlock-player').classList.remove('hidden');
+            setTimeout(() => document.getElementById('unlock-player-pin').focus(), 100);
+        };
+        window.closeUnlockModal = () => document.getElementById('modal-unlock-player').classList.add('hidden');
+
+        const formCreatePlayer = document.getElementById('form-create-player');
+        if(formCreatePlayer) {
+            formCreatePlayer.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('new-player-name').value.trim();
+                const pin = document.getElementById('new-player-pin').value.trim();
+
+                if (!name || !pin) return showToast("Veuillez remplir tous les champs.", true);
+                if (allPlayers.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+                    return showToast("Un joueur porte déjà ce nom !", true);
+                }
+
+                try {
+                    const docRef = await addDoc(playersColl, { name, pin, createdAt: new Date().toISOString() });
+                    saveUnlockedPin(docRef.id, pin);
+                    expandedPlayerCards.add(docRef.id);
+                    showToast(`Bienvenue ${name} ! Votre liste est créée.`);
+                    closeCreatePlayerModal();
+                    e.target.reset();
+                    renderLudoUI();
+                    focusGameInput(docRef.id);
+                } catch (err) { showToast("Erreur de création.", true); }
+            });
+        }
+
+        const formUnlockPlayer = document.getElementById('form-unlock-player');
+        if(formUnlockPlayer) {
+            formUnlockPlayer.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const playerId = document.getElementById('unlock-player-id').value;
+                const pinInput = document.getElementById('unlock-player-pin').value.trim();
+                const player = allPlayers.find(p => p.id === playerId);
+
+                if (player && (player.pin === pinInput || pinInput === MASTER_PIN)) {
+                    saveUnlockedPin(playerId, player.pin);
+                    expandedPlayerCards.add(playerId);
+                    showToast(`Liste de ${player.name} déverrouillée !`);
+                    closeUnlockModal();
+                    e.target.reset();
+                    renderLudoUI();
+                    focusGameInput(playerId);
+                } else {
+                    showToast("Code PIN incorrect !", true);
+                }
+            });
+        }
+
+        window.addGame = async (playerId, inputId) => {
+            const input = document.getElementById(inputId);
+            const rawVal = input ? input.value.trim() : '';
+            if (!rawVal) return showToast("Saisissez un nom de jeu !", true);
+
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Déverrouillez la liste avec votre PIN !", true);
+            }
+
+            const gamesList = rawVal.split(',').map(g => g.trim()).filter(g => g !== '');
+
+            try {
+                for (const gameName of gamesList) {
+                    await addDoc(gamesColl, {
+                        playerId, playerName: player.name, name: gameName, createdAt: new Date().toISOString()
+                    });
+                }
+                input.value = '';
+                showToast(`Jeu(x) ajouté(s) à la liste de ${player.name} !`);
+                focusGameInput(playerId);
+            } catch (err) { showToast("Erreur lors de l'ajout.", true); }
+        };
+
+        window.editGame = async (gameId, playerId, currentName) => {
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Déverrouillez la liste avec votre PIN !", true);
+            }
+
+            const newName = prompt("Modifier le nom du jeu :", currentName);
+            if (newName === null) return;
+            const trimmed = newName.trim();
+            if (!trimmed) return showToast("Le nom du jeu ne peut pas être vide !", true);
+            if (trimmed === currentName) return;
+
+            try {
+                await updateDoc(getDocRef('ludo_jeux', gameId), { name: trimmed });
+                showToast("Nom du jeu modifié avec succès !");
+                focusGameInput(playerId);
+            } catch (err) {
+                console.error("Erreur modification jeu :", err);
+                showToast("Erreur lors de la modification.", true);
+            }
+        };
+
+        window.deleteGame = async (gameId, playerId) => {
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Seul le propriétaire peut supprimer ce jeu !", true);
+            }
+
+            try {
+                await deleteDoc(getDocRef('ludo_jeux', gameId));
+                showToast("Jeu retiré.");
+                focusGameInput(playerId);
+            } catch (err) { showToast("Erreur de suppression.", true); }
+        };
+
+        window.deletePlayerList = async (playerId) => {
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Code PIN requis pour supprimer !", true);
+            }
+
+            if (!confirm(`Supprimer la liste de ${player.name} et tous ses jeux ?`)) return;
+
+            try {
+                const playerGames = allGames.filter(g => g.playerId === playerId);
+                for (const g of playerGames) {
+                    await deleteDoc(getDocRef('ludo_jeux', g.id));
+                }
+                
+                await deleteDoc(getDocRef('ludo_joueurs', playerId));
+                
+                const pins = getUnlockedPins();
+                delete pins[playerId];
+                localStorage.setItem('gob_unlocked_pins', JSON.stringify(pins));
+                expandedPlayerCards.delete(playerId);
+
+                showToast(`Liste de ${player.name} supprimée.`);
+            } catch (err) { 
+                console.error("Erreur suppression joueur:", err);
+                showToast("Erreur lors de la suppression.", true); 
+            }
+        };
+
+        window.handleSearch = () => {
+            const input = document.getElementById('global-search-input');
+            if(!input) return;
+            const queryVal = input.value.trim().toLowerCase();
+            const container = document.getElementById('search-results-container');
+            const listEl = document.getElementById('search-results-list');
+            const clearBtn = document.getElementById('clear-search-btn');
+
+            if (!queryVal) {
+                if(container) container.classList.add('hidden');
+                if(clearBtn) clearBtn.classList.add('hidden');
+                return;
+            }
+
+            if(clearBtn) clearBtn.classList.remove('hidden');
+            if(container) container.classList.remove('hidden');
+
+            const matches = allGames.filter(g => (g.name || '').toLowerCase().includes(queryVal));
+
+            if (matches.length === 0) {
+                if(listEl) {
+                    listEl.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-amber-900/60 font-medium text-sm">
+                            <i class="fa-solid fa-ghost text-2xl mb-1 block text-gray-400"></i>
+                            Aucun jeu trouvé pour "${queryVal}".
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const grouped = {};
+            matches.forEach(m => {
+                const cleanName = m.name.trim();
+                const key = cleanName.toLowerCase();
+                if (!grouped[key]) grouped[key] = { displayName: cleanName, owners: [] };
+                if (!grouped[key].owners.includes(m.playerName)) grouped[key].owners.push(m.playerName);
+            });
+
+            const sortedResults = Object.values(grouped).sort((a, b) => 
+                a.displayName.localeCompare(b.displayName, 'fr', { sensitivity: 'base' })
+            );
+
+            if(listEl) {
+                listEl.innerHTML = sortedResults.map(item => `
+                    <div class="bg-white p-3 sm:p-4 rounded-xl border border-[#d4c5b0] shadow-sm flex flex-col justify-between" title="${item.displayName.replace(/"/g, '&quot;')}">
+                        <div>
+                            <h4 class="font-bold text-goblin text-sm sm:text-base brand-font mb-1.5 flex items-center" title="${item.displayName.replace(/"/g, '&quot;')}">
+                                <i class="fa-solid fa-dice text-amber-700 mr-1.5 shrink-0"></i><span class="truncate">${item.displayName}</span>
+                            </h4>
+                            <div class="text-xs text-[#5d4037]">
+                                <span class="font-bold text-amber-900">Possédé par (${item.owners.length}) :</span>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    ${item.owners.map(owner => `
+                                        <span class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded-md font-semibold border border-amber-200 text-[11px]">
+                                            <i class="fa-solid fa-user-tag mr-1 text-[9px]"></i>${owner}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        };
+
+        window.clearSearch = () => {
+            const input = document.getElementById('global-search-input');
+            if(input) input.value = '';
+            handleSearch();
+        };
+
+        function renderLudoUI() {
+            const grid = document.getElementById('players-grid');
+            const emptyState = document.getElementById('empty-players-state');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            if (allPlayers.length === 0) {
+                if(emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+                return;
+            }
+
+            if(emptyState) { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
+
+            const unlockedPins = getUnlockedPins();
+
+            allPlayers.forEach(player => {
+                const isUnlocked = unlockedPins[player.id] === player.pin;
+                const isExpanded = expandedPlayerCards.has(player.id);
+                
+                const playerGames = allGames
+                    .filter(g => g.playerId === player.id)
+                    .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'fr', { sensitivity: 'base' }));
+
+                const card = document.createElement('div');
+                card.className = "parchment-card rounded-xl p-3 sm:p-3.5 flex flex-col shadow-sm hover:shadow-md border border-[#d4c5b0] relative overflow-hidden transition-all";
+
+                const gamesListHtml = playerGames.length === 0 
+                    ? `<div class="text-xs text-amber-800/60 italic text-center py-3">Aucun jeu enregistré.</div>`
+                    : playerGames.map(g => {
+                        const safeNameAttr = g.name.replace(/"/g, '&quot;');
+                        const safeNameJs = g.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                        return `
+                            <div class="bg-white/90 px-2.5 py-1.5 rounded-lg border border-[#e2d5c3] shadow-2xs flex justify-between items-center text-xs font-medium text-[#3e2723] hover:border-goblin transition-colors min-w-0" title="${safeNameAttr}">
+                                <span class="truncate pr-2 flex-grow min-w-0 ${isUnlocked ? 'cursor-pointer hover:text-green-800 hover:underline' : ''}" 
+                                      title="${safeNameAttr}" 
+                                      ${isUnlocked ? `onclick="editGame('${g.id}', '${player.id}', '${safeNameJs}')"` : ''}>
+                                    ${g.name} ${isUnlocked ? '<i class="fa-solid fa-pen text-[9px] text-gray-400 ml-1"></i>' : ''}
+                                </span>
+                                ${isUnlocked ? `
+                                    <button onclick="deleteGame('${g.id}', '${player.id}')" class="text-gray-400 hover:text-red-600 font-bold text-sm px-1 transition-colors shrink-0" title="Retirer ce jeu">&times;</button>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center cursor-pointer select-none gap-2 py-0.5" onclick="togglePlayerCard('${player.id}')">
+                        <div class="flex items-center space-x-2 min-w-0">
+                            <h3 class="text-sm sm:text-base font-bold text-goblin brand-font truncate max-w-[110px] sm:max-w-[130px]" title="${player.name}">${player.name}</h3>
+                            <span class="text-[10px] sm:text-[11px] font-bold text-amber-900 bg-amber-100/90 px-1.5 py-0.5 rounded-md border border-amber-200/80 shrink-0">${playerGames.length} jeux</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5 shrink-0">
+                            <div onclick="event.stopPropagation()">
+                                ${isUnlocked ? `
+                                    <button onclick="lockPlayerList('${player.id}')" class="text-emerald-800 bg-emerald-100/90 hover:bg-amber-100 hover:text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold border border-emerald-300 transition-colors flex items-center shadow-2xs" title="Verrouiller à nouveau">
+                                        <i class="fa-solid fa-lock-open mr-1 text-[9px]"></i>Ouvert
+                                    </button>
+                                ` : `
+                                    <button onclick="openUnlockModal('${player.id}', '${player.name.replace(/'/g, "\\'")}')" class="text-amber-800 hover:text-goblin bg-amber-50 hover:bg-amber-100 px-1.5 py-0.5 rounded text-[10px] font-bold border border-amber-200/80 transition-colors" title="Déverrouiller avec PIN">
+                                        <i class="fa-solid fa-lock mr-1 text-[9px]"></i>PIN
+                                    </button>
+                                `}
+                            </div>
+                            <i id="player-chevron-${player.id}" class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-goblin text-xs transition-transform duration-300"></i>
+                        </div>
+                    </div>
+
+                    <div id="player-content-${player.id}" class="${isExpanded ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-[#e2d5c3]/80">
+                        ${isUnlocked ? `
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wide text-amber-900"><i class="fa-solid fa-gear mr-1"></i>Gestion</span>
+                                <button onclick="deletePlayerList('${player.id}')" class="text-red-500 hover:text-red-700 text-[11px] font-bold transition-colors flex items-center" title="Supprimer la liste">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Supprimer
+                                </button>
+                            </div>
+                            <form onsubmit="event.preventDefault(); addGame('${player.id}', 'input-game-${player.id}');" class="mb-2 flex gap-1.5">
+                                <input type="text" id="input-game-${player.id}" placeholder="Ajouter un jeu..." class="flex-grow bg-[#ffffff] border border-[#d4c5b0] rounded-md py-1 px-2 text-xs text-[#3e2723] focus:outline-none focus:border-goblin">
+                                <button type="submit" class="bg-goblin hover:bg-green-800 text-white font-bold px-2 py-1 rounded-md text-xs transition-colors shadow-2xs">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </form>
+                        ` : `
+                            <div class="mb-2 p-1.5 bg-amber-50/70 rounded-md border border-amber-200/60 text-[10px] text-amber-900/80 flex items-center">
+                                <i class="fa-solid fa-eye mr-1 text-amber-700"></i> Lecture seule.
+                            </div>
+                        `}
+
+                        <div class="max-h-[220px] overflow-y-auto space-y-1 pr-0.5">
+                            ${gamesListHtml}
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            const searchInput = document.getElementById('global-search-input');
+            if (searchInput && searchInput.value.trim()) {
+                handleSearch();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+            const today = new Date().toISOString().split('T')[0];
+            
+            const tDate = document.getElementById('tableDate');
+            if(tDate) { tDate.setAttribute('min', today); tDate.value = today; }
+            
+            const eDate = document.getElementById('eventDate');
+            if(eDate) { eDate.setAttribute('min', today); eDate.value = today; }
+        });
+    </script>
+</body>
+</html>
