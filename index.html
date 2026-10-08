@@ -1375,11 +1375,6 @@
             const ev = getEventById(eventId);
             if (!ev) return;
 
-            const pin = prompt("Veuillez saisir le code PIN administrateur pour modifier cet événement :");
-            if (pin !== MASTER_PIN) {
-                return showToast("Code PIN incorrect. Modification annulée.", true);
-            }
-
             document.getElementById('edit-event-id').value = ev.id;
             document.getElementById('edit-event-title').value = ev.title || '';
             document.getElementById('edit-event-type').value = ev.type || 'Tournoi';
