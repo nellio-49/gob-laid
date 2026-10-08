@@ -13,7 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lacquer&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
         body {
@@ -27,9 +27,14 @@
             background-repeat: no-repeat;
             color: #3e2723;
         }
+
+        /* Titres style peinture avec coulures */
         h1, h2, h3, h4, .brand-font {
-            font-family: 'Cinzel', serif;
+            font-family: 'Lacquer', 'Cinzel', cursive, serif;
+            letter-spacing: 0.03em;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 3px 6px rgba(50, 57, 30, 0.25);
         }
+
         .parchment-card {
             background-color: rgba(255, 255, 255, 0.95);
             border: 1px solid #e2d5c3;
@@ -195,18 +200,9 @@
                                 <input type="text" id="upcomingTitle" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]" placeholder="Ex : Grand Tournoi d'Automne">
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                                <div>
-                                    <label for="upcomingDate" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date *</label>
-                                    <input type="date" id="upcomingDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
-                                </div>
-                                <div>
-                                    <label for="upcomingTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure (Optionnel)</label>
-                                    <div class="relative flex items-center">
-                                        <input type="time" id="upcomingTime" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] pr-8 cursor-pointer">
-                                        <i class="fa-regular fa-clock absolute right-2.5 text-[#586337] pointer-events-none text-xs sm:text-sm"></i>
-                                    </div>
-                                </div>
+                            <div>
+                                <label for="upcomingDate" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date / Période *</label>
+                                <input type="text" id="upcomingDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]" placeholder="Ex : 01 juillet, 2026, Samedi 15 Novembre à 14h...">
                             </div>
 
                             <div>
@@ -705,12 +701,8 @@
                 currentUpcoming = [];
                 snapshot.forEach((doc) => { currentUpcoming.push({ id: doc.id, ...doc.data() }); });
                 
-                // Tri par date croissante (du plus proche au plus éloigné)
-                currentUpcoming.sort((a, b) => {
-                    const aD = a.date ? new Date(a.date + 'T' + (a.time || '00:00')) : new Date('9999-12-31');
-                    const bD = b.date ? new Date(b.date + 'T' + (b.time || '00:00')) : new Date('9999-12-31');
-                    return aD - bD;
-                });
+                // Tri par date de création du plus récent au plus ancien ou selon l'ordre de saisie
+                currentUpcoming.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
 
                 renderUpcomingEvents();
             }, (error) => {
@@ -769,8 +761,7 @@
                 if (!currentUser) return showToast("Connexion requise.", true);
 
                 const title = document.getElementById('upcomingTitle').value.trim();
-                const date = document.getElementById('upcomingDate').value;
-                const time = document.getElementById('upcomingTime').value || '';
+                const dateText = document.getElementById('upcomingDate').value.trim();
                 const description = document.getElementById('upcomingDescription').value.trim();
                 const imageInput = document.getElementById('upcomingImage');
                 const docInput = document.getElementById('upcomingDoc');
@@ -795,7 +786,7 @@
                     }
 
                     await addDoc(upcomingCollection, {
-                        title, date, time, description, imageBase64, docBase64, docName,
+                        title, dateText, description, imageBase64, docBase64, docName,
                         creatorId: currentUser.uid, createdAt: new Date().toISOString()
                     });
 
@@ -834,28 +825,12 @@
             if (!container) return;
             container.innerHTML = '';
 
-            const today = new Date(new Date().setHours(0,0,0,0));
-            const activeEvents = currentUpcoming.filter(item => {
-                if (!item.date) return true;
-                return new Date(item.date + 'T23:59:59') >= today;
-            });
-
-            if (activeEvents.length === 0) {
+            if (currentUpcoming.length === 0) {
                 if (emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
             } else {
                 if (emptyState) { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
 
-                activeEvents.forEach(item => {
-                    let dateDisplay = '';
-                    if (item.date) {
-                        const dateObj = new Date(item.date + 'T00:00:00');
-                        dateDisplay = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                        dateDisplay = dateDisplay.charAt(0).toUpperCase() + dateDisplay.slice(1);
-                        if (item.time) dateDisplay += ` à ${item.time}`;
-                    } else if (item.dateText) {
-                        dateDisplay = item.dateText;
-                    }
-
+                currentUpcoming.forEach(item => {
                     const card = document.createElement('div');
                     card.className = "parchment-card rounded-xl border-l-4 border-l-[#586337] shadow-sm p-4 relative overflow-hidden space-y-3";
                     
@@ -863,7 +838,7 @@
                         <div class="flex justify-between items-start gap-2">
                             <div>
                                 <h3 class="text-lg sm:text-2xl font-bold text-[#3e2723] brand-font">${item.title}</h3>
-                                ${dateDisplay ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${dateDisplay}</p>` : ''}
+                                ${(item.dateText || item.date) ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${item.dateText || item.date}</p>` : ''}
                             </div>
                             <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center shrink-0">
                                 <i class="fa-solid fa-trash-can mr-1"></i> Retirer
@@ -873,8 +848,8 @@
                         <p class="text-xs sm:text-sm text-[#5d4037] bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] whitespace-pre-line">${item.description}</p>
 
                         ${item.imageBase64 ? `
-                            <div class="mt-2 rounded-lg overflow-hidden border border-[#d4c5b0] max-h-80 flex justify-center bg-black/5">
-                                <img src="${item.imageBase64}" alt="${item.title}" class="object-contain max-h-80 w-full">
+                            <div class="mt-3 rounded-xl overflow-hidden border border-[#d4c5b0] max-h-96 flex justify-center bg-black/5 p-1">
+                                <img src="${item.imageBase64}" alt="${item.title}" class="object-contain max-h-96 w-full block rounded-lg shadow-sm">
                             </div>
                         ` : ''}
 
@@ -1774,9 +1749,6 @@
         window.addEventListener('DOMContentLoaded', () => {
             initAuth();
             const today = new Date().toISOString().split('T')[0];
-            
-            const upDate = document.getElementById('upcomingDate');
-            if(upDate) { upDate.setAttribute('min', today); upDate.value = today; }
 
             const tDate = document.getElementById('tableDate');
             if(tDate) { tDate.setAttribute('min', today); tDate.value = today; }
