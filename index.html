@@ -42,16 +42,16 @@
             backdrop-filter: blur(4px);
         }
         
-        /* Thème Le Gob' laid (Verts) */
-        .text-goblin { color: #2f855a; }
-        .bg-goblin { background-color: #38a169; }
-        .bg-goblin:hover { background-color: #2f855a; }
-        .border-goblin { border-color: #2f855a; }
+        /* Thème Le Gob' laid (Kaki / Olive) */
+        .text-goblin { color: #586337; }
+        .bg-goblin { background-color: #6b7744; }
+        .bg-goblin:hover { background-color: #586337; }
+        .border-goblin { border-color: #586337; }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #fbf7f0; }
-        ::-webkit-scrollbar-thumb { background: #a3b18a; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #588157; }
+        ::-webkit-scrollbar-thumb { background: #8f9e73; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #586337; }
 
         input[type="time"]::-webkit-calendar-picker-indicator {
             display: none;
@@ -85,7 +85,7 @@
     <header class="header-bg shadow-sm sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row justify-between items-center py-2.5 lg:h-24 gap-3 lg:gap-0">
-                <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('tables-page')">
+                <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('upcoming-page')">
                     <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
                     <div>
                         <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
@@ -93,62 +93,39 @@
                     </div>
                 </div>
 
-                <!-- Navigation en haut à droite (3 Onglets) -->
+                <!-- Navigation en haut à droite (4 Onglets) -->
                 <nav class="flex flex-wrap justify-center items-center bg-[#f0e6d2]/80 p-1 rounded-xl border border-[#d4c5b0] gap-1 shadow-sm w-full sm:w-auto">
-                    <button onclick="switchTab('tables-page')" id="nav-tables" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-green-700 text-white shadow-sm flex items-center">
-                        <i class="fa-solid fa-dice-d6 mr-1.5"></i> Soirées Jeux
+                    <button onclick="switchTab('upcoming-page')" id="nav-upcoming" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center">
+                        <i class="fa-solid fa-bullhorn mr-1.5"></i> Événements
                     </button>
-                    <button onclick="switchTab('events-page')" id="nav-events" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-green-700 hover:bg-white/80 flex items-center">
-                        <i class="fa-solid fa-calendar-star mr-1.5"></i> Événements
+                    <button onclick="switchTab('tables-page')" id="nav-tables" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center">
+                        <i class="fa-solid fa-dice-d6 mr-1.5"></i> Soirée Torgnoles
                     </button>
-                    <button onclick="switchTab('ludo-page')" id="nav-ludo" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-green-700 hover:bg-white/80 flex items-center">
-                        <i class="fa-solid fa-boxes-stacked mr-1.5"></i> Ludothèque
+                    <button onclick="switchTab('events-page')" id="nav-events" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center">
+                        <i class="fa-solid fa-calendar-star mr-1.5"></i> Agenda
+                    </button>
+                    <button onclick="switchTab('ludo-page')" id="nav-ludo" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center">
+                        <i class="fa-solid fa-boxes-stacked mr-1.5"></i> La réserve
                     </button>
                 </nav>
             </div>
         </div>
     </header>
 
-    <!-- POP-UP D'INFORMATION À L'OUVERTURE -->
-    <div id="info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-        <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-5 sm:p-6 relative border-2 border-goblin text-center">
-            <button onclick="closeInfoModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold transition-colors" title="Fermer">&times;</button>
-            <div class="my-2">
-                <i class="fa-solid fa-circle-info text-goblin text-4xl mb-3 block"></i>
-                <h2 class="text-lg sm:text-xl font-bold text-[#3e2723] brand-font mb-4">Information</h2>
-                
-                <div class="text-xs sm:text-sm text-[#5d4037] text-left space-y-3 mb-6 font-medium bg-[#fbf7f0] p-3.5 rounded-xl border border-[#e2d5c3]">
-                    <p class="flex items-start">
-                        <span class="text-goblin font-bold mr-2 text-base leading-none">•</span>
-                        <span>La création d'une table ou la participation en tant que joueur à l'une d'elles vous inscrit automatiquement à la soirée dédiée.</span>
-                    </p>
-                    <p class="flex items-start">
-                        <span class="text-goblin font-bold mr-2 text-base leading-none">•</span>
-                        <span>Un indicateur permet de visualiser directement dans l'agenda le nombre d'inscrits à un événement.</span>
-                    </p>
-                </div>
-
-                <button onclick="closeInfoModal()" class="bg-goblin hover:bg-[#2f855a] text-white font-bold py-2 px-6 rounded-xl transition-colors shadow text-sm sm:text-base">
-                    J'ai compris
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Notifications Toast -->
-    <div id="toast" class="fixed bottom-4 right-4 left-4 sm:left-auto transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-white text-[#3e2723] px-4 py-3 sm:px-6 sm:py-4 rounded-lg shadow-xl border-l-4 border-green-600 flex items-center space-x-3 pointer-events-none text-sm">
-        <i id="toast-icon" class="fa-solid fa-bell text-green-600 text-lg sm:text-xl"></i>
+    <div id="toast" class="fixed bottom-4 right-4 left-4 sm:left-auto transform translate-y-20 opacity-0 transition-all duration-300 z-50 bg-white text-[#3e2723] px-4 py-3 sm:px-6 sm:py-4 rounded-lg shadow-xl border-l-4 border-[#586337] flex items-center space-x-3 pointer-events-none text-sm">
+        <i id="toast-icon" class="fa-solid fa-bell text-[#586337] text-lg sm:text-xl"></i>
         <span id="toast-message" class="font-medium">Notification</span>
     </div>
 
     <!-- MODAL : Détails Événement -->
     <div id="event-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
-        <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-green-600">
+        <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-[#586337]">
             <div id="event-modal-content"></div>
         </div>
     </div>
 
-    <!-- MODAL LUDOTHÈQUE 1 : Création de Joueur -->
+    <!-- MODAL LA RÉSERVE 1 : Création de Joueur -->
     <div id="modal-create-player" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
             <button onclick="closeCreatePlayerModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
@@ -165,14 +142,14 @@
                     <input type="password" id="new-player-pin" maxlength="8" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin" placeholder="****">
                     <p class="text-[11px] text-amber-800 mt-1"><i class="fa-solid fa-lock mr-1"></i>Ce code sécurise votre liste. Vous seul pourrez la modifier.</p>
                 </div>
-                <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 rounded-lg hover:bg-green-800 transition-colors shadow text-sm sm:text-base">
+                <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 rounded-lg hover:bg-[#434c29] transition-colors shadow text-sm sm:text-base">
                     Valider et créer ma liste
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- MODAL LUDOTHÈQUE 2 : Déverrouillage de Joueur -->
+    <!-- MODAL LA RÉSERVE 2 : Déverrouillage de Joueur -->
     <div id="modal-unlock-player" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-sm w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
             <button onclick="closeUnlockModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
@@ -185,7 +162,7 @@
                 <div>
                     <input type="password" id="unlock-player-pin" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-[#3e2723] focus:outline-none focus:border-goblin text-center text-lg tracking-widest" placeholder="****">
                 </div>
-                <button type="submit" class="w-full bg-goblin text-white font-bold py-2 rounded-lg hover:bg-green-800 transition-colors shadow text-sm sm:text-base">
+                <button type="submit" class="w-full bg-goblin text-white font-bold py-2 rounded-lg hover:bg-[#434c29] transition-colors shadow text-sm sm:text-base">
                     Déverrouiller
                 </button>
             </form>
@@ -194,8 +171,87 @@
 
     <main class="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-10 w-full">
         
-        <!-- ONGLET 1 : SOIRÉES JEUX -->
-        <section id="tables-page" class="tab-content active">
+        <!-- ONGLET 1 : ÉVÉNEMENTS EN APPROCHE -->
+        <section id="upcoming-page" class="tab-content active">
+            <div class="text-center mb-6 sm:mb-10">
+                <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">Événements en approche</h1>
+                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Annonces, tournois majeurs et festivités à venir dans l'Antre !</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-5 lg:gap-8">
+                <!-- Formulaire de publication -->
+                <div class="lg:col-span-1">
+                    <div class="parchment-card rounded-xl p-4 sm:p-6 sticky top-24 transition-all">
+                        <button type="button" onclick="toggleUpcomingForm()" class="w-full flex justify-between items-center text-left focus:outline-none group cursor-pointer">
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font flex items-center">
+                                <i class="fa-solid fa-scroll text-[#586337] mr-2"></i> Annoncer un Événement
+                            </h2>
+                            <i id="upcoming-form-chevron" class="fa-solid fa-chevron-down text-[#586337] text-lg sm:text-xl transition-transform duration-300"></i>
+                        </button>
+                        
+                        <form id="propose-upcoming-form" class="space-y-3.5 sm:space-y-4 hidden mt-4 pt-4 border-t border-[#e2d5c3]">
+                            <div>
+                                <label for="upcomingTitle" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Nom de l'événement *</label>
+                                <input type="text" id="upcomingTitle" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]" placeholder="Ex : Grand Tournoi d'Automne">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label for="upcomingDate" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date *</label>
+                                    <input type="date" id="upcomingDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
+                                </div>
+                                <div>
+                                    <label for="upcomingTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure (Optionnel)</label>
+                                    <div class="relative flex items-center">
+                                        <input type="time" id="upcomingTime" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] pr-8 cursor-pointer">
+                                        <i class="fa-regular fa-clock absolute right-2.5 text-[#586337] pointer-events-none text-xs sm:text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="upcomingDescription" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Description / Informations *</label>
+                                <textarea id="upcomingDescription" rows="3" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]" placeholder="Règles, lots à gagner, déroulement..."></textarea>
+                            </div>
+
+                            <div>
+                                <label for="upcomingImage" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Affiche / Image (Optionnel)</label>
+                                <input type="file" id="upcomingImage" accept="image/*" class="w-full bg-white border border-[#d4c5b0] rounded-md py-1.5 px-2 text-xs text-[#3e2723]">
+                            </div>
+
+                            <div>
+                                <label for="upcomingDoc" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Document joint (PDF, Doc... Optionnel)</label>
+                                <input type="file" id="upcomingDoc" accept=".pdf,.doc,.docx,.txt" class="w-full bg-white border border-[#d4c5b0] rounded-md py-1.5 px-2 text-xs text-[#3e2723]">
+                            </div>
+
+                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3">
+                                <i class="fa-solid fa-bullhorn mr-2"></i> Placarder l'événement
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Fenêtre des Événements en approche -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white/60 rounded-xl p-3 sm:p-6 min-h-[400px] sm:min-h-[500px] backdrop-blur-sm border border-[#e2d5c3]">
+                        <div class="flex justify-between items-end mb-4 sm:mb-6 border-b-2 border-[#d4c5b0] pb-2 sm:pb-3">
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font"><i class="fa-solid fa-flag text-[#586337] mr-2"></i> Événements à venir</h2>
+                        </div>
+
+                        <div id="upcoming-container" class="space-y-4"></div>
+                        
+                        <div id="empty-upcoming-state" class="flex flex-col items-center justify-center py-12 sm:py-16 text-amber-900/70">
+                            <i class="fa-solid fa-calendar-xmark text-5xl sm:text-7xl mb-3 opacity-40 text-[#586337]"></i>
+                            <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">Pas d'événement en vue</p>
+                            <p class="text-sm sm:text-md mt-1 font-medium">Consultez l’agenda ou proposez le vôtre !</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ONGLET 2 : SOIRÉE TORGNOLES -->
+        <section id="tables-page" class="tab-content">
             <div class="text-center mb-6 sm:mb-10">
                 <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">L'Agenda de la Taverne</h1>
                 <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Consulter ou proposer une table de jeu</p>
@@ -207,44 +263,44 @@
                     <div class="parchment-card rounded-xl p-4 sm:p-6 sticky top-24 transition-all">
                         <button type="button" onclick="toggleTableForm()" class="w-full flex justify-between items-center text-left focus:outline-none group cursor-pointer">
                             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font flex items-center">
-                                <i class="fa-solid fa-feather-pointed text-green-600 mr-2"></i> Proposer une Table
+                                <i class="fa-solid fa-feather-pointed text-[#586337] mr-2"></i> Proposer une Table
                             </h2>
-                            <i id="table-form-chevron" class="fa-solid fa-chevron-down text-green-700 text-lg sm:text-xl transition-transform duration-300"></i>
+                            <i id="table-form-chevron" class="fa-solid fa-chevron-down text-[#586337] text-lg sm:text-xl transition-transform duration-300"></i>
                         </button>
                         
                         <form id="propose-table-form" class="space-y-3.5 sm:space-y-5 hidden mt-4 pt-4 border-t border-[#e2d5c3]">
                             <div>
                                 <label for="gameName" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Nom du Jeu *</label>
-                                <input type="text" id="gameName" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Ex : Zombicide, D&D...">
+                                <input type="text" id="gameName" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Ex : Zombicide, D&D...">
                             </div>
                             
                             <div>
                                 <label for="hostName" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Votre Nom / Pseudo (Organisateur) *</label>
-                                <input type="text" id="hostName" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Meneur / Hôte">
+                                <input type="text" id="hostName" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Meneur / Hôte">
                             </div>
 
                             <div class="grid grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label for="tableDate" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date *</label>
-                                    <input type="date" id="tableDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm">
+                                    <input type="date" id="tableDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm">
                                 </div>
                                 <div>
                                     <label for="tableTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
                                     <div class="relative flex items-center">
-                                        <input type="time" id="tableTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
-                                        <i class="fa-regular fa-clock absolute right-2.5 text-green-700 pointer-events-none text-xs sm:text-sm"></i>
+                                        <input type="time" id="tableTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <i class="fa-regular fa-clock absolute right-2.5 text-[#586337] pointer-events-none text-xs sm:text-sm"></i>
                                     </div>
                                 </div>
                             </div>
 
                             <div>
                                 <label for="maxPlayers" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Nombre de joueurs max *</label>
-                                <input type="number" id="maxPlayers" min="1" max="20" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Ex : 5">
+                                <input type="number" id="maxPlayers" min="1" max="20" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Ex : 5">
                             </div>
                             
                             <div>
                                 <label for="description" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Description (Optionnel)</label>
-                                <textarea id="description" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Campagne niv 1, ou extension incluse..."></textarea>
+                                <textarea id="description" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Campagne niv 1, ou extension incluse..."></textarea>
                             </div>
 
                             <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3">
@@ -257,7 +313,7 @@
                 <div class="lg:col-span-2">
                     <div class="bg-white/60 rounded-xl p-3 sm:p-6 min-h-[400px] sm:min-h-[500px] backdrop-blur-sm border border-[#e2d5c3]">
                         <div class="flex justify-between items-end mb-4 sm:mb-6 border-b-2 border-[#d4c5b0] pb-2 sm:pb-3">
-                            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font"><i class="fa-regular fa-calendar-days text-green-700 mr-2"></i> Tables Prévues</h2>
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font"><i class="fa-regular fa-calendar-days text-[#586337] mr-2"></i> Tables Prévues</h2>
                             <div class="text-xs sm:text-sm font-medium text-amber-800" id="loading-indicator">
                                 <i class="fa-solid fa-compass fa-spin mr-1"></i> Lecture du registre...
                             </div>
@@ -275,10 +331,10 @@
             </div>
         </section>
 
-        <!-- ONGLET 2 : ÉVÉNEMENTS DU CLUB -->
+        <!-- ONGLET 3 : AGENDA DE L'ANTRE -->
         <section id="events-page" class="tab-content">
             <div class="text-center mb-6 sm:mb-10">
-                <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">Événements du club</h1>
+                <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">Agenda de l'Antre</h1>
                 <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Planifiez, visualisez et inscrivez-vous aux soirées, tournois et festivités du club.</p>
                 
                 <div class="inline-flex items-center gap-2 mt-3.5 px-4 py-2 rounded-xl bg-amber-100/90 border border-amber-300/80 text-amber-950 text-xs sm:text-sm font-semibold shadow-2xs">
@@ -291,7 +347,7 @@
                 <!-- 1. CALENDRIER -->
                 <div class="lg:col-span-2">
                     <div class="parchment-card rounded-xl overflow-hidden shadow-lg border border-[#d4c5b0]">
-                        <div class="bg-gradient-to-r from-green-700 to-green-900 text-white p-3 sm:p-4 flex justify-between items-center shadow-md">
+                        <div class="bg-gradient-to-r from-[#586337] to-[#32391e] text-white p-3 sm:p-4 flex justify-between items-center shadow-md">
                             <button onclick="prevMonth()" class="hover:bg-white/20 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg transition-colors flex items-center font-bold text-xs sm:text-sm">
                                 <i class="fa-solid fa-chevron-left mr-1"></i> <span class="hidden sm:inline">Précédent</span>
                             </button>
@@ -322,8 +378,8 @@
                         </div>
 
                         <div class="p-2 sm:p-3 bg-[#fdfaf5] border-t border-[#d4c5b0] flex flex-wrap justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold text-[#5d4037]">
-                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-green-700 mr-1"></span> Tournoi</span>
-                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 mr-1"></span> Soirée jeux</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-[#586337] mr-1"></span> Tournoi</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 mr-1"></span> Soirée Torgnoles</span>
                             <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 mr-1"></span> Réunion</span>
                             <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 mr-1"></span> Festival</span>
                             <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-blue-600 mr-1"></span> Autre</span>
@@ -336,22 +392,22 @@
                     <div class="parchment-card rounded-xl p-4 sm:p-6 sticky top-24 transition-all">
                         <button type="button" onclick="toggleEventForm()" class="w-full flex justify-between items-center text-left focus:outline-none group cursor-pointer">
                             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font flex items-center">
-                                <i class="fa-solid fa-calendar-plus text-green-700 mr-2"></i> Créer un Événement
+                                <i class="fa-solid fa-calendar-plus text-[#586337] mr-2"></i> Créer un Événement
                             </h2>
-                            <i id="event-form-chevron" class="fa-solid fa-chevron-down text-green-700 text-lg sm:text-xl transition-transform duration-300"></i>
+                            <i id="event-form-chevron" class="fa-solid fa-chevron-down text-[#586337] text-lg sm:text-xl transition-transform duration-300"></i>
                         </button>
 
                         <form id="propose-event-form" class="space-y-3.5 sm:space-y-5 hidden mt-4 pt-4 border-t border-[#e2d5c3]">
                             <div>
                                 <label for="eventTitle" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Titre de l'événement *</label>
-                                <input type="text" id="eventTitle" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Ex : Tournoi Catan, AG...">
+                                <input type="text" id="eventTitle" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Ex : Tournoi Catan, AG...">
                             </div>
 
                             <div>
                                 <label for="eventType" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Type d'événement *</label>
-                                <select id="eventType" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm font-medium">
+                                <select id="eventType" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm font-medium">
                                     <option value="Tournoi">🏆 Tournoi</option>
-                                    <option value="Soirée jeux">🎲 Soirée jeux</option>
+                                    <option value="Soirée Torgnoles">🎲 Soirée Torgnoles</option>
                                     <option value="Assemblée / Réunion">📜 Assemblée / Réunion</option>
                                     <option value="Festival / Salon">🎪 Festival / Salon</option>
                                     <option value="Autre">📌 Autre</option>
@@ -361,25 +417,25 @@
                             <div class="grid grid-cols-2 gap-3 sm:gap-4">
                                 <div>
                                     <label for="eventDate" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date *</label>
-                                    <input type="date" id="eventDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm">
+                                    <input type="date" id="eventDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm">
                                 </div>
                                 <div>
                                     <label for="eventTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
                                     <div class="relative flex items-center">
-                                        <input type="time" id="eventTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
-                                        <i class="fa-regular fa-clock absolute right-2.5 text-green-700 pointer-events-none text-xs sm:text-sm"></i>
+                                        <input type="time" id="eventTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <i class="fa-regular fa-clock absolute right-2.5 text-[#586337] pointer-events-none text-xs sm:text-sm"></i>
                                     </div>
                                 </div>
                             </div>
 
                             <div>
                                 <label for="eventLocation" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Lieu / Salle</label>
-                                <input type="text" id="eventLocation" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Ex : Salle polyvalente de Bourg-la-Cave">
+                                <input type="text" id="eventLocation" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Ex : Salle polyvalente de Bourg-la-Cave">
                             </div>
                             
                             <div>
                                 <label for="eventDescription" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Description / Détails</label>
-                                <textarea id="eventDescription" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Informations complémentaires, lots, tarifs..."></textarea>
+                                <textarea id="eventDescription" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Informations complémentaires, lots, tarifs..."></textarea>
                             </div>
 
                             <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3">
@@ -391,14 +447,14 @@
             </div>
         </section>
 
-        <!-- ONGLET 3 : LUDOTHÈQUE DU CLUB -->
+        <!-- ONGLET 4 : LA RÉSERVE -->
         <section id="ludo-page" class="tab-content">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4">
                 <div>
-                    <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-1 sm:mb-2 brand-font">Ludothèque du Club</h1>
+                    <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-1 sm:mb-2 brand-font">La réserve</h1>
                     <p class="text-sm sm:text-lg text-[#5d4037] font-medium">Consultez les listes de jeux des membres et recherchez qui possède quel jeu.</p>
                 </div>
-                <button onclick="openCreatePlayerModal()" class="w-full sm:w-auto bg-goblin hover:bg-green-800 text-white font-bold py-2 sm:py-2.5 px-4 rounded-xl shadow-md transition-all flex items-center justify-center text-xs sm:text-sm whitespace-nowrap">
+                <button onclick="openCreatePlayerModal()" class="w-full sm:w-auto bg-goblin hover:bg-[#434c29] text-white font-bold py-2 sm:py-2.5 px-4 rounded-xl shadow-md transition-all flex items-center justify-center text-xs sm:text-sm whitespace-nowrap">
                     <i class="fa-solid fa-user-plus mr-2"></i> Créer ma liste de jeux
                 </button>
             </div>
@@ -408,7 +464,7 @@
                 <div class="relative">
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 transform -translate-y-1/2 text-goblin text-base sm:text-xl"></i>
                     <input type="text" id="global-search-input" oninput="handleSearch()" class="w-full bg-white border-2 border-[#d4c5b0] focus:border-goblin rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-9 text-xs sm:text-base text-[#3e2723] font-medium placeholder-gray-400 focus:outline-none shadow-inner transition-colors" placeholder="Rechercher un jeu (Catan, Zombicide...)...">
-                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-700 font-bold text-base sm:text-lg">&times;</button>
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#586337] font-bold text-base sm:text-lg">&times;</button>
                 </div>
 
                 <div id="search-results-container" class="hidden mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#e2d5c3]">
@@ -425,7 +481,7 @@
                 <i class="fa-solid fa-chess-board text-5xl sm:text-7xl mb-3 opacity-40 text-goblin"></i>
                 <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">Aucune liste de jeu enregistrée.</p>
                 <p class="text-xs sm:text-sm mt-1 font-medium">Soyez le premier à ajouter votre liste !</p>
-                <button onclick="openCreatePlayerModal()" class="mt-4 bg-goblin hover:bg-green-800 text-white font-bold py-2 px-4 rounded-xl shadow transition-all text-xs sm:text-sm">
+                <button onclick="openCreatePlayerModal()" class="mt-4 bg-goblin hover:bg-[#434c29] text-white font-bold py-2 px-4 rounded-xl shadow transition-all text-xs sm:text-sm">
                     ➕ Créer ma liste
                 </button>
             </div>
@@ -440,13 +496,13 @@
                 <span class="brand-font font-bold text-base sm:text-xl text-[#5d4037]">Le Gob' laid © 2026</span>
             </div>
             <div class="flex space-x-6 text-[#8d6e63]">
-                <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-green-700 transition-colors" title="Notre page Facebook">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-[#586337] transition-colors" title="Notre page Facebook">
                     <i class="fa-brands fa-facebook text-xl sm:text-2xl"></i>
                 </a>
-                <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-green-700 transition-colors" title="Rejoindre notre Discord">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-[#586337] transition-colors" title="Rejoindre notre Discord">
                     <i class="fa-brands fa-discord text-xl sm:text-2xl"></i>
                 </a>
-                <a href="#" class="hover:text-green-700 transition-colors"><i class="fa-brands fa-instagram text-xl sm:text-2xl"></i></a>
+                <a href="#" class="hover:text-[#586337] transition-colors"><i class="fa-brands fa-instagram text-xl sm:text-2xl"></i></a>
             </div>
         </div>
     </footer>
@@ -496,16 +552,11 @@
         const expandedTableCards = new Set();
 
         const typeColorMap = {
-            'Tournoi': { badge: 'bg-green-700 text-white' },
-            'Soirée jeux': { badge: 'bg-amber-600 text-white' },
+            'Tournoi': { badge: 'bg-[#586337] text-white' },
+            'Soirée Torgnoles': { badge: 'bg-amber-600 text-white' },
             'Assemblée / Réunion': { badge: 'bg-purple-600 text-white' },
             'Festival / Salon': { badge: 'bg-emerald-600 text-white' },
             'Autre': { badge: 'bg-blue-600 text-white' }
-        };
-
-        window.closeInfoModal = function() {
-            const modal = document.getElementById('info-modal');
-            if (modal) modal.classList.add('hidden');
         };
 
         window.switchTab = function(tabId) {
@@ -513,19 +564,30 @@
             const target = document.getElementById(tabId);
             if (target) target.classList.add('active');
 
+            const navUpcoming = document.getElementById('nav-upcoming');
             const navTables = document.getElementById('nav-tables');
             const navEvents = document.getElementById('nav-events');
             const navLudo = document.getElementById('nav-ludo');
 
-            const activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-green-700 text-white shadow-sm flex items-center";
-            const inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-green-700 hover:bg-white/80 flex items-center";
+            const activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center";
+            const inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center";
 
+            if (navUpcoming) navUpcoming.className = tabId === 'upcoming-page' ? activeClass : inactiveClass;
             if (navTables) navTables.className = tabId === 'tables-page' ? activeClass : inactiveClass;
             if (navEvents) navEvents.className = tabId === 'events-page' ? activeClass : inactiveClass;
             if (navLudo) navLudo.className = tabId === 'ludo-page' ? activeClass : inactiveClass;
 
             if (tabId === 'events-page') renderCalendar();
             if (tabId === 'ludo-page') renderLudoUI();
+        };
+
+        window.toggleUpcomingForm = function() {
+            const form = document.getElementById('propose-upcoming-form');
+            const chevron = document.getElementById('upcoming-form-chevron');
+            if (form) {
+                form.classList.toggle('hidden');
+                if (chevron) chevron.classList.toggle('rotate-180');
+            }
         };
 
         window.toggleTableForm = function() {
@@ -588,11 +650,11 @@
             msgEl.textContent = message;
             
             if (isError) {
-                toast.classList.replace('border-green-600', 'border-red-600');
+                toast.classList.replace('border-[#586337]', 'border-red-600');
                 iconEl.className = "fa-solid fa-circle-exclamation text-red-600 text-lg sm:text-xl";
             } else {
-                toast.classList.replace('border-red-600', 'border-green-600');
-                iconEl.className = "fa-solid fa-bell text-green-600 text-lg sm:text-xl";
+                toast.classList.replace('border-red-600', 'border-[#586337]');
+                iconEl.className = "fa-solid fa-bell text-[#586337] text-lg sm:text-xl";
             }
 
             toast.classList.remove('translate-y-20', 'opacity-0');
@@ -615,18 +677,45 @@
             }
         }
 
+        const upcomingCollection = getCol('upcoming_events');
         const tablesCollection = getCol('tables');
         const eventsCollection = getCol('events');
         const playersColl = getCol('ludo_joueurs');
         const gamesColl = getCol('ludo_jeux');
         
+        let currentUpcoming = [];
         let currentTables = [];
         let currentEvents = [];
         let allPlayers = [];
         let allGames = [];
 
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
         function initFirestoreListeners() {
             if (!currentUser) return;
+
+            onSnapshot(upcomingCollection, (snapshot) => {
+                currentUpcoming = [];
+                snapshot.forEach((doc) => { currentUpcoming.push({ id: doc.id, ...doc.data() }); });
+                
+                // Tri par date croissante (du plus proche au plus éloigné)
+                currentUpcoming.sort((a, b) => {
+                    const aD = a.date ? new Date(a.date + 'T' + (a.time || '00:00')) : new Date('9999-12-31');
+                    const bD = b.date ? new Date(b.date + 'T' + (b.time || '00:00')) : new Date('9999-12-31');
+                    return aD - bD;
+                });
+
+                renderUpcomingEvents();
+            }, (error) => {
+                console.error("Firestore error (upcoming):", error);
+            });
 
             onSnapshot(tablesCollection, (snapshot) => {
                 currentTables = [];
@@ -672,7 +761,137 @@
             });
         }
 
-        // ================= SECTION SOIRÉES JEUX =================
+        // ================= SECTION ÉVÉNEMENTS EN APPROCHE =================
+        const proposeUpcomingForm = document.getElementById('propose-upcoming-form');
+        if (proposeUpcomingForm) {
+            proposeUpcomingForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser) return showToast("Connexion requise.", true);
+
+                const title = document.getElementById('upcomingTitle').value.trim();
+                const date = document.getElementById('upcomingDate').value;
+                const time = document.getElementById('upcomingTime').value || '';
+                const description = document.getElementById('upcomingDescription').value.trim();
+                const imageInput = document.getElementById('upcomingImage');
+                const docInput = document.getElementById('upcomingDoc');
+
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Enregistrement...';
+                btn.disabled = true;
+
+                try {
+                    let imageBase64 = null;
+                    let docBase64 = null;
+                    let docName = null;
+
+                    if (imageInput.files && imageInput.files[0]) {
+                        imageBase64 = await fileToBase64(imageInput.files[0]);
+                    }
+
+                    if (docInput.files && docInput.files[0]) {
+                        docName = docInput.files[0].name;
+                        docBase64 = await fileToBase64(docInput.files[0]);
+                    }
+
+                    await addDoc(upcomingCollection, {
+                        title, date, time, description, imageBase64, docBase64, docName,
+                        creatorId: currentUser.uid, createdAt: new Date().toISOString()
+                    });
+
+                    showToast("Événement placardé !");
+                    e.target.reset();
+                    toggleUpcomingForm();
+                } catch (error) {
+                    console.error("Erreur ajout événement en approche :", error);
+                    showToast("Erreur lors de l'ajout.", true);
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        window.deleteUpcomingEvent = async function(id) {
+            if (!currentUser) return;
+            const pin = prompt("Veuillez saisir le code PIN administrateur (9999 par défaut) pour supprimer cet événement :");
+            if (pin !== MASTER_PIN) {
+                return showToast("Code PIN incorrect. Suppression annulée.", true);
+            }
+
+            try {
+                await deleteDoc(getDocRef('upcoming_events', id));
+                showToast("Événement retiré.");
+            } catch (err) {
+                console.error(err);
+                showToast("Erreur de suppression.", true);
+            }
+        };
+
+        function renderUpcomingEvents() {
+            const container = document.getElementById('upcoming-container');
+            const emptyState = document.getElementById('empty-upcoming-state');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const today = new Date(new Date().setHours(0,0,0,0));
+            const activeEvents = currentUpcoming.filter(item => {
+                if (!item.date) return true;
+                return new Date(item.date + 'T23:59:59') >= today;
+            });
+
+            if (activeEvents.length === 0) {
+                if (emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+            } else {
+                if (emptyState) { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
+
+                activeEvents.forEach(item => {
+                    let dateDisplay = '';
+                    if (item.date) {
+                        const dateObj = new Date(item.date + 'T00:00:00');
+                        dateDisplay = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                        dateDisplay = dateDisplay.charAt(0).toUpperCase() + dateDisplay.slice(1);
+                        if (item.time) dateDisplay += ` à ${item.time}`;
+                    } else if (item.dateText) {
+                        dateDisplay = item.dateText;
+                    }
+
+                    const card = document.createElement('div');
+                    card.className = "parchment-card rounded-xl border-l-4 border-l-[#586337] shadow-sm p-4 relative overflow-hidden space-y-3";
+                    
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start gap-2">
+                            <div>
+                                <h3 class="text-lg sm:text-2xl font-bold text-[#3e2723] brand-font">${item.title}</h3>
+                                ${dateDisplay ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${dateDisplay}</p>` : ''}
+                            </div>
+                            <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center shrink-0">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Retirer
+                            </button>
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-[#5d4037] bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] whitespace-pre-line">${item.description}</p>
+
+                        ${item.imageBase64 ? `
+                            <div class="mt-2 rounded-lg overflow-hidden border border-[#d4c5b0] max-h-80 flex justify-center bg-black/5">
+                                <img src="${item.imageBase64}" alt="${item.title}" class="object-contain max-h-80 w-full">
+                            </div>
+                        ` : ''}
+
+                        ${item.docBase64 ? `
+                            <div class="pt-2">
+                                <a href="${item.docBase64}" download="${item.docName || 'document'}" class="inline-flex items-center bg-[#586337] hover:bg-[#434c29] text-white text-xs font-bold py-2 px-3 rounded-lg shadow transition-colors">
+                                    <i class="fa-solid fa-file-arrow-down mr-2 text-sm"></i> Télécharger le document (${item.docName || 'Document joint'})
+                                </a>
+                            </div>
+                        ` : ''}
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        // ================= SECTION SOIRÉE TORGNOLES =================
         const proposeTableForm = document.getElementById('propose-table-form');
         if(proposeTableForm) {
             proposeTableForm.addEventListener('submit', async (e) => {
@@ -716,8 +935,8 @@
                             const eventRef = getDocRef('events', eventId);
                             
                             await setDoc(eventRef, {
-                                title: "Soirée jeux",
-                                type: "Soirée jeux",
+                                title: "Soirée Torgnoles",
+                                type: "Soirée Torgnoles",
                                 date: date,
                                 time: "20:00",
                                 location: "Salle polyvalente de Bourg-la-Cave",
@@ -778,8 +997,8 @@
                         const eventRef = getDocRef('events', eventId);
 
                         await setDoc(eventRef, {
-                            title: "Soirée jeux",
-                            type: "Soirée jeux",
+                            title: "Soirée Torgnoles",
+                            type: "Soirée Torgnoles",
                             date: date,
                             time: "20:00",
                             location: "Salle polyvalente de Bourg-la-Cave",
@@ -834,6 +1053,11 @@
 
         window.deleteTable = async function(tableId) {
             if (!currentUser) return;
+            const pin = prompt("Veuillez saisir le code PIN administrateur pour annuler cette table :");
+            if (pin !== MASTER_PIN) {
+                return showToast("Code PIN incorrect. Suppression annulée.", true);
+            }
+
             try {
                 const table = currentTables.find(t => t.id === tableId);
                 if (!table) return;
@@ -900,14 +1124,14 @@
                         `).join('');
 
                     const card = document.createElement('div');
-                    card.className = `parchment-card rounded-xl border-l-4 ${isFull ? 'border-l-red-500' : 'border-l-green-600'} shadow-sm hover:shadow-md transition-shadow relative overflow-hidden p-2.5 sm:p-4 max-w-full`;
+                    card.className = `parchment-card rounded-xl border-l-4 ${isFull ? 'border-l-red-500' : 'border-l-[#586337]'} shadow-sm hover:shadow-md transition-shadow relative overflow-hidden p-2.5 sm:p-4 max-w-full`;
                     
                     card.innerHTML = `
                         <div class="flex justify-between items-start cursor-pointer select-none gap-2 min-w-0" onclick="toggleTableCard('${table.id}')">
                             <div class="flex-grow min-w-0">
                                 <div class="flex flex-wrap items-start justify-between gap-1.5 sm:gap-2 mb-1 min-w-0">
                                     <h3 class="text-sm sm:text-xl font-bold text-[#3e2723] brand-font break-words min-w-0 flex-1 leading-snug">${table.gameName}</h3>
-                                    <span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide border ${isFull ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}">
+                                    <span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide border ${isFull ? 'bg-red-50 text-red-700 border-red-200' : 'bg-[#f4f6ee] text-[#586337] border-[#d2d8bc]'}">
                                         <i class="fa-solid fa-users mr-1"></i> ${currentPlayersCount} / ${table.maxPlayers}
                                     </span>
                                 </div>
@@ -917,7 +1141,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center space-x-1 shrink-0 pt-0.5">
-                                <i id="table-chevron-${table.id}" class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-green-700 text-xs sm:text-sm transition-transform duration-300"></i>
+                                <i id="table-chevron-${table.id}" class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-[#586337] text-xs sm:text-sm transition-transform duration-300"></i>
                             </div>
                         </div>
 
@@ -939,8 +1163,8 @@
                                 <div class="pt-2 border-t border-[#e2d5c3] mb-2.5">
                                     <label for="join-input-${table.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1">Rejoindre cette table :</label>
                                     <div class="flex gap-1.5 sm:gap-2">
-                                        <input type="text" id="join-input-${table.id}" placeholder="Votre nom ou pseudo" class="flex-grow min-w-0 bg-white border border-[#d4c5b0] rounded-md py-1 px-2 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600">
-                                        <button onclick="joinTable('${table.id}', 'join-input-${table.id}',${table.maxPlayers})" class="shrink-0 bg-goblin hover:bg-green-800 text-white font-bold text-xs px-2.5 sm:px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap">
+                                        <input type="text" id="join-input-${table.id}" placeholder="Votre nom ou pseudo" class="flex-grow min-w-0 bg-white border border-[#d4c5b0] rounded-md py-1 px-2 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
+                                        <button onclick="joinTable('${table.id}', 'join-input-${table.id}',${table.maxPlayers})" class="shrink-0 bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-2.5 sm:px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap">
                                             <i class="fa-solid fa-user-plus mr-1"></i> S'inscrire
                                         </button>
                                     </div>
@@ -1044,7 +1268,7 @@
                             <span class="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider ${colorConfig.badge}">
                                 ${ev.type}
                             </span>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide border bg-red-50 text-green-700 border-red-200">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide border bg-[#f4f6ee] text-[#586337] border-[#d2d8bc]">
                                 <i class="fa-solid fa-users mr-1"></i> ${playersCount}
                             </span>
                         </div>
@@ -1054,8 +1278,8 @@
                     <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font">${ev.title}</h2>
 
                     <div class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-[#5d4037] font-medium bg-[#fbf7f0] p-2.5 sm:p-3 rounded-lg border border-[#e2d5c3]">
-                        <p><i class="fa-regular fa-calendar text-green-700 mr-2"></i><strong>Date :</strong> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
-                        <p><i class="fa-solid fa-location-dot text-green-700 mr-2"></i><strong>Lieu :</strong> ${ev.location}</p>
+                        <p><i class="fa-regular fa-calendar text-[#586337] mr-2"></i><strong>Date :</strong> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
+                        <p><i class="fa-solid fa-location-dot text-[#586337] mr-2"></i><strong>Lieu :</strong> ${ev.location}</p>
                     </div>
 
                     ${ev.description ? `
@@ -1072,8 +1296,8 @@
                     <div class="pt-2 border-t border-[#e2d5c3]">
                         <label for="join-event-input-${ev.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1">Participer à cet événement :</label>
                         <div class="flex gap-2">
-                            <input type="text" id="join-event-input-${ev.id}" placeholder="Votre nom ou pseudo" class="flex-grow bg-white border border-[#d4c5b0] rounded-md py-1 px-2.5 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600">
-                            <button onclick="joinEvent('${ev.id}', 'join-event-input-${ev.id}')" class="bg-goblin hover:bg-green-800 text-white font-bold text-xs px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap">
+                            <input type="text" id="join-event-input-${ev.id}" placeholder="Votre nom ou pseudo" class="flex-grow bg-white border border-[#d4c5b0] rounded-md py-1 px-2.5 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
+                            <button onclick="joinEvent('${ev.id}', 'join-event-input-${ev.id}')" class="bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap">
                                 <i class="fa-solid fa-user-plus mr-1"></i> S'inscrire
                             </button>
                         </div>
@@ -1083,7 +1307,7 @@
                         <button onclick="deleteEvent('${ev.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center">
                             <i class="fa-solid fa-trash-can mr-1.5"></i> Supprimer / Annuler
                         </button>
-                        <button onclick="closeEventModal()" class="bg-goblin text-white font-bold text-xs py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-green-800 transition-colors">
+                        <button onclick="closeEventModal()" class="bg-goblin text-white font-bold text-xs py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-[#434c29] transition-colors">
                             Fermer
                         </button>
                     </div>
@@ -1135,6 +1359,11 @@
 
         window.deleteEvent = async function(eventId) {
             if (!currentUser) return;
+            const pin = prompt("Veuillez saisir le code PIN administrateur pour annuler cet événement :");
+            if (pin !== MASTER_PIN) {
+                return showToast("Code PIN incorrect. Suppression annulée.", true);
+            }
+
             try {
                 await deleteDoc(getDocRef('events', eventId));
                 closeEventModal();
@@ -1188,7 +1417,7 @@
                         const isToday = todayStr === dateFormatted;
 
                         const dayHeader = document.createElement('div');
-                        dayHeader.className = `text-[10px] sm:text-xs font-bold ${isToday ? 'bg-green-700 text-white w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center' : (dayCol >= 5 ? 'text-red-700' : 'text-[#3e2723]')}`;
+                        dayHeader.className = `text-[10px] sm:text-xs font-bold ${isToday ? 'bg-[#586337] text-white w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center' : (dayCol >= 5 ? 'text-red-700' : 'text-[#3e2723]')}`;
                         dayHeader.textContent = dayCounter;
                         td.appendChild(dayHeader);
 
@@ -1221,7 +1450,7 @@
             }
         }
 
-        // ================= SECTION LUDOTHÈQUE DU CLUB =================
+        // ================= SECTION LA RÉSERVE =================
         function getUnlockedPins() {
             try { return JSON.parse(localStorage.getItem('gob_unlocked_pins') || '{}'); } catch(e) { return {}; }
         }
@@ -1517,7 +1746,7 @@
                             </div>
                             <form onsubmit="event.preventDefault(); addGame('${player.id}', 'input-game-${player.id}');" class="mb-2 flex gap-1.5">
                                 <input type="text" id="input-game-${player.id}" placeholder="Ajouter un jeu..." class="flex-grow bg-[#ffffff] border border-[#d4c5b0] rounded-md py-1 px-2 text-xs text-[#3e2723] focus:outline-none focus:border-goblin">
-                                <button type="submit" class="bg-goblin hover:bg-green-800 text-white font-bold px-2 py-1 rounded-md text-xs transition-colors shadow-2xs">
+                                <button type="submit" class="bg-goblin hover:bg-[#434c29] text-white font-bold px-2 py-1 rounded-md text-xs transition-colors shadow-2xs">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </form>
@@ -1546,6 +1775,9 @@
             initAuth();
             const today = new Date().toISOString().split('T')[0];
             
+            const upDate = document.getElementById('upcomingDate');
+            if(upDate) { upDate.setAttribute('min', today); upDate.value = today; }
+
             const tDate = document.getElementById('tableDate');
             if(tDate) { tDate.setAttribute('min', today); tDate.value = today; }
             
