@@ -222,6 +222,53 @@
         </div>
     </div>
 
+    <!-- MODAL : Modifier une Table -->
+    <div id="edit-table-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
+        <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
+            <button onclick="closeEditTableModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font mb-4 flex items-center">
+                <i class="fa-solid fa-pen-to-square text-goblin mr-2"></i> Modifier la Table
+            </h2>
+            
+            <form id="form-edit-table" class="space-y-3.5 sm:space-y-4">
+                <input type="hidden" id="edit-table-id">
+                <input type="hidden" id="edit-table-old-date">
+                
+                <div>
+                    <label for="edit-table-game" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Nom du Jeu *</label>
+                    <input type="text" id="edit-table-game" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                </div>
+                <div>
+                    <label for="edit-table-host" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Votre Nom / Pseudo (Organisateur) *</label>
+                    <input type="text" id="edit-table-host" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                </div>
+                <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                        <label for="edit-table-date" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date *</label>
+                        <input type="date" id="edit-table-date" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                    </div>
+                    <div>
+                        <label for="edit-table-time" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
+                        <input type="time" id="edit-table-time" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                    </div>
+                </div>
+                <div>
+                    <label for="edit-table-max" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Nombre de joueurs max *</label>
+                    <input type="number" id="edit-table-max" min="1" max="20" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                </div>
+                <div>
+                    <label for="edit-table-description" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Description (Optionnel)</label>
+                    <textarea id="edit-table-description" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin"></textarea>
+                </div>
+                
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeEditTableModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL LA RÉSERVE 1 : Création de Joueur -->
     <div id="modal-create-player" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
@@ -1107,6 +1154,129 @@
             });
         }
 
+        // --- MODIFICATION DES TABLES ---
+        window.openEditTableModal = function(tableId) {
+            const table = currentTables.find(t => t.id === tableId);
+            if (!table) return;
+
+            document.getElementById('edit-table-id').value = table.id;
+            document.getElementById('edit-table-old-date').value = table.date;
+            document.getElementById('edit-table-game').value = table.gameName || '';
+            document.getElementById('edit-table-host').value = table.hostName || '';
+            document.getElementById('edit-table-date').value = table.date || '';
+            document.getElementById('edit-table-time').value = table.time || '18:00';
+            document.getElementById('edit-table-max').value = table.maxPlayers || 5;
+            document.getElementById('edit-table-description').value = table.description || '';
+
+            document.getElementById('edit-table-modal').classList.remove('hidden');
+        };
+
+        window.closeEditTableModal = function() {
+            document.getElementById('edit-table-modal').classList.add('hidden');
+        };
+
+        const formEditTable = document.getElementById('form-edit-table');
+        if (formEditTable) {
+            formEditTable.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser) return showToast("Connexion requise.", true);
+
+                const id = document.getElementById('edit-table-id').value;
+                const oldDate = document.getElementById('edit-table-old-date').value;
+                const gameName = document.getElementById('edit-table-game').value.trim();
+                const hostName = document.getElementById('edit-table-host').value.trim();
+                const date = document.getElementById('edit-table-date').value;
+                const time = document.getElementById('edit-table-time').value;
+                const maxPlayers = parseInt(document.getElementById('edit-table-max').value, 10);
+                const description = document.getElementById('edit-table-description').value.trim();
+
+                const table = currentTables.find(t => t.id === id);
+                if (!table) return;
+                const oldHost = table.hostName;
+
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Enregistrement...';
+                btn.disabled = true;
+
+                try {
+                    await updateDoc(getDocRef('tables', id), {
+                        gameName, hostName, date, time, maxPlayers, description
+                    });
+
+                    // Synchronisation avec l'Agenda si la date ou l'hôte a changé
+                    if (oldDate !== date) {
+                        const oldAffectedPlayers = new Set([oldHost, ...(table.playersList || [])]);
+                        const newAffectedPlayers = new Set([hostName, ...(table.playersList || [])]);
+
+                        // Retirer de l'ancien événement
+                        const remainingOldTables = currentTables.filter(t => t.date === oldDate && t.id !== id);
+                        const oldEvent = currentEvents.find(ev => ev.date === oldDate && !ev.cancelled);
+                        if (oldEvent) {
+                            const eventRef = getDocRef('events', oldEvent.id);
+                            for (const pName of oldAffectedPlayers) {
+                                const stillInTables = remainingOldTables.some(t =>
+                                    t.hostName === pName || (t.playersList || []).includes(pName)
+                                );
+                                if (!stillInTables) {
+                                    await updateDoc(eventRef, { playersList: arrayRemove(pName) });
+                                }
+                            }
+                        }
+
+                        // Ajouter au nouvel événement
+                        const targetNewEvent = currentEvents.find(ev => ev.date === date && !ev.cancelled);
+                        if (targetNewEvent) {
+                            const newEventRef = getDocRef('events', targetNewEvent.id);
+                            for (const pName of newAffectedPlayers) {
+                                await updateDoc(newEventRef, { playersList: arrayUnion(pName) });
+                            }
+                        } else {
+                            const dateObj = new Date(date + 'T00:00:00');
+                            const isFridayOrSaturday = (dateObj.getDay() === 5 || dateObj.getDay() === 6);
+                            const eventId = isFridayOrSaturday ? `soiree-${date}` : `event-${date}`;
+                            const newEventRef = getDocRef('events', eventId);
+
+                            await setDoc(newEventRef, {
+                                title: "Soirée Torgnoles",
+                                type: "Soirée Torgnoles",
+                                date: date,
+                                time: "18:00",
+                                location: "Salle polyvalente de Bourg-la-Cave",
+                                description: "Rencontre hebdomadaire du club",
+                                creatorId: 'system',
+                                createdAt: new Date().toISOString(),
+                                playersList: Array.from(newAffectedPlayers),
+                                cancelled: false
+                            });
+                        }
+                    } else if (oldHost !== hostName) {
+                        // La date n'a pas changé, mais l'hôte a changé
+                        const stillInTables = currentTables.some(t =>
+                            t.date === date && t.id !== id && (t.hostName === oldHost || (t.playersList || []).includes(oldHost))
+                        );
+                        const targetEvent = currentEvents.find(ev => ev.date === date && !ev.cancelled);
+                        if (targetEvent) {
+                            const eventRef = getDocRef('events', targetEvent.id);
+                            if (!stillInTables) {
+                                await updateDoc(eventRef, { playersList: arrayRemove(oldHost) });
+                            }
+                            await updateDoc(eventRef, { playersList: arrayUnion(hostName) });
+                        }
+                    }
+
+                    showToast("Table modifiée avec succès !");
+                    closeEditTableModal();
+                } catch (error) {
+                    console.error("Erreur modification table :", error);
+                    showToast("Erreur lors de la modification.", true);
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            });
+        }
+
         window.joinTable = async function(tableId, inputId, maxPlayers) {
             if (!currentUser) return showToast("Connexion requise.", true);
             const inputEl = document.getElementById(inputId);
@@ -1317,7 +1487,10 @@
                                 </div>
                             `}
 
-                            <div class="pt-1.5 flex justify-end">
+                            <div class="pt-1.5 flex justify-end gap-2">
+                                <button onclick="openEditTableModal('${table.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
+                                    <i class="fa-solid fa-pen mr-1.5"></i> Modifier
+                                </button>
                                 <button onclick="deleteTable('${table.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
                                     <i class="fa-solid fa-trash-can mr-1.5"></i> Annuler la table
                                 </button>
