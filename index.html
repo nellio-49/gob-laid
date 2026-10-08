@@ -123,10 +123,102 @@
         <span id="toast-message" class="font-medium">Notification</span>
     </div>
 
-    <!-- MODAL : Détails Événement -->
+    <!-- MODAL : Détails Événement (Agenda) -->
     <div id="event-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-[#586337]">
             <div id="event-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- MODAL : Modifier Événement Agenda -->
+    <div id="edit-event-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
+        <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
+            <button onclick="closeEditEventModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font mb-4 flex items-center">
+                <i class="fa-solid fa-pen-to-square text-goblin mr-2"></i> Modifier l'événement de l'agenda
+            </h2>
+            
+            <form id="form-edit-event" class="space-y-3.5 sm:space-y-4">
+                <input type="hidden" id="edit-event-id">
+                
+                <div>
+                    <label for="edit-event-title" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Titre de l'événement *</label>
+                    <input type="text" id="edit-event-title" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                </div>
+                <div>
+                    <label for="edit-event-type" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Type d'événement *</label>
+                    <select id="edit-event-type" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin font-medium">
+                        <option value="Tournoi">🏆 Tournoi</option>
+                        <option value="Soirée Torgnoles">🎲 Soirée Torgnoles</option>
+                        <option value="Assemblée / Réunion">📜 Assemblée / Réunion</option>
+                        <option value="Festival / Salon">🎪 Festival / Salon</option>
+                        <option value="Autre">📌 Autre</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                        <label for="edit-event-date" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date *</label>
+                        <input type="date" id="edit-event-date" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                    </div>
+                    <div>
+                        <label for="edit-event-time" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
+                        <input type="time" id="edit-event-time" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                    </div>
+                </div>
+                <div>
+                    <label for="edit-event-location" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Lieu / Salle</label>
+                    <input type="text" id="edit-event-location" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                </div>
+                <div>
+                    <label for="edit-event-description" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Description / Détails</label>
+                    <textarea id="edit-event-description" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin"></textarea>
+                </div>
+                
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeEditEventModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL : Modifier Événement en approche -->
+    <div id="edit-upcoming-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
+        <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
+            <button onclick="closeEditUpcomingModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font mb-4 flex items-center">
+                <i class="fa-solid fa-pen-to-square text-goblin mr-2"></i> Modifier l'événement
+            </h2>
+            
+            <form id="form-edit-upcoming" class="space-y-3.5 sm:space-y-4">
+                <input type="hidden" id="edit-upcoming-id">
+                
+                <div>
+                    <label for="edit-upcoming-title" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Nom de l'événement *</label>
+                    <input type="text" id="edit-upcoming-title" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                </div>
+                <div>
+                    <label for="edit-upcoming-date" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date / Période *</label>
+                    <input type="text" id="edit-upcoming-date" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin">
+                </div>
+                <div>
+                    <label for="edit-upcoming-description" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Description / Informations *</label>
+                    <textarea id="edit-upcoming-description" rows="3" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin"></textarea>
+                </div>
+                <div>
+                    <label for="edit-upcoming-image" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Remplacer l'affiche / image (Optionnel)</label>
+                    <input type="file" id="edit-upcoming-image" accept="image/*" class="w-full bg-white border border-[#d4c5b0] rounded-md py-1.5 px-2 text-xs text-[#3e2723]">
+                </div>
+                <div>
+                    <label for="edit-upcoming-doc" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Remplacer le document joint (Optionnel)</label>
+                    <input type="file" id="edit-upcoming-doc" accept=".pdf,.doc,.docx,.txt" class="w-full bg-white border border-[#d4c5b0] rounded-md py-1.5 px-2 text-xs text-[#3e2723]">
+                </div>
+                
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeEditUpcomingModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow">Enregistrer</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -283,7 +375,7 @@
                                 <div>
                                     <label for="tableTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
                                     <div class="relative flex items-center">
-                                        <input type="time" id="tableTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <input type="time" id="tableTime" required value="18:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm pr-8 cursor-pointer">
                                         <i class="fa-regular fa-clock absolute right-2.5 text-[#586337] pointer-events-none text-xs sm:text-sm"></i>
                                     </div>
                                 </div>
@@ -418,7 +510,7 @@
                                 <div>
                                     <label for="eventTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
                                     <div class="relative flex items-center">
-                                        <input type="time" id="eventTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <input type="time" id="eventTime" required value="18:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm pr-8 cursor-pointer">
                                         <i class="fa-regular fa-clock absolute right-2.5 text-[#586337] pointer-events-none text-xs sm:text-sm"></i>
                                     </div>
                                 </div>
@@ -701,7 +793,6 @@
                 currentUpcoming = [];
                 snapshot.forEach((doc) => { currentUpcoming.push({ id: doc.id, ...doc.data() }); });
                 
-                // Tri par date de création du plus récent au plus ancien ou selon l'ordre de saisie
                 currentUpcoming.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
 
                 renderUpcomingEvents();
@@ -803,6 +894,77 @@
             });
         }
 
+        // --- MODIFICATION & SUPPRESSION DES ÉVÉNEMENTS EN APPROCHE ---
+        window.openEditUpcomingModal = function(id) {
+            const eventItem = currentUpcoming.find(e => e.id === id);
+            if (!eventItem) return;
+
+            const pin = prompt("Veuillez saisir le code PIN administrateur pour modifier cet événement :");
+            if (pin !== MASTER_PIN) {
+                return showToast("Code PIN incorrect. Modification annulée.", true);
+            }
+
+            document.getElementById('edit-upcoming-id').value = eventItem.id;
+            document.getElementById('edit-upcoming-title').value = eventItem.title || '';
+            document.getElementById('edit-upcoming-date').value = eventItem.dateText || eventItem.date || '';
+            document.getElementById('edit-upcoming-description').value = eventItem.description || '';
+            document.getElementById('edit-upcoming-image').value = '';
+            document.getElementById('edit-upcoming-doc').value = '';
+
+            document.getElementById('edit-upcoming-modal').classList.remove('hidden');
+        };
+
+        window.closeEditUpcomingModal = function() {
+            document.getElementById('edit-upcoming-modal').classList.add('hidden');
+        };
+
+        const formEditUpcoming = document.getElementById('form-edit-upcoming');
+        if (formEditUpcoming) {
+            formEditUpcoming.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser) return showToast("Connexion requise.", true);
+
+                const id = document.getElementById('edit-upcoming-id').value;
+                const title = document.getElementById('edit-upcoming-title').value.trim();
+                const dateText = document.getElementById('edit-upcoming-date').value.trim();
+                const description = document.getElementById('edit-upcoming-description').value.trim();
+                const imageInput = document.getElementById('edit-upcoming-image');
+                const docInput = document.getElementById('edit-upcoming-doc');
+
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Enregistrement...';
+                btn.disabled = true;
+
+                try {
+                    const updateData = {
+                        title,
+                        dateText,
+                        description
+                    };
+
+                    if (imageInput.files && imageInput.files[0]) {
+                        updateData.imageBase64 = await fileToBase64(imageInput.files[0]);
+                    }
+
+                    if (docInput.files && docInput.files[0]) {
+                        updateData.docName = docInput.files[0].name;
+                        updateData.docBase64 = await fileToBase64(docInput.files[0]);
+                    }
+
+                    await updateDoc(getDocRef('upcoming_events', id), updateData);
+                    showToast("Événement modifié avec succès !");
+                    closeEditUpcomingModal();
+                } catch (error) {
+                    console.error("Erreur modification événement :", error);
+                    showToast("Erreur lors de la modification.", true);
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            });
+        }
+
         window.deleteUpcomingEvent = async function(id) {
             if (!currentUser) return;
             const pin = prompt("Veuillez saisir le code PIN administrateur (9999 par défaut) pour supprimer cet événement :");
@@ -840,9 +1002,14 @@
                                 <h3 class="text-lg sm:text-2xl font-bold text-[#3e2723] brand-font">${item.title}</h3>
                                 ${(item.dateText || item.date) ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${item.dateText || item.date}</p>` : ''}
                             </div>
-                            <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center shrink-0">
-                                <i class="fa-solid fa-trash-can mr-1"></i> Retirer
-                            </button>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button onclick="openEditUpcomingModal('${item.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
+                                    <i class="fa-solid fa-pen mr-1"></i> Modifier
+                                </button>
+                                <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Retirer
+                                </button>
+                            </div>
                         </div>
 
                         <p class="text-xs sm:text-sm text-[#5d4037] bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] whitespace-pre-line">${item.description}</p>
@@ -913,7 +1080,7 @@
                                 title: "Soirée Torgnoles",
                                 type: "Soirée Torgnoles",
                                 date: date,
-                                time: "20:00",
+                                time: "18:00",
                                 location: "Salle polyvalente de Bourg-la-Cave",
                                 description: "Rencontre hebdomadaire du club",
                                 creatorId: 'system',
@@ -928,7 +1095,7 @@
 
                     showToast("Annonce placardée et inscription à la soirée enregistrée !");
                     e.target.reset();
-                    document.getElementById('tableTime').value = "20:00";
+                    document.getElementById('tableTime').value = "18:00";
                     toggleTableForm();
                 } catch (error) {
                     console.error(error);
@@ -975,7 +1142,7 @@
                             title: "Soirée Torgnoles",
                             type: "Soirée Torgnoles",
                             date: date,
-                            time: "20:00",
+                            time: "18:00",
                             location: "Salle polyvalente de Bourg-la-Cave",
                             description: "Rencontre hebdomadaire du club",
                             creatorId: 'system',
@@ -1191,7 +1358,7 @@
                     });
                     showToast("Événement ajouté au calendrier !");
                     e.target.reset();
-                    document.getElementById('eventTime').value = "20:00";
+                    document.getElementById('eventTime').value = "18:00";
                     calendarDate = new Date(date);
                     renderCalendar();
                     toggleEventForm();
@@ -1199,6 +1366,73 @@
                     showToast("Erreur lors de l'ajout.", true);
                 } finally {
                     btn.innerHTML = '<i class="fa-solid fa-calendar-check mr-2"></i> Ajouter au Calendrier';
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        window.openEditEventModal = function(eventId) {
+            const ev = getEventById(eventId);
+            if (!ev) return;
+
+            const pin = prompt("Veuillez saisir le code PIN administrateur pour modifier cet événement :");
+            if (pin !== MASTER_PIN) {
+                return showToast("Code PIN incorrect. Modification annulée.", true);
+            }
+
+            document.getElementById('edit-event-id').value = ev.id;
+            document.getElementById('edit-event-title').value = ev.title || '';
+            document.getElementById('edit-event-type').value = ev.type || 'Tournoi';
+            document.getElementById('edit-event-date').value = ev.date || '';
+            document.getElementById('edit-event-time').value = ev.time || '18:00';
+            document.getElementById('edit-event-location').value = ev.location || '';
+            document.getElementById('edit-event-description').value = ev.description || '';
+
+            closeEventModal();
+            document.getElementById('edit-event-modal').classList.remove('hidden');
+        };
+
+        window.closeEditEventModal = function() {
+            document.getElementById('edit-event-modal').classList.add('hidden');
+        };
+
+        const formEditEvent = document.getElementById('form-edit-event');
+        if (formEditEvent) {
+            formEditEvent.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser) return showToast("Connexion requise.", true);
+
+                const id = document.getElementById('edit-event-id').value;
+                const title = document.getElementById('edit-event-title').value.trim();
+                const type = document.getElementById('edit-event-type').value;
+                const date = document.getElementById('edit-event-date').value;
+                const time = document.getElementById('edit-event-time').value;
+                const location = document.getElementById('edit-event-location').value.trim();
+                const description = document.getElementById('edit-event-description').value.trim();
+
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Enregistrement...';
+                btn.disabled = true;
+
+                try {
+                    await updateDoc(getDocRef('events', id), {
+                        title,
+                        type,
+                        date,
+                        time,
+                        location: location || 'Salle polyvalente de Bourg-la-Cave',
+                        description
+                    });
+                    showToast("Événement de l'agenda modifié !");
+                    closeEditEventModal();
+                    calendarDate = new Date(date);
+                    renderCalendar();
+                } catch (error) {
+                    console.error("Erreur modification événement agenda :", error);
+                    showToast("Erreur lors de la modification.", true);
+                } finally {
+                    btn.innerHTML = originalText;
                     btn.disabled = false;
                 }
             });
@@ -1278,10 +1512,15 @@
                         </div>
                     </div>
 
-                    <div class="pt-2 sm:pt-3 border-t border-[#e2d5c3] flex justify-between items-center gap-2 sm:gap-3">
-                        <button onclick="deleteEvent('${ev.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center">
-                            <i class="fa-solid fa-trash-can mr-1.5"></i> Supprimer / Annuler
-                        </button>
+                    <div class="pt-2 sm:pt-3 border-t border-[#e2d5c3] flex flex-wrap justify-between items-center gap-2 sm:gap-3">
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="openEditEventModal('${ev.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center">
+                                <i class="fa-solid fa-pen mr-1.5"></i> Modifier
+                            </button>
+                            <button onclick="deleteEvent('${ev.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center">
+                                <i class="fa-solid fa-trash-can mr-1.5"></i> Supprimer
+                            </button>
+                        </div>
                         <button onclick="closeEventModal()" class="bg-goblin text-white font-bold text-xs py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-[#434c29] transition-colors">
                             Fermer
                         </button>
