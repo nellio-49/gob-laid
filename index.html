@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Gob' laid - Club de Jeux</title>
+    <title>Le Gob' laid - l'Antre</title>
     
     <!-- Icône du site et pour écran d'accueil smartphone -->
     <link rel="icon" type="image/webp" href="gob.webp">
@@ -89,7 +89,7 @@
                     <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
                     <div>
                         <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
-                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase">Club de Jeux</span>
+                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase">l'Antre</span>
                     </div>
                 </div>
 
@@ -965,22 +965,7 @@
 
         // ================= SECTION ÉVÉNEMENTS & CALENDRIER =================
         function getEventById(eventId) {
-            let ev = currentEvents.find(e => e.id === eventId);
-            if (!ev && eventId.startsWith('soiree-')) {
-                const dateFormatted = eventId.replace('soiree-', '');
-                ev = {
-                    id: eventId,
-                    title: "Soirée jeux",
-                    type: "Soirée jeux",
-                    date: dateFormatted,
-                    time: "20:00",
-                    location: "Salle polyvalente de Bourg-la-Cave",
-                    description: "Rencontre hebdomadaire du club",
-                    playersList: [],
-                    isDefault: true
-                };
-            }
-            return ev;
+            return currentEvents.find(e => e.id === eventId);
         }
 
         const proposeEventForm = document.getElementById('propose-event-form');
@@ -1122,29 +1107,11 @@
             if (playersList.includes(playerName)) return showToast("Ce nom est déjà inscrit à l'événement !", true);
 
             try {
-                const existingInFirestore = currentEvents.some(e => e.id === eventId);
-
-                if (!existingInFirestore && (ev.isDefault || eventId.startsWith('soiree-'))) {
-                    const eventRef = getDocRef('events', eventId);
-                    await setDoc(eventRef, {
-                        title: ev.title,
-                        type: ev.type,
-                        date: ev.date,
-                        time: ev.time,
-                        location: ev.location,
-                        description: ev.description,
-                        creatorId: 'system',
-                        createdAt: new Date().toISOString(),
-                        playersList: [playerName],
-                        cancelled: false
-                    });
-                } else {
-                    const eventRef = getDocRef('events', eventId);
-                    await updateDoc(eventRef, {
-                        playersList: arrayUnion(playerName),
-                        cancelled: false
-                    });
-                }
+                const eventRef = getDocRef('events', eventId);
+                await updateDoc(eventRef, {
+                    playersList: arrayUnion(playerName),
+                    cancelled: false
+                });
                 showToast(`${playerName} est inscrit à l'événement !`);
                 openEventModal(eventId);
             } catch(e) {
@@ -1169,23 +1136,7 @@
         window.deleteEvent = async function(eventId) {
             if (!currentUser) return;
             try {
-                if (eventId.startsWith('soiree-')) {
-                    const ev = getEventById(eventId);
-                    const eventRef = getDocRef('events', eventId);
-                    await setDoc(eventRef, {
-                        title: ev.title || "Soirée jeux",
-                        type: ev.type || "Soirée jeux",
-                        date: ev.date,
-                        time: ev.time || "20:00",
-                        location: ev.location || "Salle polyvalente de Bourg-la-Cave",
-                        description: ev.description || "Rencontre hebdomadaire du club",
-                        cancelled: true,
-                        creatorId: currentUser.uid,
-                        createdAt: new Date().toISOString()
-                    });
-                } else {
-                    await deleteDoc(getDocRef('events', eventId));
-                }
+                await deleteDoc(getDocRef('events', eventId));
                 closeEventModal();
                 showToast("Événement annulé.");
             } catch(e) {
@@ -1242,24 +1193,6 @@
                         td.appendChild(dayHeader);
 
                         let dayEvents = currentEvents.filter(e => e.date === dateFormatted && !e.cancelled);
-
-                        if (dayCol === 4 || dayCol === 5) { // Vendredi (4) et Samedi (5) pour Le Gob' laid
-                            const soireeRecord = currentEvents.find(e => e.id === `soiree-${dateFormatted}`);
-                            const hasSoiree = dayEvents.some(e => e.type === 'Soirée jeux');
-                            if (!soireeRecord && !hasSoiree) {
-                                dayEvents.push({
-                                    id: `soiree-${dateFormatted}`,
-                                    title: 'Soirée jeux',
-                                    type: 'Soirée jeux',
-                                    date: dateFormatted,
-                                    time: '20:00',
-                                    location: 'Salle polyvalente de Bourg-la-Cave',
-                                    description: 'Rencontre hebdomadaire du club',
-                                    playersList: [],
-                                    isDefault: true
-                                });
-                            }
-                        }
 
                         if (dayEvents.length > 0) {
                             const eventsContainer = document.createElement('div');
