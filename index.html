@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Gob'Laid - Le repère du Club</title>
+    <title>Le Gob' laid - Club de Jeux</title>
     
     <!-- Icône du site et pour écran d'accueil smartphone -->
     <link rel="icon" type="image/webp" href="gob.webp">
@@ -13,14 +13,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
         body {
             font-family: 'Lora', serif;
             background-color: #fbf7f0; 
-            /* Arrière-plan Taverne au format WebP avec calque parchemin à 35 % d'opacité */
-            background-image: linear-gradient(rgba(251, 247, 240, 0.35), rgba(251, 247, 240, 0.35)), url('taverne.webp');
+            /* Arrière-plan Taverne avec calque parchemin à 78 % d'opacité */
+            background-image: linear-gradient(rgba(251, 247, 240, 0.78), rgba(251, 247, 240, 0.78)), url('taverne.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -29,12 +29,6 @@
         }
         h1, h2, h3, h4, .brand-font {
             font-family: 'Cinzel', serif;
-        }
-        .dripping-text {
-            font-family: 'Rubik Wet Paint', cursive, serif;
-            color: #2f855a;
-            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.15);
-            letter-spacing: 0.05em;
         }
         .parchment-card {
             background-color: rgba(255, 255, 255, 0.95);
@@ -48,7 +42,7 @@
             backdrop-filter: blur(4px);
         }
         
-        /* Thème Le Gob'Laid (Verts) */
+        /* Thème Le Gob' laid (Verts) */
         .text-goblin { color: #2f855a; }
         .bg-goblin { background-color: #38a169; }
         .bg-goblin:hover { background-color: #2f855a; }
@@ -64,9 +58,9 @@
             -webkit-appearance: none;
         }
 
-        .tab-content { display: none !important; }
+        .tab-content { display: none; }
         .tab-content.active {
-            display: block !important;
+            display: block;
             animation: fadeIn 0.3s ease-out;
         }
         @keyframes fadeIn {
@@ -84,73 +78,6 @@
             }
         }
     </style>
-    <script>
-        // Fonctions d'interface utilisateur globales synchrones (pour éviter tout blocage)
-        window.closeInfoModal = function() {
-            var modal = document.getElementById('info-modal');
-            if (modal) modal.classList.add('hidden');
-        };
-
-        window.switchTab = function(tabId) {
-            var tabs = document.querySelectorAll('.tab-content');
-            for (var i = 0; i < tabs.length; i++) {
-                tabs[i].classList.remove('active');
-            }
-            var target = document.getElementById(tabId);
-            if (target) target.classList.add('active');
-
-            var navTables = document.getElementById('nav-tables');
-            var navEvents = document.getElementById('nav-events');
-            var navLudo = document.getElementById('nav-ludo');
-
-            var activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-green-700 text-white shadow-sm flex items-center";
-            var inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-green-700 hover:bg-white/80 flex items-center";
-
-            if (navTables) navTables.className = tabId === 'tables-page' ? activeClass : inactiveClass;
-            if (navEvents) navEvents.className = tabId === 'events-page' ? activeClass : inactiveClass;
-            if (navLudo) navLudo.className = tabId === 'ludo-page' ? activeClass : inactiveClass;
-
-            if (tabId === 'events-page' && typeof window.renderCalendar === 'function') window.renderCalendar();
-            if (tabId === 'ludo-page' && typeof window.renderLudoUI === 'function') window.renderLudoUI();
-        };
-
-        window.toggleTableForm = function() {
-            var form = document.getElementById('propose-table-form');
-            var chevron = document.getElementById('table-form-chevron');
-            if (form) {
-                form.classList.toggle('hidden');
-                if (chevron) chevron.classList.toggle('rotate-180');
-            }
-        };
-
-        window.toggleEventForm = function() {
-            var form = document.getElementById('propose-event-form');
-            var chevron = document.getElementById('event-form-chevron');
-            if (form) {
-                form.classList.toggle('hidden');
-                if (chevron) chevron.classList.toggle('rotate-180');
-            }
-        };
-
-        window.showToast = function(message, isError) {
-            var toast = document.getElementById('toast');
-            var msgEl = document.getElementById('toast-message');
-            var iconEl = document.getElementById('toast-icon');
-            if(!toast || !msgEl || !iconEl) return;
-            msgEl.textContent = message;
-            
-            if (isError) {
-                toast.classList.replace('border-green-600', 'border-red-600');
-                iconEl.className = "fa-solid fa-circle-exclamation text-red-600 text-lg sm:text-xl";
-            } else {
-                toast.classList.replace('border-red-600', 'border-green-600');
-                iconEl.className = "fa-solid fa-bell text-green-600 text-lg sm:text-xl";
-            }
-
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            setTimeout(function() { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
-        };
-    </script>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden">
 
@@ -159,10 +86,10 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row justify-between items-center py-2.5 lg:h-24 gap-3 lg:gap-0">
                 <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('tables-page')">
-                    <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob'Laid" />
+                    <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
                     <div>
-                        <span class="dripping-text text-2xl sm:text-4xl block leading-tight">Le Gob'Laid</span>
-                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase">Le repère du Club</span>
+                        <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
+                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase">Club de Jeux</span>
                     </div>
                 </div>
 
@@ -182,8 +109,8 @@
         </div>
     </header>
 
-    <!-- POP-UP D'INFORMATION À L'OUVERTURE (Masqué par défaut avec classe 'hidden') -->
-    <div id="info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
+    <!-- POP-UP D'INFORMATION À L'OUVERTURE -->
+    <div id="info-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-5 sm:p-6 relative border-2 border-goblin text-center">
             <button onclick="closeInfoModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold transition-colors" title="Fermer">&times;</button>
             <div class="my-2">
@@ -269,9 +196,9 @@
         
         <!-- ONGLET 1 : SOIRÉES JEUX -->
         <section id="tables-page" class="tab-content active">
-            <div class="text-center mb-6 sm:mb-10 parchment-card max-w-2xl mx-auto p-4 sm:p-6 rounded-2xl shadow-md border border-[#d4c5b0]">
-                <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-3 brand-font">L'Agenda de la Taverne</h1>
-                <p class="text-sm sm:text-lg text-[#5d4037] font-medium">Consulter ou proposer une table de jeu</p>
+            <div class="text-center mb-6 sm:mb-10">
+                <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">L'Agenda de la Taverne</h1>
+                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Consulter ou proposer une table de jeu</p>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-5 lg:gap-8">
@@ -304,7 +231,7 @@
                                 <div>
                                     <label for="tableTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
                                     <div class="relative flex items-center">
-                                        <input type="time" id="tableTime" required value="18:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <input type="time" id="tableTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
                                         <i class="fa-regular fa-clock absolute right-2.5 text-green-700 pointer-events-none text-xs sm:text-sm"></i>
                                     </div>
                                 </div>
@@ -350,9 +277,9 @@
 
         <!-- ONGLET 2 : ÉVÉNEMENTS DU CLUB -->
         <section id="events-page" class="tab-content">
-            <div class="text-center mb-6 sm:mb-10 parchment-card max-w-2xl mx-auto p-4 sm:p-6 rounded-2xl shadow-md border border-[#d4c5b0]">
-                <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-3 brand-font">Événements du club</h1>
-                <p class="text-sm sm:text-lg text-[#5d4037] font-medium">Planifiez, visualisez et inscrivez-vous aux soirées, tournois et festivités du club.</p>
+            <div class="text-center mb-6 sm:mb-10">
+                <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">Événements du club</h1>
+                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Planifiez, visualisez et inscrivez-vous aux soirées, tournois et festivités du club.</p>
                 
                 <div class="inline-flex items-center gap-2 mt-3.5 px-4 py-2 rounded-xl bg-amber-100/90 border border-amber-300/80 text-amber-950 text-xs sm:text-sm font-semibold shadow-2xs">
                     <i class="fa-solid fa-hand-pointer text-goblin text-base"></i>
@@ -380,4 +307,1318 @@
                             <table class="w-full border-collapse text-center table-fixed min-w-[320px] sm:min-w-[550px]">
                                 <thead>
                                     <tr class="text-[10px] sm:text-xs font-bold text-[#5d4037] border-b-2 border-[#d4c5b0] bg-[#fbf7f0]/80">
-                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1 w-6 sm:w-10 text-gray-400 italic">n°</th>
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1">Lu</th>
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1">Ma</th>
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1">Me</th>
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1">Je</th>
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1">Ve</th>
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1 text-red-700">Sa</th>
+                                        <th class="py-1.5 sm:py-2.5 px-0.5 sm:px-1 text-red-700">Di</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calendar-grid-body" class="divide-y divide-[#e2d5c3]/50 text-xs sm:text-sm"></tbody>
+                            </table>
+                        </div>
+
+                        <div class="p-2 sm:p-3 bg-[#fdfaf5] border-t border-[#d4c5b0] flex flex-wrap justify-center gap-2 sm:gap-3 text-[10px] sm:text-xs font-bold text-[#5d4037]">
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-green-700 mr-1"></span> Tournoi</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-amber-600 mr-1"></span> Soirée jeux</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 mr-1"></span> Réunion</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-600 mr-1"></span> Festival</span>
+                            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-blue-600 mr-1"></span> Autre</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. CRÉATION D'ÉVÉNEMENT (Volet dépliable) -->
+                <div class="lg:col-span-1">
+                    <div class="parchment-card rounded-xl p-4 sm:p-6 sticky top-24 transition-all">
+                        <button type="button" onclick="toggleEventForm()" class="w-full flex justify-between items-center text-left focus:outline-none group cursor-pointer">
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font flex items-center">
+                                <i class="fa-solid fa-calendar-plus text-green-700 mr-2"></i> Créer un Événement
+                            </h2>
+                            <i id="event-form-chevron" class="fa-solid fa-chevron-down text-green-700 text-lg sm:text-xl transition-transform duration-300"></i>
+                        </button>
+
+                        <form id="propose-event-form" class="space-y-3.5 sm:space-y-5 hidden mt-4 pt-4 border-t border-[#e2d5c3]">
+                            <div>
+                                <label for="eventTitle" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Titre de l'événement *</label>
+                                <input type="text" id="eventTitle" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Ex : Tournoi Catan, AG...">
+                            </div>
+
+                            <div>
+                                <label for="eventType" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Type d'événement *</label>
+                                <select id="eventType" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm font-medium">
+                                    <option value="Tournoi">🏆 Tournoi</option>
+                                    <option value="Soirée jeux">🎲 Soirée jeux</option>
+                                    <option value="Assemblée / Réunion">📜 Assemblée / Réunion</option>
+                                    <option value="Festival / Salon">🎪 Festival / Salon</option>
+                                    <option value="Autre">📌 Autre</option>
+                                </select>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 sm:gap-4">
+                                <div>
+                                    <label for="eventDate" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date *</label>
+                                    <input type="date" id="eventDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm">
+                                </div>
+                                <div>
+                                    <label for="eventTime" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Heure *</label>
+                                    <div class="relative flex items-center">
+                                        <input type="time" id="eventTime" required value="20:00" onclick="this.showPicker && this.showPicker()" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-2.5 sm:px-3 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm pr-8 cursor-pointer">
+                                        <i class="fa-regular fa-clock absolute right-2.5 text-green-700 pointer-events-none text-xs sm:text-sm"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="eventLocation" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Lieu / Salle</label>
+                                <input type="text" id="eventLocation" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Ex : Salle polyvalente de Bourg-la-Cave">
+                            </div>
+                            
+                            <div>
+                                <label for="eventDescription" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Description / Détails</label>
+                                <textarea id="eventDescription" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-green-600 focus:ring-2 focus:ring-green-100 transition-colors shadow-sm" placeholder="Informations complémentaires, lots, tarifs..."></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3">
+                                <i class="fa-solid fa-calendar-check mr-2"></i> Ajouter au Calendrier
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ONGLET 3 : LUDOTHÈQUE DU CLUB -->
+        <section id="ludo-page" class="tab-content">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-1 sm:mb-2 brand-font">Ludothèque du Club</h1>
+                    <p class="text-sm sm:text-lg text-[#5d4037] font-medium">Consultez les listes de jeux des membres et recherchez qui possède quel jeu.</p>
+                </div>
+                <button onclick="openCreatePlayerModal()" class="w-full sm:w-auto bg-goblin hover:bg-green-800 text-white font-bold py-2 sm:py-2.5 px-4 rounded-xl shadow-md transition-all flex items-center justify-center text-xs sm:text-sm whitespace-nowrap">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Créer ma liste de jeux
+                </button>
+            </div>
+
+            <!-- Barre de Recherche Globale -->
+            <div class="parchment-card rounded-2xl p-3.5 sm:p-6 mb-6 sm:mb-8 border border-[#d4c5b0] shadow-md">
+                <div class="relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 transform -translate-y-1/2 text-goblin text-base sm:text-xl"></i>
+                    <input type="text" id="global-search-input" oninput="handleSearch()" class="w-full bg-white border-2 border-[#d4c5b0] focus:border-goblin rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-9 text-xs sm:text-base text-[#3e2723] font-medium placeholder-gray-400 focus:outline-none shadow-inner transition-colors" placeholder="Rechercher un jeu (Catan, Zombicide...)...">
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-green-700 font-bold text-base sm:text-lg">&times;</button>
+                </div>
+
+                <div id="search-results-container" class="hidden mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#e2d5c3]">
+                    <h3 class="text-base sm:text-lg font-bold text-goblin brand-font mb-2 sm:mb-3 flex items-center">
+                        <i class="fa-solid fa-list-check mr-2"></i> Résultats de la recherche :
+                    </h3>
+                    <div id="search-results-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"></div>
+                </div>
+            </div>
+
+            <div id="players-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 items-start"></div>
+
+            <div id="empty-players-state" class="hidden flex-col items-center justify-center py-12 sm:py-16 text-amber-900/70 parchment-card rounded-2xl border border-[#d4c5b0]">
+                <i class="fa-solid fa-chess-board text-5xl sm:text-7xl mb-3 opacity-40 text-goblin"></i>
+                <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">Aucune liste de jeu enregistrée.</p>
+                <p class="text-xs sm:text-sm mt-1 font-medium">Soyez le premier à ajouter votre liste !</p>
+                <button onclick="openCreatePlayerModal()" class="mt-4 bg-goblin hover:bg-green-800 text-white font-bold py-2 px-4 rounded-xl shadow transition-all text-xs sm:text-sm">
+                    ➕ Créer ma liste
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="header-bg border-t-2 border-[#d4c5b0] mt-auto py-6 sm:py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 md:gap-0">
+            <div class="flex items-center space-x-3">
+                <img src="gob.webp" class="h-14 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
+                <span class="brand-font font-bold text-base sm:text-xl text-[#5d4037]">Le Gob' laid © 2026</span>
+            </div>
+            <div class="flex space-x-6 text-[#8d6e63]">
+                <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-green-700 transition-colors" title="Notre page Facebook">
+                    <i class="fa-brands fa-facebook text-xl sm:text-2xl"></i>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="hover:text-green-700 transition-colors" title="Rejoindre notre Discord">
+                    <i class="fa-brands fa-discord text-xl sm:text-2xl"></i>
+                </a>
+                <a href="#" class="hover:text-green-700 transition-colors"><i class="fa-brands fa-instagram text-xl sm:text-2xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Application Unifiée - Firebase Le Gob' laid -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        const MASTER_PIN = "9999";
+
+        // ==========================================
+        // CONFIGURATION FIREBASE LE GOB' LAID
+        // ==========================================
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
+        let firebaseConfig = null;
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                firebaseConfig = JSON.parse(__firebase_config);
+            } else {
+                firebaseConfig = {
+                    apiKey: "AIzaSyBIoi9ziM-v5eQ54LgRoCBLQ22m5QHBLAQ",
+                    authDomain: "site-gob-laid.firebaseapp.com",
+                    projectId: "site-gob-laid",
+                    storageBucket: "site-gob-laid.firebasestorage.app",
+                    messagingSenderId: "57060942174",
+                    appId: "1:57060942174:web:30d9f8cda4ffb5300f6fcf"
+                };
+            }
+        } catch (e) { console.error(e); }
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentUser = null;
+
+        function getCol(colName) {
+            return collection(db, 'artifacts', appId, 'public', 'data', colName);
+        }
+        function getDocRef(colName, docId) {
+            return doc(db, 'artifacts', appId, 'public', 'data', colName, docId);
+        }
+
+        let calendarDate = new Date();
+        const expandedPlayerCards = new Set();
+        const expandedTableCards = new Set();
+
+        const typeColorMap = {
+            'Tournoi': { badge: 'bg-green-700 text-white' },
+            'Soirée jeux': { badge: 'bg-amber-600 text-white' },
+            'Assemblée / Réunion': { badge: 'bg-purple-600 text-white' },
+            'Festival / Salon': { badge: 'bg-emerald-600 text-white' },
+            'Autre': { badge: 'bg-blue-600 text-white' }
+        };
+
+        window.closeInfoModal = function() {
+            const modal = document.getElementById('info-modal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            const target = document.getElementById(tabId);
+            if (target) target.classList.add('active');
+
+            const navTables = document.getElementById('nav-tables');
+            const navEvents = document.getElementById('nav-events');
+            const navLudo = document.getElementById('nav-ludo');
+
+            const activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-green-700 text-white shadow-sm flex items-center";
+            const inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-green-700 hover:bg-white/80 flex items-center";
+
+            if (navTables) navTables.className = tabId === 'tables-page' ? activeClass : inactiveClass;
+            if (navEvents) navEvents.className = tabId === 'events-page' ? activeClass : inactiveClass;
+            if (navLudo) navLudo.className = tabId === 'ludo-page' ? activeClass : inactiveClass;
+
+            if (tabId === 'events-page') renderCalendar();
+            if (tabId === 'ludo-page') renderLudoUI();
+        };
+
+        window.toggleTableForm = function() {
+            const form = document.getElementById('propose-table-form');
+            const chevron = document.getElementById('table-form-chevron');
+            if (form) {
+                form.classList.toggle('hidden');
+                if (chevron) chevron.classList.toggle('rotate-180');
+            }
+        };
+
+        window.toggleTableCard = function(tableId) {
+            const content = document.getElementById(`table-content-${tableId}`);
+            const chevron = document.getElementById(`table-chevron-${tableId}`);
+            if (content) {
+                const isHidden = content.classList.contains('hidden');
+                if (isHidden) {
+                    content.classList.remove('hidden');
+                    if (chevron) chevron.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    expandedTableCards.add(tableId);
+                } else {
+                    content.classList.add('hidden');
+                    if (chevron) chevron.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                    expandedTableCards.delete(tableId);
+                }
+            }
+        };
+
+        window.toggleEventForm = function() {
+            const form = document.getElementById('propose-event-form');
+            const chevron = document.getElementById('event-form-chevron');
+            if (form) {
+                form.classList.toggle('hidden');
+                if (chevron) chevron.classList.toggle('rotate-180');
+            }
+        };
+
+        window.togglePlayerCard = function(playerId) {
+            const content = document.getElementById(`player-content-${playerId}`);
+            const chevron = document.getElementById(`player-chevron-${playerId}`);
+            if (content) {
+                const isHidden = content.classList.contains('hidden');
+                if (isHidden) {
+                    content.classList.remove('hidden');
+                    if (chevron) chevron.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    expandedPlayerCards.add(playerId);
+                } else {
+                    content.classList.add('hidden');
+                    if (chevron) chevron.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                    expandedPlayerCards.delete(playerId);
+                }
+            }
+        };
+
+        window.showToast = function(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+            if(!toast || !msgEl || !iconEl) return;
+            msgEl.textContent = message;
+            
+            if (isError) {
+                toast.classList.replace('border-green-600', 'border-red-600');
+                iconEl.className = "fa-solid fa-circle-exclamation text-red-600 text-lg sm:text-xl";
+            } else {
+                toast.classList.replace('border-red-600', 'border-green-600');
+                iconEl.className = "fa-solid fa-bell text-green-600 text-lg sm:text-xl";
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
+        };
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                currentUser = auth.currentUser;
+                initFirestoreListeners();
+            } catch (error) {
+                console.error("Auth error:", error);
+                const loader = document.getElementById('loading-indicator');
+                if(loader) loader.innerHTML = "<span class='text-red-600'>Erreur de connexion</span>";
+            }
+        }
+
+        const tablesCollection = getCol('tables');
+        const eventsCollection = getCol('events');
+        const playersColl = getCol('ludo_joueurs');
+        const gamesColl = getCol('ludo_jeux');
+        
+        let currentTables = [];
+        let currentEvents = [];
+        let allPlayers = [];
+        let allGames = [];
+
+        function initFirestoreListeners() {
+            if (!currentUser) return;
+
+            onSnapshot(tablesCollection, (snapshot) => {
+                currentTables = [];
+                snapshot.forEach((doc) => { currentTables.push({ id: doc.id, ...doc.data() }); });
+                currentTables.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+                renderTables();
+                const loader = document.getElementById('loading-indicator');
+                if(loader) loader.style.display = 'none';
+            }, (error) => {
+                console.error("Firestore error (tables):", error);
+                const loader = document.getElementById('loading-indicator');
+                if(loader) loader.innerHTML = "<span class='text-red-600'>Erreur d'accès base</span>";
+            });
+
+            onSnapshot(eventsCollection, (snapshot) => {
+                currentEvents = [];
+                snapshot.forEach((doc) => { currentEvents.push({ id: doc.id, ...doc.data() }); });
+                currentEvents.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+                renderCalendar();
+            }, (error) => {
+                console.error("Firestore error (events):", error);
+            });
+
+            onSnapshot(playersColl, (snapshot) => {
+                allPlayers = [];
+                snapshot.forEach(docSnap => {
+                    allPlayers.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                allPlayers.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'fr', { sensitivity: 'base' }));
+                renderLudoUI();
+            }, (error) => {
+                console.error("Firestore error (players):", error);
+            });
+
+            onSnapshot(gamesColl, (snapshot) => {
+                allGames = [];
+                snapshot.forEach(docSnap => {
+                    allGames.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderLudoUI();
+            }, (error) => {
+                console.error("Firestore error (games):", error);
+            });
+        }
+
+        // ================= SECTION SOIRÉES JEUX =================
+        const proposeTableForm = document.getElementById('propose-table-form');
+        if(proposeTableForm) {
+            proposeTableForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser) return showToast("Connexion requise.", true);
+
+                const gameName = document.getElementById('gameName').value.trim();
+                const hostName = document.getElementById('hostName').value.trim();
+                const date = document.getElementById('tableDate').value;
+                const time = document.getElementById('tableTime').value;
+                const maxPlayers = parseInt(document.getElementById('maxPlayers').value, 10);
+                const description = document.getElementById('description').value.trim();
+
+                if (new Date(date + 'T' + time) < new Date()) {
+                    return showToast("La date doit être dans le futur !", true);
+                }
+
+                const btn = e.target.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Écriture...';
+                btn.disabled = true;
+
+                try {
+                    const docRef = await addDoc(tablesCollection, {
+                        gameName, hostName, date, time, maxPlayers,
+                        playersList: [],
+                        description, creatorId: currentUser.uid,
+                        createdAt: new Date().toISOString()
+                    });
+                    expandedTableCards.add(docRef.id);
+
+                    try {
+                        const targetEvent = currentEvents.find(ev => ev.date === date && !ev.cancelled);
+                        if (targetEvent) {
+                            const eventRef = getDocRef('events', targetEvent.id);
+                            await updateDoc(eventRef, { playersList: arrayUnion(hostName) });
+                        } else {
+                            const dateObj = new Date(date + 'T00:00:00');
+                            const isFridayOrSaturday = (dateObj.getDay() === 5 || dateObj.getDay() === 6);
+                            const eventId = isFridayOrSaturday ? `soiree-${date}` : `event-${date}`;
+                            const eventRef = getDocRef('events', eventId);
+                            
+                            await setDoc(eventRef, {
+                                title: "Soirée jeux",
+                                type: "Soirée jeux",
+                                date: date,
+                                time: "20:00",
+                                location: "Salle polyvalente de Bourg-la-Cave",
+                                description: "Rencontre hebdomadaire du club",
+                                creatorId: 'system',
+                                createdAt: new Date().toISOString(),
+                                playersList: [hostName],
+                                cancelled: false
+                            });
+                        }
+                    } catch (eErr) {
+                        console.error("Erreur auto-inscription événement :", eErr);
+                    }
+
+                    showToast("Annonce placardée et inscription à la soirée enregistrée !");
+                    e.target.reset();
+                    document.getElementById('tableTime').value = "20:00";
+                    toggleTableForm();
+                } catch (error) {
+                    console.error(error);
+                    showToast("Erreur lors de l'ajout.", true);
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        window.joinTable = async function(tableId, inputId, maxPlayers) {
+            if (!currentUser) return showToast("Connexion requise.", true);
+            const inputEl = document.getElementById(inputId);
+            const playerName = inputEl ? inputEl.value.trim() : '';
+
+            if (!playerName) return showToast("Saisissez votre nom/pseudo !", true);
+
+            const table = currentTables.find(t => t.id === tableId);
+            if (!table) return showToast("Table introuvable.", true);
+
+            const playersList = table.playersList || [];
+
+            if (playersList.length >= maxPlayers) return showToast("La table est déjà complète !", true);
+            if (playersList.includes(playerName)) return showToast("Ce nom est déjà inscrit à la table !", true);
+
+            try {
+                const tableRef = getDocRef('tables', tableId);
+                await updateDoc(tableRef, { playersList: arrayUnion(playerName) });
+
+                try {
+                    const date = table.date;
+                    const targetEvent = currentEvents.find(ev => ev.date === date && !ev.cancelled);
+                    if (targetEvent) {
+                        const eventRef = getDocRef('events', targetEvent.id);
+                        await updateDoc(eventRef, { playersList: arrayUnion(playerName) });
+                    } else {
+                        const dateObj = new Date(date + 'T00:00:00');
+                        const isFridayOrSaturday = (dateObj.getDay() === 5 || dateObj.getDay() === 6);
+                        const eventId = isFridayOrSaturday ? `soiree-${date}` : `event-${date}`;
+                        const eventRef = getDocRef('events', eventId);
+
+                        await setDoc(eventRef, {
+                            title: "Soirée jeux",
+                            type: "Soirée jeux",
+                            date: date,
+                            time: "20:00",
+                            location: "Salle polyvalente de Bourg-la-Cave",
+                            description: "Rencontre hebdomadaire du club",
+                            creatorId: 'system',
+                            createdAt: new Date().toISOString(),
+                            playersList: [playerName],
+                            cancelled: false
+                        });
+                    }
+                } catch (eErr) {
+                    console.error("Erreur auto-inscription événement :", eErr);
+                }
+
+                showToast(`${playerName} a rejoint la table et est inscrit à la soirée !`);
+                if (inputEl) inputEl.value = '';
+            } catch(e) { showToast("Erreur d'inscription.", true); }
+        };
+
+        window.leaveTable = async function(tableId, playerName) {
+            if (!currentUser) return;
+            try {
+                const table = currentTables.find(t => t.id === tableId);
+                if (!table) return;
+
+                const tableRef = getDocRef('tables', tableId);
+                await updateDoc(tableRef, { playersList: arrayRemove(playerName) });
+
+                const date = table.date;
+                const stillInTables = currentTables.some(t => {
+                    if (t.date !== date) return false;
+                    if (t.id === tableId) {
+                        return t.hostName === playerName; 
+                    }
+                    return t.hostName === playerName || (t.playersList || []).includes(playerName);
+                });
+
+                if (!stillInTables) {
+                    const targetEvent = currentEvents.find(ev => ev.date === date && !ev.cancelled);
+                    if (targetEvent) {
+                        const eventRef = getDocRef('events', targetEvent.id);
+                        await updateDoc(eventRef, { playersList: arrayRemove(playerName) });
+                    }
+                }
+
+                showToast(`${playerName} s'est désinscrit de la table.`);
+            } catch(e) {
+                console.error(e);
+                showToast("Erreur lors du retrait.", true);
+            }
+        };
+
+        window.deleteTable = async function(tableId) {
+            if (!currentUser) return;
+            try {
+                const table = currentTables.find(t => t.id === tableId);
+                if (!table) return;
+
+                const date = table.date;
+                const affectedPlayers = new Set([table.hostName, ...(table.playersList || [])]);
+
+                await deleteDoc(getDocRef('tables', tableId));
+                expandedTableCards.delete(tableId);
+
+                const remainingTables = currentTables.filter(t => t.date === date && t.id !== tableId);
+                const targetEvent = currentEvents.find(ev => ev.date === date && !ev.cancelled);
+
+                if (targetEvent) {
+                    for (const pName of affectedPlayers) {
+                        const stillInTables = remainingTables.some(t => 
+                            t.hostName === pName || (t.playersList || []).includes(pName)
+                        );
+                        if (!stillInTables) {
+                            const eventRef = getDocRef('events', targetEvent.id);
+                            await updateDoc(eventRef, { playersList: arrayRemove(pName) });
+                        }
+                    }
+                }
+
+                showToast("Annonce retirée.");
+            } catch(e) {
+                console.error(e);
+                showToast("Erreur de suppression.", true);
+            }
+        };
+
+        function renderTables() {
+            const container = document.getElementById('tables-container');
+            const emptyState = document.getElementById('empty-state');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const today = new Date(new Date().setHours(0,0,0,0));
+            const upcomingTables = currentTables.filter(t => new Date(t.date) >= today);
+
+            if (upcomingTables.length === 0) {
+                if (emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+            } else {
+                if (emptyState) { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
+
+                upcomingTables.forEach(table => {
+                    const isExpanded = expandedTableCards.has(table.id);
+                    const dateObj = new Date(table.date);
+                    const formattedDate = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+                    
+                    const playersList = table.playersList || [];
+                    const currentPlayersCount = playersList.length;
+                    const isFull = currentPlayersCount >= table.maxPlayers;
+
+                    const playersHtml = playersList.length === 0 
+                        ? `<span class="text-xs text-amber-800/60 italic">Aucun joueur inscrit.</span>`
+                        : playersList.map((p) => `
+                            <span class="inline-flex items-center bg-amber-100/90 text-[#3e2723] text-[11px] sm:text-xs font-semibold px-2 py-0.5 rounded-md border border-amber-200/80 max-w-full min-w-0 break-words">
+                                <i class="fa-solid fa-user text-[10px] text-amber-700 mr-1 shrink-0"></i>
+                                <span class="break-words min-w-0">${p}</span>
+                                <button onclick="leaveTable('${table.id}', '${p.replace(/'/g, "\\'")}')" class="ml-1.5 text-red-500 hover:text-red-700 font-bold hover:bg-red-100/80 rounded px-1 transition-colors shrink-0" title="Se désinscrire">&times;</button>
+                            </span>
+                        `).join('');
+
+                    const card = document.createElement('div');
+                    card.className = `parchment-card rounded-xl border-l-4 ${isFull ? 'border-l-red-500' : 'border-l-green-600'} shadow-sm hover:shadow-md transition-shadow relative overflow-hidden p-2.5 sm:p-4 max-w-full`;
+                    
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start cursor-pointer select-none gap-2 min-w-0" onclick="toggleTableCard('${table.id}')">
+                            <div class="flex-grow min-w-0">
+                                <div class="flex flex-wrap items-start justify-between gap-1.5 sm:gap-2 mb-1 min-w-0">
+                                    <h3 class="text-sm sm:text-xl font-bold text-[#3e2723] brand-font break-words min-w-0 flex-1 leading-snug">${table.gameName}</h3>
+                                    <span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide border ${isFull ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}">
+                                        <i class="fa-solid fa-users mr-1"></i> ${currentPlayersCount} / ${table.maxPlayers}
+                                    </span>
+                                </div>
+                                <div class="text-[11px] sm:text-xs text-[#5d4037] font-medium flex flex-wrap items-center gap-x-2.5 gap-y-0.5">
+                                    <span class="flex items-center"><i class="fa-regular fa-calendar text-amber-600 mr-1"></i> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</span>
+                                    <span class="flex items-center"><i class="fa-regular fa-clock text-amber-600 mr-1"></i> ${table.time}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-1 shrink-0 pt-0.5">
+                                <i id="table-chevron-${table.id}" class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-green-700 text-xs sm:text-sm transition-transform duration-300"></i>
+                            </div>
+                        </div>
+
+                        <div id="table-content-${table.id}" class="${isExpanded ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-[#e2d5c3]">
+                            <div class="text-xs sm:text-sm text-[#5d4037] font-medium mb-2 flex flex-wrap items-center min-w-0">
+                                <i class="fa-solid fa-user-tie text-amber-600 mr-1.5 shrink-0"></i> 
+                                <strong class="shrink-0">Hôte :</strong>&nbsp;
+                                <span class="break-words min-w-0">${table.hostName}</span>
+                            </div>
+
+                            ${table.description ? `<p class="text-[#5d4037] mb-2.5 bg-[#fdfaf5] p-2 sm:p-2.5 rounded-lg border border-[#e2d5c3] italic text-xs sm:text-sm break-words overflow-hidden"><i class="fa-solid fa-quote-left text-gray-300 mr-1.5"></i>${table.description}</p>` : ''}
+
+                            <div class="bg-[#fbf7f0] p-2 sm:p-2.5 rounded-lg border border-[#e2d5c3] mb-2.5">
+                                <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 block mb-1.5"><i class="fa-solid fa-list-check mr-1"></i> Joueurs inscrits (${currentPlayersCount}) :</span>
+                                <div class="flex flex-wrap gap-1.5 min-w-0">${playersHtml}</div>
+                            </div>
+
+                            ${!isFull ? `
+                                <div class="pt-2 border-t border-[#e2d5c3] mb-2.5">
+                                    <label for="join-input-${table.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1">Rejoindre cette table :</label>
+                                    <div class="flex gap-1.5 sm:gap-2">
+                                        <input type="text" id="join-input-${table.id}" placeholder="Votre nom ou pseudo" class="flex-grow min-w-0 bg-white border border-[#d4c5b0] rounded-md py-1 px-2 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600">
+                                        <button onclick="joinTable('${table.id}', 'join-input-${table.id}',${table.maxPlayers})" class="shrink-0 bg-goblin hover:bg-green-800 text-white font-bold text-xs px-2.5 sm:px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap">
+                                            <i class="fa-solid fa-user-plus mr-1"></i> S'inscrire
+                                        </button>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="my-2 py-1 text-center bg-red-50 border border-red-200 text-red-700 text-xs font-bold rounded-md">
+                                    <i class="fa-solid fa-ban mr-1"></i> Table complète
+                                </div>
+                            `}
+
+                            <div class="pt-1.5 flex justify-end">
+                                <button onclick="deleteTable('${table.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
+                                    <i class="fa-solid fa-trash-can mr-1.5"></i> Annuler la table
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        // ================= SECTION ÉVÉNEMENTS & CALENDRIER =================
+        function getEventById(eventId) {
+            let ev = currentEvents.find(e => e.id === eventId);
+            if (!ev && eventId.startsWith('soiree-')) {
+                const dateFormatted = eventId.replace('soiree-', '');
+                ev = {
+                    id: eventId,
+                    title: "Soirée jeux",
+                    type: "Soirée jeux",
+                    date: dateFormatted,
+                    time: "20:00",
+                    location: "Salle polyvalente de Bourg-la-Cave",
+                    description: "Rencontre hebdomadaire du club",
+                    playersList: [],
+                    isDefault: true
+                };
+            }
+            return ev;
+        }
+
+        const proposeEventForm = document.getElementById('propose-event-form');
+        if(proposeEventForm) {
+            proposeEventForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUser) return showToast("Connexion requise.", true);
+
+                const title = document.getElementById('eventTitle').value.trim();
+                const type = document.getElementById('eventType').value;
+                const date = document.getElementById('eventDate').value;
+                const time = document.getElementById('eventTime').value;
+                const location = document.getElementById('eventLocation').value.trim();
+                const description = document.getElementById('eventDescription').value.trim();
+
+                const btn = e.target.querySelector('button[type="submit"]');
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Écriture...';
+                btn.disabled = true;
+
+                try {
+                    await addDoc(eventsCollection, {
+                        title, type, date, time, location: location || 'Salle polyvalente de Bourg-la-Cave',
+                        description, playersList: [], creatorId: currentUser.uid, createdAt: new Date().toISOString()
+                    });
+                    showToast("Événement ajouté au calendrier !");
+                    e.target.reset();
+                    document.getElementById('eventTime').value = "20:00";
+                    calendarDate = new Date(date);
+                    renderCalendar();
+                    toggleEventForm();
+                } catch (error) {
+                    showToast("Erreur lors de l'ajout.", true);
+                } finally {
+                    btn.innerHTML = '<i class="fa-solid fa-calendar-check mr-2"></i> Ajouter au Calendrier';
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        window.prevMonth = function() { calendarDate.setMonth(calendarDate.getMonth() - 1); renderCalendar(); };
+        window.nextMonth = function() { calendarDate.setMonth(calendarDate.getMonth() + 1); renderCalendar(); };
+
+        function getISOWeekNumber(d) {
+            const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            const dayNum = date.getUTCDay() || 7;
+            date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+            const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+            return Math.ceil((((date - yearStart) / 86400000) + 1)/7);
+        }
+
+        window.openEventModal = function(eventId) {
+            const ev = getEventById(eventId);
+            if (!ev) return;
+
+            const modal = document.getElementById('event-modal');
+            const content = document.getElementById('event-modal-content');
+            const colorConfig = typeColorMap[ev.type] || typeColorMap['Autre'];
+            const dateObj = new Date(ev.date + 'T00:00:00');
+            const formattedDate = dateObj.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+            const playersList = ev.playersList || [];
+            const playersCount = playersList.length;
+            const playersHtml = playersList.length === 0 
+                ? `<span class="text-xs text-amber-800/60 italic">Aucun participant inscrit pour le moment.</span>`
+                : playersList.map((p) => `
+                    <span class="inline-flex items-center bg-amber-100/90 text-[#3e2723] text-xs font-semibold px-2 py-0.5 rounded-md border border-amber-200/80 shadow-2xs">
+                        <i class="fa-solid fa-user text-[10px] text-amber-700 mr-1"></i>${p}
+                        <button onclick="leaveEvent('${ev.id}', '${p.replace(/'/g, "\\'")}')" class="ml-1.5 text-red-500 hover:text-red-700 font-bold hover:bg-red-100/80 rounded px-1 transition-colors" title="Se désinscrire">&times;</button>
+                    </span>
+                `).join('');
+
+            content.innerHTML = `
+                <div class="space-y-3 sm:space-y-4 text-left">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#e2d5c3] pb-2 sm:pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider ${colorConfig.badge}">
+                                ${ev.type}
+                            </span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide border bg-red-50 text-green-700 border-red-200">
+                                <i class="fa-solid fa-users mr-1"></i> ${playersCount}
+                            </span>
+                        </div>
+                        <span class="text-xs text-amber-800 font-bold"><i class="fa-regular fa-clock mr-1"></i>${ev.time}</span>
+                    </div>
+
+                    <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font">${ev.title}</h2>
+
+                    <div class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-[#5d4037] font-medium bg-[#fbf7f0] p-2.5 sm:p-3 rounded-lg border border-[#e2d5c3]">
+                        <p><i class="fa-regular fa-calendar text-green-700 mr-2"></i><strong>Date :</strong> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
+                        <p><i class="fa-solid fa-location-dot text-green-700 mr-2"></i><strong>Lieu :</strong> ${ev.location}</p>
+                    </div>
+
+                    ${ev.description ? `
+                        <div class="bg-white p-2.5 sm:p-3 rounded-lg border border-[#e2d5c3] text-xs sm:text-sm italic text-[#5d4037]">
+                            <i class="fa-solid fa-quote-left text-gray-300 mr-2"></i>${ev.description}
+                        </div>
+                    ` : ''}
+
+                    <div class="bg-[#fbf7f0] p-2.5 rounded-lg border border-[#e2d5c3]">
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 block mb-1.5"><i class="fa-solid fa-users mr-1"></i> Participants inscrits (${playersCount}) :</span>
+                        <div class="flex flex-wrap gap-1.5">${playersHtml}</div>
+                    </div>
+
+                    <div class="pt-2 border-t border-[#e2d5c3]">
+                        <label for="join-event-input-${ev.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1">Participer à cet événement :</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="join-event-input-${ev.id}" placeholder="Votre nom ou pseudo" class="flex-grow bg-white border border-[#d4c5b0] rounded-md py-1 px-2.5 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-green-600">
+                            <button onclick="joinEvent('${ev.id}', 'join-event-input-${ev.id}')" class="bg-goblin hover:bg-green-800 text-white font-bold text-xs px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap">
+                                <i class="fa-solid fa-user-plus mr-1"></i> S'inscrire
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pt-2 sm:pt-3 border-t border-[#e2d5c3] flex justify-between items-center gap-2 sm:gap-3">
+                        <button onclick="deleteEvent('${ev.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center">
+                            <i class="fa-solid fa-trash-can mr-1.5"></i> Supprimer / Annuler
+                        </button>
+                        <button onclick="closeEventModal()" class="bg-goblin text-white font-bold text-xs py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-green-800 transition-colors">
+                            Fermer
+                        </button>
+                    </div>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        };
+
+        window.closeEventModal = function() { document.getElementById('event-modal').classList.add('hidden'); };
+
+        window.joinEvent = async function(eventId, inputId) {
+            if (!currentUser) return showToast("Connexion requise.", true);
+            const inputEl = document.getElementById(inputId);
+            const playerName = inputEl ? inputEl.value.trim() : '';
+
+            if (!playerName) return showToast("Saisissez votre nom/pseudo !", true);
+
+            const ev = getEventById(eventId);
+            const playersList = ev?.playersList || [];
+
+            if (playersList.includes(playerName)) return showToast("Ce nom est déjà inscrit à l'événement !", true);
+
+            try {
+                const existingInFirestore = currentEvents.some(e => e.id === eventId);
+
+                if (!existingInFirestore && (ev.isDefault || eventId.startsWith('soiree-'))) {
+                    const eventRef = getDocRef('events', eventId);
+                    await setDoc(eventRef, {
+                        title: ev.title,
+                        type: ev.type,
+                        date: ev.date,
+                        time: ev.time,
+                        location: ev.location,
+                        description: ev.description,
+                        creatorId: 'system',
+                        createdAt: new Date().toISOString(),
+                        playersList: [playerName],
+                        cancelled: false
+                    });
+                } else {
+                    const eventRef = getDocRef('events', eventId);
+                    await updateDoc(eventRef, {
+                        playersList: arrayUnion(playerName),
+                        cancelled: false
+                    });
+                }
+                showToast(`${playerName} est inscrit à l'événement !`);
+                openEventModal(eventId);
+            } catch(e) {
+                console.error("joinEvent error:", e);
+                showToast("Erreur d'inscription.", true);
+            }
+        };
+
+        window.leaveEvent = async function(eventId, playerName) {
+            if (!currentUser) return;
+            try {
+                const eventRef = getDocRef('events', eventId);
+                await updateDoc(eventRef, { playersList: arrayRemove(playerName) });
+                showToast(`${playerName} s'est désinscrit.`);
+                openEventModal(eventId);
+            } catch(e) {
+                console.error("leaveEvent error:", e);
+                showToast("Erreur lors du retrait.", true);
+            }
+        };
+
+        window.deleteEvent = async function(eventId) {
+            if (!currentUser) return;
+            try {
+                if (eventId.startsWith('soiree-')) {
+                    const ev = getEventById(eventId);
+                    const eventRef = getDocRef('events', eventId);
+                    await setDoc(eventRef, {
+                        title: ev.title || "Soirée jeux",
+                        type: ev.type || "Soirée jeux",
+                        date: ev.date,
+                        time: ev.time || "20:00",
+                        location: ev.location || "Salle polyvalente de Bourg-la-Cave",
+                        description: ev.description || "Rencontre hebdomadaire du club",
+                        cancelled: true,
+                        creatorId: currentUser.uid,
+                        createdAt: new Date().toISOString()
+                    });
+                } else {
+                    await deleteDoc(getDocRef('events', eventId));
+                }
+                closeEventModal();
+                showToast("Événement annulé.");
+            } catch(e) {
+                console.error("deleteEvent error:", e);
+                showToast("Erreur de suppression.", true);
+            }
+        };
+
+        function renderCalendar() {
+            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth();
+            const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            const monthTitle = document.getElementById('calendar-month-year');
+            if (monthTitle) monthTitle.innerHTML = `<i class="fa-regular fa-calendar-days mr-1.5 sm:mr-2"></i> ${monthNames[month]} ${year}`;
+
+            const tbody = document.getElementById('calendar-grid-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const firstDayOfMonth = new Date(year, month, 1);
+            const lastDayOfMonth = new Date(year, month + 1, 0);
+
+            let startingDay = firstDayOfMonth.getDay() - 1;
+            if (startingDay === -1) startingDay = 6;
+
+            const totalDays = lastDayOfMonth.getDate();
+            const todayStr = new Date().toISOString().split('T')[0];
+
+            let dayCounter = 1;
+
+            for (let weekRow = 0; weekRow < 6; weekRow++) {
+                if (dayCounter > totalDays) break;
+                const tr = document.createElement('tr');
+
+                const weekNumTd = document.createElement('td');
+                const weekNumDate = new Date(year, month, dayCounter);
+                weekNumTd.className = "py-1 px-0.5 text-[10px] sm:text-xs text-gray-400 italic bg-[#fdfaf5] border-r border-[#e2d5c3]/50";
+                weekNumTd.textContent = getISOWeekNumber(weekNumDate);
+                tr.appendChild(weekNumTd);
+
+                for (let dayCol = 0; dayCol < 7; dayCol++) {
+                    const td = document.createElement('td');
+                    td.className = "cal-day-cell border border-[#e2d5c3]/40 p-0.5 sm:p-1 relative text-left transition-colors hover:bg-amber-50/50";
+
+                    if ((weekRow === 0 && dayCol < startingDay) || dayCounter > totalDays) {
+                        td.className += " bg-gray-50/40 opacity-40";
+                    } else {
+                        const dateFormatted = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayCounter).padStart(2, '0')}`;
+                        const isToday = todayStr === dateFormatted;
+
+                        const dayHeader = document.createElement('div');
+                        dayHeader.className = `text-[10px] sm:text-xs font-bold ${isToday ? 'bg-green-700 text-white w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center' : (dayCol >= 5 ? 'text-red-700' : 'text-[#3e2723]')}`;
+                        dayHeader.textContent = dayCounter;
+                        td.appendChild(dayHeader);
+
+                        let dayEvents = currentEvents.filter(e => e.date === dateFormatted && !e.cancelled);
+
+                        if (dayCol === 4 || dayCol === 5) { // Vendredi (4) et Samedi (5) pour Le Gob' laid
+                            const soireeRecord = currentEvents.find(e => e.id === `soiree-${dateFormatted}`);
+                            const hasSoiree = dayEvents.some(e => e.type === 'Soirée jeux');
+                            if (!soireeRecord && !hasSoiree) {
+                                dayEvents.push({
+                                    id: `soiree-${dateFormatted}`,
+                                    title: 'Soirée jeux',
+                                    type: 'Soirée jeux',
+                                    date: dateFormatted,
+                                    time: '20:00',
+                                    location: 'Salle polyvalente de Bourg-la-Cave',
+                                    description: 'Rencontre hebdomadaire du club',
+                                    playersList: [],
+                                    isDefault: true
+                                });
+                            }
+                        }
+
+                        if (dayEvents.length > 0) {
+                            const eventsContainer = document.createElement('div');
+                            eventsContainer.className = "mt-0.5 sm:mt-1 space-y-0.5 sm:space-y-1";
+                            dayEvents.forEach(ev => {
+                                const colorConfig = typeColorMap[ev.type] || typeColorMap['Autre'];
+                                const count = (ev.playersList || []).length;
+                                const evBadge = document.createElement('button');
+                                evBadge.className = `w-full text-left text-[9px] sm:text-[11px] font-bold p-0.5 sm:p-1 rounded ${colorConfig.badge} shadow-sm hover:opacity-90 transition-opacity flex items-center justify-between gap-1 min-w-0`;
+                                evBadge.innerHTML = `
+                                    <span class="truncate min-w-0"><span class="opacity-80 hidden sm:inline">${ev.time}</span> ${ev.title}</span>
+                                    <span class="shrink-0 bg-black/20 text-white text-[8px] sm:text-[10px] px-1 py-0.5 rounded-full font-bold flex items-center leading-none" title="${count} inscrit(s)">
+                                        <i class="fa-solid fa-user text-[7px] sm:text-[8px] mr-0.5"></i>${count}
+                                    </span>
+                                `;
+                                evBadge.onclick = (e) => { e.stopPropagation(); openEventModal(ev.id); };
+                                eventsContainer.appendChild(evBadge);
+                            });
+                            td.appendChild(eventsContainer);
+                        }
+                        dayCounter++;
+                    }
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+        }
+
+        // ================= SECTION LUDOTHÈQUE DU CLUB =================
+        function getUnlockedPins() {
+            try { return JSON.parse(localStorage.getItem('gob_unlocked_pins') || '{}'); } catch(e) { return {}; }
+        }
+        function saveUnlockedPin(playerId, pin) {
+            const pins = getUnlockedPins();
+            pins[playerId] = pin;
+            localStorage.setItem('gob_unlocked_pins', JSON.stringify(pins));
+        }
+
+        window.lockPlayerList = function(playerId) {
+            const pins = getUnlockedPins();
+            delete pins[playerId];
+            localStorage.setItem('gob_unlocked_pins', JSON.stringify(pins));
+            const player = allPlayers.find(p => p.id === playerId);
+            showToast(`Liste de ${player ? player.name : ''} verrouillée.`);
+            renderLudoUI();
+        };
+
+        function focusGameInput(playerId) {
+            setTimeout(() => {
+                const inputEl = document.getElementById(`input-game-${playerId}`);
+                if (inputEl) inputEl.focus();
+            }, 80);
+        }
+
+        window.openCreatePlayerModal = () => document.getElementById('modal-create-player').classList.remove('hidden');
+        window.closeCreatePlayerModal = () => document.getElementById('modal-create-player').classList.add('hidden');
+
+        window.openUnlockModal = (playerId, playerName) => {
+            document.getElementById('unlock-player-id').value = playerId;
+            document.getElementById('unlock-player-title').textContent = playerName;
+            document.getElementById('modal-unlock-player').classList.remove('hidden');
+            setTimeout(() => document.getElementById('unlock-player-pin').focus(), 100);
+        };
+        window.closeUnlockModal = () => document.getElementById('modal-unlock-player').classList.add('hidden');
+
+        const formCreatePlayer = document.getElementById('form-create-player');
+        if(formCreatePlayer) {
+            formCreatePlayer.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const name = document.getElementById('new-player-name').value.trim();
+                const pin = document.getElementById('new-player-pin').value.trim();
+
+                if (!name || !pin) return showToast("Veuillez remplir tous les champs.", true);
+                if (allPlayers.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+                    return showToast("Un joueur porte déjà ce nom !", true);
+                }
+
+                try {
+                    const docRef = await addDoc(playersColl, { name, pin, createdAt: new Date().toISOString() });
+                    saveUnlockedPin(docRef.id, pin);
+                    expandedPlayerCards.add(docRef.id);
+                    showToast(`Bienvenue ${name} ! Votre liste est créée.`);
+                    closeCreatePlayerModal();
+                    e.target.reset();
+                    renderLudoUI();
+                    focusGameInput(docRef.id);
+                } catch (err) { showToast("Erreur de création.", true); }
+            });
+        }
+
+        const formUnlockPlayer = document.getElementById('form-unlock-player');
+        if(formUnlockPlayer) {
+            formUnlockPlayer.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const playerId = document.getElementById('unlock-player-id').value;
+                const pinInput = document.getElementById('unlock-player-pin').value.trim();
+                const player = allPlayers.find(p => p.id === playerId);
+
+                if (player && (player.pin === pinInput || pinInput === MASTER_PIN)) {
+                    saveUnlockedPin(playerId, player.pin);
+                    expandedPlayerCards.add(playerId);
+                    showToast(`Liste de ${player.name} déverrouillée !`);
+                    closeUnlockModal();
+                    e.target.reset();
+                    renderLudoUI();
+                    focusGameInput(playerId);
+                } else {
+                    showToast("Code PIN incorrect !", true);
+                }
+            });
+        }
+
+        window.addGame = async (playerId, inputId) => {
+            const input = document.getElementById(inputId);
+            const rawVal = input ? input.value.trim() : '';
+            if (!rawVal) return showToast("Saisissez un nom de jeu !", true);
+
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Déverrouillez la liste avec votre PIN !", true);
+            }
+
+            const gamesList = rawVal.split(',').map(g => g.trim()).filter(g => g !== '');
+
+            try {
+                for (const gameName of gamesList) {
+                    await addDoc(gamesColl, {
+                        playerId, playerName: player.name, name: gameName, createdAt: new Date().toISOString()
+                    });
+                }
+                input.value = '';
+                showToast(`Jeu(x) ajouté(s) à la liste de ${player.name} !`);
+                focusGameInput(playerId);
+            } catch (err) { showToast("Erreur lors de l'ajout.", true); }
+        };
+
+        window.deleteGame = async (gameId, playerId) => {
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Seul le propriétaire peut supprimer ce jeu !", true);
+            }
+
+            try {
+                await deleteDoc(getDocRef('ludo_jeux', gameId));
+                showToast("Jeu retiré.");
+                focusGameInput(playerId);
+            } catch (err) { showToast("Erreur de suppression.", true); }
+        };
+
+        window.deletePlayerList = async (playerId) => {
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Code PIN requis pour supprimer !", true);
+            }
+
+            if (!confirm(`Supprimer la liste de ${player.name} et tous ses jeux ?`)) return;
+
+            try {
+                const playerGames = allGames.filter(g => g.playerId === playerId);
+                for (const g of playerGames) {
+                    await deleteDoc(getDocRef('ludo_jeux', g.id));
+                }
+                
+                await deleteDoc(getDocRef('ludo_joueurs', playerId));
+                
+                const pins = getUnlockedPins();
+                delete pins[playerId];
+                localStorage.setItem('gob_unlocked_pins', JSON.stringify(pins));
+                expandedPlayerCards.delete(playerId);
+
+                showToast(`Liste de ${player.name} supprimée.`);
+            } catch (err) { 
+                console.error("Erreur suppression joueur:", err);
+                showToast("Erreur lors de la suppression.", true); 
+            }
+        };
+
+        window.handleSearch = () => {
+            const input = document.getElementById('global-search-input');
+            if(!input) return;
+            const queryVal = input.value.trim().toLowerCase();
+            const container = document.getElementById('search-results-container');
+            const listEl = document.getElementById('search-results-list');
+            const clearBtn = document.getElementById('clear-search-btn');
+
+            if (!queryVal) {
+                if(container) container.classList.add('hidden');
+                if(clearBtn) clearBtn.classList.add('hidden');
+                return;
+            }
+
+            if(clearBtn) clearBtn.classList.remove('hidden');
+            if(container) container.classList.remove('hidden');
+
+            const matches = allGames.filter(g => (g.name || '').toLowerCase().includes(queryVal));
+
+            if (matches.length === 0) {
+                if(listEl) {
+                    listEl.innerHTML = `
+                        <div class="col-span-full text-center py-4 text-amber-900/60 font-medium text-sm">
+                            <i class="fa-solid fa-ghost text-2xl mb-1 block text-gray-400"></i>
+                            Aucun jeu trouvé pour "${queryVal}".
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const grouped = {};
+            matches.forEach(m => {
+                const cleanName = m.name.trim();
+                const key = cleanName.toLowerCase();
+                if (!grouped[key]) grouped[key] = { displayName: cleanName, owners: [] };
+                if (!grouped[key].owners.includes(m.playerName)) grouped[key].owners.push(m.playerName);
+            });
+
+            const sortedResults = Object.values(grouped).sort((a, b) => 
+                a.displayName.localeCompare(b.displayName, 'fr', { sensitivity: 'base' })
+            );
+
+            if(listEl) {
+                listEl.innerHTML = sortedResults.map(item => `
+                    <div class="bg-white p-3 sm:p-4 rounded-xl border border-[#d4c5b0] shadow-sm flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-bold text-goblin text-sm sm:text-base brand-font mb-1.5 flex items-center">
+                                <i class="fa-solid fa-dice text-amber-700 mr-1.5"></i>${item.displayName}
+                            </h4>
+                            <div class="text-xs text-[#5d4037]">
+                                <span class="font-bold text-amber-900">Possédé par (${item.owners.length}) :</span>
+                                <div class="flex flex-wrap gap-1 mt-1">
+                                    ${item.owners.map(owner => `
+                                        <span class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded-md font-semibold border border-amber-200 text-[11px]">
+                                            <i class="fa-solid fa-user-tag mr-1 text-[9px]"></i>${owner}
+                                        </span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        };
+
+        window.clearSearch = () => {
+            const input = document.getElementById('global-search-input');
+            if(input) input.value = '';
+            handleSearch();
+        };
+
+        function renderLudoUI() {
+            const grid = document.getElementById('players-grid');
+            const emptyState = document.getElementById('empty-players-state');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            if (allPlayers.length === 0) {
+                if(emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+                return;
+            }
+
+            if(emptyState) { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
+
+            const unlockedPins = getUnlockedPins();
+
+            allPlayers.forEach(player => {
+                const isUnlocked = unlockedPins[player.id] === player.pin;
+                const isExpanded = expandedPlayerCards.has(player.id);
+                
+                const playerGames = allGames
+                    .filter(g => g.playerId === player.id)
+                    .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'fr', { sensitivity: 'base' }));
+
+                const card = document.createElement('div');
+                card.className = "parchment-card rounded-xl p-3 sm:p-3.5 flex flex-col shadow-sm hover:shadow-md border border-[#d4c5b0] relative overflow-hidden transition-all";
+
+                const gamesListHtml = playerGames.length === 0 
+                    ? `<div class="text-xs text-amber-800/60 italic text-center py-3">Aucun jeu enregistré.</div>`
+                    : playerGames.map(g => `
+                        <div class="bg-white/90 px-2.5 py-1.5 rounded-lg border border-[#e2d5c3] shadow-2xs flex justify-between items-center text-xs font-medium text-[#3e2723] hover:border-goblin transition-colors">
+                            <span class="truncate pr-2">${g.name}</span>
+                            ${isUnlocked ? `
+                                <button onclick="deleteGame('${g.id}', '${player.id}')" class="text-gray-400 hover:text-red-600 font-bold text-sm px-1 transition-colors" title="Retirer ce jeu">&times;</button>
+                            ` : ''}
+                        </div>
+                    `).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center cursor-pointer select-none gap-2 py-0.5" onclick="togglePlayerCard('${player.id}')">
+                        <div class="flex items-center space-x-2 min-w-0">
+                            <h3 class="text-sm sm:text-base font-bold text-goblin brand-font truncate max-w-[110px] sm:max-w-[130px]" title="${player.name}">${player.name}</h3>
+                            <span class="text-[10px] sm:text-[11px] font-bold text-amber-900 bg-amber-100/90 px-1.5 py-0.5 rounded-md border border-amber-200/80 shrink-0">${playerGames.length} jeux</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5 shrink-0">
+                            <div onclick="event.stopPropagation()">
+                                ${isUnlocked ? `
+                                    <button onclick="lockPlayerList('${player.id}')" class="text-emerald-800 bg-emerald-100/90 hover:bg-amber-100 hover:text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold border border-emerald-300 transition-colors flex items-center shadow-2xs" title="Verrouiller à nouveau">
+                                        <i class="fa-solid fa-lock-open mr-1 text-[9px]"></i>Ouvert
+                                    </button>
+                                ` : `
+                                    <button onclick="openUnlockModal('${player.id}', '${player.name.replace(/'/g, "\\'")}')" class="text-amber-800 hover:text-goblin bg-amber-50 hover:bg-amber-100 px-1.5 py-0.5 rounded text-[10px] font-bold border border-amber-200/80 transition-colors" title="Déverrouiller avec PIN">
+                                        <i class="fa-solid fa-lock mr-1 text-[9px]"></i>PIN
+                                    </button>
+                                `}
+                            </div>
+                            <i id="player-chevron-${player.id}" class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-goblin text-xs transition-transform duration-300"></i>
+                        </div>
+                    </div>
+
+                    <div id="player-content-${player.id}" class="${isExpanded ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-[#e2d5c3]/80">
+                        ${isUnlocked ? `
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-bold uppercase tracking-wide text-amber-900"><i class="fa-solid fa-gear mr-1"></i>Gestion</span>
+                                <button onclick="deletePlayerList('${player.id}')" class="text-red-500 hover:text-red-700 text-[11px] font-bold transition-colors flex items-center" title="Supprimer la liste">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Supprimer
+                                </button>
+                            </div>
+                            <form onsubmit="event.preventDefault(); addGame('${player.id}', 'input-game-${player.id}');" class="mb-2 flex gap-1.5">
+                                <input type="text" id="input-game-${player.id}" placeholder="Ajouter un jeu..." class="flex-grow bg-[#ffffff] border border-[#d4c5b0] rounded-md py-1 px-2 text-xs text-[#3e2723] focus:outline-none focus:border-goblin">
+                                <button type="submit" class="bg-goblin hover:bg-green-800 text-white font-bold px-2 py-1 rounded-md text-xs transition-colors shadow-2xs">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </form>
+                        ` : `
+                            <div class="mb-2 p-1.5 bg-amber-50/70 rounded-md border border-amber-200/60 text-[10px] text-amber-900/80 flex items-center">
+                                <i class="fa-solid fa-eye mr-1 text-amber-700"></i> Lecture seule.
+                            </div>
+                        `}
+
+                        <div class="max-h-[220px] overflow-y-auto space-y-1 pr-0.5">
+                            ${gamesListHtml}
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            const searchInput = document.getElementById('global-search-input');
+            if (searchInput && searchInput.value.trim()) {
+                handleSearch();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initAuth();
+            const today = new Date().toISOString().split('T')[0];
+            
+            const tDate = document.getElementById('tableDate');
+            if(tDate) { tDate.setAttribute('min', today); tDate.value = today; }
+            
+            const eDate = document.getElementById('eventDate');
+            if(eDate) { eDate.setAttribute('min', today); eDate.value = today; }
+        });
+    </script>
+</body>
+</html>
