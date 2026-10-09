@@ -685,6 +685,7 @@
         let calendarDate = new Date();
         const expandedPlayerCards = new Set();
         const expandedTableCards = new Set();
+        const expandedUpcomingCards = new Set();
 
         const typeColorMap = {
             'Tournoi': { badge: 'bg-[#586337] text-white' },
@@ -747,6 +748,23 @@
                     content.classList.add('hidden');
                     if (chevron) chevron.classList.replace('fa-chevron-up', 'fa-chevron-down');
                     expandedTableCards.delete(tableId);
+                }
+            }
+        };
+
+        window.toggleUpcomingCard = function(eventId) {
+            const content = document.getElementById(`upcoming-content-${eventId}`);
+            const chevron = document.getElementById(`upcoming-chevron-${eventId}`);
+            if (content) {
+                const isHidden = content.classList.contains('hidden');
+                if (isHidden) {
+                    content.classList.remove('hidden');
+                    if (chevron) chevron.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    expandedUpcomingCards.add(eventId);
+                } else {
+                    content.classList.add('hidden');
+                    if (chevron) chevron.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                    expandedUpcomingCards.delete(eventId);
                 }
             }
         };
@@ -923,10 +941,11 @@
                         docBase64 = await fileToBase64(docInput.files[0]);
                     }
 
-                    await addDoc(upcomingCollection, {
+                    const docRef = await addDoc(upcomingCollection, {
                         title, dateText, description, imageBase64, docBase64, docName,
                         creatorId: currentUser.uid, createdAt: new Date().toISOString()
                     });
+                    expandedUpcomingCards.add(docRef.id);
 
                     showToast("Événement placardé !");
                     e.target.reset();
@@ -1021,6 +1040,7 @@
 
             try {
                 await deleteDoc(getDocRef('upcoming_events', id));
+                expandedUpcomingCards.delete(id);
                 showToast("Événement retiré.");
             } catch (err) {
                 console.error(err);
@@ -1040,38 +1060,49 @@
                 if (emptyState) { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
 
                 currentUpcoming.forEach(item => {
+                    const isExpanded = expandedUpcomingCards.has(item.id);
+
                     const card = document.createElement('div');
-                    card.className = "parchment-card rounded-xl border-l-4 border-l-[#586337] shadow-sm p-4 relative overflow-hidden space-y-3";
+                    card.className = "parchment-card rounded-xl border-l-4 border-l-[#586337] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden p-3 sm:p-4";
                     
                     card.innerHTML = `
-                        <div>
-                            <h3 class="text-lg sm:text-2xl font-bold text-[#3e2723] brand-font">${item.title}</h3>
-                            ${(item.dateText || item.date) ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${item.dateText || item.date}</p>` : ''}
+                        <!-- En-tête cliquable -->
+                        <div class="flex justify-between items-start cursor-pointer select-none gap-2 min-w-0" onclick="toggleUpcomingCard('${item.id}')">
+                            <div class="flex-grow min-w-0">
+                                <h3 class="text-base sm:text-xl font-bold text-[#3e2723] brand-font break-words leading-snug">${item.title}</h3>
+                                ${(item.dateText || item.date) ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${item.dateText || item.date}</p>` : ''}
+                            </div>
+                            <div class="flex items-center space-x-1 shrink-0 pt-0.5">
+                                <i id="upcoming-chevron-${item.id}" class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-[#586337] text-xs sm:text-sm transition-transform duration-300"></i>
+                            </div>
                         </div>
 
-                        <p class="text-xs sm:text-sm text-[#5d4037] bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] whitespace-pre-line">${item.description}</p>
+                        <!-- Contenu dépliable -->
+                        <div id="upcoming-content-${item.id}" class="${isExpanded ? '' : 'hidden'} mt-3 pt-3 border-t border-[#e2d5c3]">
+                            <p class="text-xs sm:text-sm text-[#5d4037] bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] whitespace-pre-line">${item.description}</p>
 
-                        ${item.imageBase64 ? `
-                            <div class="mt-3 rounded-xl overflow-hidden border border-[#d4c5b0] max-h-96 flex justify-center bg-black/5 p-1">
-                                <img src="${item.imageBase64}" alt="${item.title}" class="object-contain max-h-96 w-full block rounded-lg shadow-sm">
+                            ${item.imageBase64 ? `
+                                <div class="mt-3 rounded-xl overflow-hidden border border-[#d4c5b0] max-h-96 flex justify-center bg-black/5 p-1">
+                                    <img src="${item.imageBase64}" alt="${item.title}" class="object-contain max-h-96 w-full block rounded-lg shadow-sm">
+                                </div>
+                            ` : ''}
+
+                            ${item.docBase64 ? `
+                                <div class="pt-3">
+                                    <a href="${item.docBase64}" download="${item.docName || 'document'}" class="inline-flex items-center bg-[#586337] hover:bg-[#434c29] text-white text-xs font-bold py-2 px-3 rounded-lg shadow transition-colors">
+                                        <i class="fa-solid fa-file-arrow-down mr-2 text-sm"></i> Télécharger le document (${item.docName || 'Document joint'})
+                                    </a>
+                                </div>
+                            ` : ''}
+
+                            <div class="pt-3 mt-3 flex justify-end items-center gap-1.5 border-t border-[#e2d5c3]">
+                                <button onclick="openEditUpcomingModal('${item.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
+                                    <i class="fa-solid fa-pen mr-1"></i> Modifier
+                                </button>
+                                <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Retirer
+                                </button>
                             </div>
-                        ` : ''}
-
-                        ${item.docBase64 ? `
-                            <div class="pt-2">
-                                <a href="${item.docBase64}" download="${item.docName || 'document'}" class="inline-flex items-center bg-[#586337] hover:bg-[#434c29] text-white text-xs font-bold py-2 px-3 rounded-lg shadow transition-colors">
-                                    <i class="fa-solid fa-file-arrow-down mr-2 text-sm"></i> Télécharger le document (${item.docName || 'Document joint'})
-                                </a>
-                            </div>
-                        ` : ''}
-
-                        <div class="pt-2 flex justify-end items-center gap-1.5 border-t border-[#e2d5c3]">
-                            <button onclick="openEditUpcomingModal('${item.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
-                                <i class="fa-solid fa-pen mr-1"></i> Modifier
-                            </button>
-                            <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center">
-                                <i class="fa-solid fa-trash-can mr-1"></i> Retirer
-                            </button>
                         </div>
                     `;
                     container.appendChild(card);
