@@ -648,6 +648,22 @@
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
+        // ==========================================
+        // FONCTION D'ENVOI VERS DISCORD (WEBHOOK)
+        // ==========================================
+        async function notifyDiscord(message) {
+            try {
+                const WORKER_URL = 'https://gob-laid-proxy.nellio-cps49.workers.dev/'; 
+                await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+            } catch (e) {
+                console.error("Erreur lors de l'envoi de la notification Discord :", e);
+            }
+        }
+
         const MASTER_PIN = "9999";
 
         // ==========================================
@@ -947,6 +963,10 @@
                     });
                     expandedUpcomingCards.add(docRef.id);
 
+                    // --- NOTIFICATION DISCORD ÉVÉNEMENT EN APPROCHE ---
+                    await notifyDiscord(`📢 **Nouvel événement en approche !**\n• **Nom :** ${title}\n• **Date/Période :** ${dateText}\n• **Infos :** ${description}`);
+                    // --------------------------------------------------
+
                     showToast("Événement placardé !");
                     e.target.reset();
                     toggleUpcomingForm();
@@ -1169,6 +1189,10 @@
                     } catch (eErr) {
                         console.error("Erreur auto-inscription événement :", eErr);
                     }
+
+                    // --- NOTIFICATION DISCORD TABLE ---
+                    await notifyDiscord(`🎲 **Nouvelle table proposée dans l'Antre !**\n• **Jeu :** ${gameName}\n• **Hôte :** ${hostName}\n• **Date :** ${date} à ${time}\n• **Places max :** ${maxPlayers}\n${description ? `• **Description :** ${description}` : ''}`);
+                    // ----------------------------------
 
                     showToast("Annonce placardée et inscription à la soirée enregistrée !");
                     e.target.reset();
@@ -1559,6 +1583,11 @@
                         title, type, date, time, location: location || 'Salle polyvalente de Bourg-la-Cave',
                         description, playersList: [], creatorId: currentUser.uid, createdAt: new Date().toISOString()
                     });
+
+                    // --- NOTIFICATION DISCORD AGENDA ---
+                    await notifyDiscord(`🗓️ **Nouvel événement ajouté à l'Agenda !**\n• **Titre :** ${title}\n• **Type :** ${type}\n• **Date :** ${date} à ${time}\n• **Lieu :** ${location || 'Salle polyvalente de Bourg-la-Cave'}`);
+                    // -----------------------------------
+
                     showToast("Événement ajouté au calendrier !");
                     e.target.reset();
                     document.getElementById('eventTime').value = "18:00";
