@@ -964,7 +964,7 @@
                     expandedUpcomingCards.add(docRef.id);
 
                     // --- NOTIFICATION DISCORD ÉVÉNEMENT EN APPROCHE ---
-                    await notifyDiscord(`📢 **Nouvel événement en approche !**\n• **Nom :** ${title}\n• **Date/Période :** ${dateText}\n• **Infos :** ${description}`);
+                    await notifyDiscord(`@everyone 📢 **Nouvel événement en approche !**\n• **Nom :** ${title}\n• **Date/Période :** ${dateText}\n• **Infos :** ${description}`);
                     // --------------------------------------------------
 
                     showToast("Événement placardé !");
@@ -1191,7 +1191,7 @@
                     }
 
                     // --- NOTIFICATION DISCORD TABLE ---
-                    await notifyDiscord(`🎲 **Nouvelle table proposée dans l'Antre !**\n• **Jeu :** ${gameName}\n• **Hôte :** ${hostName}\n• **Date :** ${date} à ${time}\n• **Places max :** ${maxPlayers}\n${description ? `• **Description :** ${description}` : ''}`);
+                    await notifyDiscord(`@everyone 🎲 **Nouvelle table proposée dans l'Antre !**\n• **Jeu :** ${gameName}\n• **Hôte :** ${hostName}\n• **Date :** ${date} à ${time}\n• **Places max :** ${maxPlayers}\n${description ? `• **Description :** ${description}` : ''}`);
                     // ----------------------------------
 
                     showToast("Annonce placardée et inscription à la soirée enregistrée !");
@@ -1585,7 +1585,7 @@
                     });
 
                     // --- NOTIFICATION DISCORD AGENDA ---
-                    await notifyDiscord(`🗓️ **Nouvel événement ajouté à l'Agenda !**\n• **Titre :** ${title}\n• **Type :** ${type}\n• **Date :** ${date} à ${time}\n• **Lieu :** ${location || 'Salle polyvalente de Bourg-la-Cave'}`);
+                    await notifyDiscord(`@everyone 🗓️ **Nouvel événement ajouté à l'Agenda !**\n• **Titre :** ${title}\n• **Type :** ${type}\n• **Date :** ${date} à ${time}\n• **Lieu :** ${location || 'Salle polyvalente de Bourg-la-Cave'}`);
                     // -----------------------------------
 
                     showToast("Événement ajouté au calendrier !");
