@@ -13,11 +13,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lacquer&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <!-- Remplacement de Lora par Cinzel pour harmoniser tous les textes avec l'univers -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Lacquer&display=swap" rel="stylesheet">
     
     <style>
         body {
-            font-family: 'Lora', serif;
+            /* Application de la police des titres (sans l'effet peinture) à tout le corps du site */
+            font-family: 'Cinzel', serif;
             background-color: #fbf7f0; 
             /* Arrière-plan Taverne avec calque parchemin à 78 % d'opacité */
             background-image: linear-gradient(rgba(251, 247, 240, 0.78), rgba(251, 247, 240, 0.78)), url('taverne.webp');
@@ -28,7 +30,7 @@
             color: #3e2723;
         }
 
-        /* Titres style peinture avec coulures */
+        /* Titres principaux avec l'effet "peinture" */
         h1, h2, h3, h4, .brand-font {
             font-family: 'Lacquer', 'Cinzel', cursive, serif;
             letter-spacing: 0.03em;
@@ -458,7 +460,7 @@
                         
                         <div id="empty-state" class="hidden flex-col items-center justify-center py-12 sm:py-16 text-amber-900/70">
                             <i class="fa-solid fa-spider text-5xl sm:text-7xl mb-3 opacity-40"></i>
-                            <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">Le tableau des quêtes est vide.</p>
+                            <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">La Taverne est vide.</p>
                             <p class="text-sm sm:text-md mt-1 font-medium">Soyez le premier à proposer une table !</p>
                         </div>
                     </div>
