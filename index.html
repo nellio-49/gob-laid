@@ -18,7 +18,7 @@
     
     <style>
         body {
-            /* Application de la police des titres (sans l'effet peinture) à tout le corps du site */
+            /* Application de la police des textes généraux */
             font-family: 'Cinzel', serif;
             background-color: #fbf7f0; 
             /* Arrière-plan Taverne avec calque parchemin à 78 % d'opacité */
@@ -30,7 +30,7 @@
             color: #3e2723;
         }
 
-        /* Titres principaux avec l'effet "peinture" */
+        /* Titres principaux et éléments du thème avec l'effet "peinture" */
         h1, h2, h3, h4, .brand-font {
             font-family: 'Lacquer', 'Cinzel', cursive, serif;
             letter-spacing: 0.03em;
@@ -96,22 +96,22 @@
                     <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
                     <div>
                         <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
-                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase">l'Antre</span>
+                        <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase brand-font">l'Antre</span>
                     </div>
                 </div>
 
                 <!-- Navigation en haut à droite (4 Onglets) -->
                 <nav class="flex flex-wrap justify-center items-center bg-[#f0e6d2]/80 p-1 rounded-xl border border-[#d4c5b0] gap-1 shadow-sm w-full sm:w-auto">
-                    <button onclick="switchTab('upcoming-page')" id="nav-upcoming" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center">
+                    <button onclick="switchTab('upcoming-page')" id="nav-upcoming" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center brand-font">
                         <i class="fa-solid fa-bullhorn mr-1.5"></i> Événements
                     </button>
-                    <button onclick="switchTab('tables-page')" id="nav-tables" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center">
+                    <button onclick="switchTab('tables-page')" id="nav-tables" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font">
                         <i class="fa-solid fa-dice-d6 mr-1.5"></i> Soirée Torgnoles
                     </button>
-                    <button onclick="switchTab('events-page')" id="nav-events" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center">
+                    <button onclick="switchTab('events-page')" id="nav-events" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font">
                         <i class="fa-solid fa-calendar-star mr-1.5"></i> Agenda
                     </button>
-                    <button onclick="switchTab('ludo-page')" id="nav-ludo" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center">
+                    <button onclick="switchTab('ludo-page')" id="nav-ludo" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font">
                         <i class="fa-solid fa-boxes-stacked mr-1.5"></i> La réserve
                     </button>
                 </nav>
@@ -321,7 +321,7 @@
         <section id="upcoming-page" class="tab-content active">
             <div class="text-center mb-6 sm:mb-10">
                 <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">Événements en approche</h1>
-                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Annonces, tournois majeurs et festivités à venir dans l'Antre !</p>
+                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium brand-font">Annonces, tournois majeurs et festivités à venir dans l'Antre !</p>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-5 lg:gap-8">
@@ -391,7 +391,7 @@
         <section id="tables-page" class="tab-content">
             <div class="text-center mb-6 sm:mb-10">
                 <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">L'Agenda de la Taverne</h1>
-                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Consulter ou proposer une table de jeu</p>
+                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium brand-font">Consulter ou proposer une table de jeu</p>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-5 lg:gap-8">
@@ -472,7 +472,7 @@
         <section id="events-page" class="tab-content">
             <div class="text-center mb-6 sm:mb-10">
                 <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">Agenda de l'Antre</h1>
-                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium">Planifiez, visualisez et inscrivez-vous aux soirées, tournois et festivités du club.</p>
+                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium brand-font">Planifiez, visualisez et inscrivez-vous aux soirées, tournois et festivités du club.</p>
                 
                 <div class="inline-flex items-center gap-2 mt-3.5 px-4 py-2 rounded-xl bg-amber-100/90 border border-amber-300/80 text-amber-950 text-xs sm:text-sm font-semibold shadow-2xs">
                     <i class="fa-solid fa-hand-pointer text-goblin text-base"></i>
@@ -589,7 +589,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-3 sm:gap-4">
                 <div>
                     <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-1 sm:mb-2 brand-font">La réserve</h1>
-                    <p class="text-sm sm:text-lg text-[#5d4037] font-medium">Consultez les listes de jeux des membres et recherchez qui possède quel jeu.</p>
+                    <p class="text-sm sm:text-lg text-[#5d4037] font-medium brand-font">Consultez les listes de jeux des membres et recherchez qui possède quel jeu.</p>
                 </div>
                 <button onclick="openCreatePlayerModal()" class="w-full sm:w-auto bg-goblin hover:bg-[#434c29] text-white font-bold py-2 sm:py-2.5 px-4 rounded-xl shadow-md transition-all flex items-center justify-center text-xs sm:text-sm whitespace-nowrap">
                     <i class="fa-solid fa-user-plus mr-2"></i> Créer ma liste de jeux
@@ -723,8 +723,8 @@
             const navEvents = document.getElementById('nav-events');
             const navLudo = document.getElementById('nav-ludo');
 
-            const activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center";
-            const inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center";
+            const activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center brand-font";
+            const inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font";
 
             if (navUpcoming) navUpcoming.className = tabId === 'upcoming-page' ? activeClass : inactiveClass;
             if (navTables) navTables.className = tabId === 'tables-page' ? activeClass : inactiveClass;
