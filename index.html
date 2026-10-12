@@ -6,8 +6,8 @@
     <title>Le Gob' laid - l'Antre</title>
     
     <!-- Icône du site et pour écran d'accueil smartphone -->
-    <link rel="icon" type="image/webp" href="gob.webp">
-    <link rel="apple-touch-icon" href="gob.webp">
+    <link rel="icon" type="image/webp" href="Gemini_Generated_Image_161qbl161qbl161q_2.png">
+    <link rel="apple-touch-icon" href="Gemini_Generated_Image_161qbl161qbl161q_2.png">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -99,12 +99,13 @@
     <!-- ÉCRAN DE SÉCURITÉ : La Porte de la Taverne -->
     <div id="security-gate" class="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center transition-opacity duration-500" style="background-image: linear-gradient(rgba(251, 247, 240, 0.95), rgba(251, 247, 240, 0.95)), url('taverne.webp');">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-6 sm:p-8 relative border-2 border-[#586337] text-center mx-4 transform transition-transform duration-500 scale-100" id="gate-card">
-            <img src="gob.webp" class="h-24 sm:h-32 mx-auto mb-4 drop-shadow-md" alt="Le Gob laid">
+            <!-- Image mise à jour -->
+            <img src="Gemini_Generated_Image_161qbl161qbl161q_2.png" class="h-24 sm:h-32 mx-auto mb-4 mix-blend-multiply" alt="Le Gob laid">
             <h2 class="text-3xl sm:text-4xl font-bold text-[#3e2723] brand-font mb-2">Halte là !</h2>
             <p class="text-sm sm:text-base text-[#5d4037] mb-6 font-medium">
-                L'accès à l'Antre est réservé aux Gobs du club.<br>
-                <strong>Entrez le mot de passe :</strong><br>
-                <span class="text-xs text-[#8d6e63] italic block mt-1.5">*Demandez votre mot de passe sur le Discord</span>
+                L'accès à l'Antre est réservé aux initiés du club.<br>
+                <strong>Entrez le mot de passe secret :</strong><br>
+                <span class="text-xs text-[#8d6e63] italic block mt-1.5">*Demandez votre mot de passe aux Gobs Chefs sur le Discord</span>
             </p>
             <form id="form-gatekeeper" class="space-y-4">
                 <input type="password" id="gate-password" required class="w-full bg-white border-2 border-[#d4c5b0] rounded-xl py-3 px-4 text-center text-lg sm:text-xl text-[#3e2723] tracking-widest focus:outline-none focus:border-[#586337] shadow-inner font-bold" placeholder="Mot de passe">
@@ -115,7 +116,7 @@
             </form>
             
             <div id="gate-error" class="hidden mt-4 p-2 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm font-bold flex items-center justify-center">
-                <i class="fa-solid fa-circle-exclamation mr-2"></i> Et ben NON !
+                <i class="fa-solid fa-circle-exclamation mr-2"></i> Mot de passe incorrect !
             </div>
         </div>
     </div>
@@ -125,7 +126,8 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row justify-between items-center py-2.5 lg:h-24 gap-3 lg:gap-0">
                 <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('upcoming-page')">
-                    <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain" alt="Logo Le Gob laid" />
+                    <!-- Image mise à jour -->
+                    <img src="Gemini_Generated_Image_161qbl161qbl161q_2.png" class="h-12 sm:h-20 w-auto object-contain mix-blend-multiply" alt="Logo Le Gob laid" />
                     <div>
                         <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
                         <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase brand-font">l'Antre</span>
@@ -683,7 +685,7 @@
         // ==========================================
         // SÉCURITÉ DE LA TAVERNE & MOT DE PASSE
         // ==========================================
-        const TAVERN_SECRET_PASSWORD = "Goblio"; 
+        const TAVERN_SECRET_PASSWORD = "GOB2026"; 
 
         // ==========================================
         // FONCTION D'ENVOI VERS DISCORD (WEBHOOK)
@@ -1124,8 +1126,7 @@
                         <!-- En-tête cliquable -->
                         <div class="flex justify-between items-start cursor-pointer select-none gap-2 min-w-0" onclick="toggleUpcomingCard('${item.id}')">
                             <div class="flex-grow min-w-0">
-                                <h3 class="text-base sm:text-xl font-bold text-[#3e2723] brand-font break-words leading-snug">${item.title}</h3>
-                                ${(item.dateText || item.date) ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5 brand-font"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${item.dateText || item.date}</p>` : ''}
+                                <h3 class="text-base sm:text-xl font-bold text-[#3e2723] brand-font break-words leading-snug">${item.title}</h3>${(item.dateText || item.date) ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5 brand-font"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${item.dateText || item.date}</p>` : ''}
                             </div>
                             <div class="flex items-center space-x-1 shrink-0 pt-0.5">
                                 <i id="upcoming-chevron-${item.id}" class="fa-solid ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-[#586337] text-xs sm:text-sm transition-transform duration-300"></i>
@@ -1527,7 +1528,7 @@
                                 <div class="flex flex-wrap items-start justify-between gap-1.5 sm:gap-2 mb-1 min-w-0">
                                     <h3 class="text-sm sm:text-xl font-bold text-[#3e2723] brand-font break-words min-w-0 flex-1 leading-snug">${table.gameName}</h3>
                                     <span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wide border ${isFull ? 'bg-red-50 text-red-700 border-red-200' : 'bg-[#f4f6ee] text-[#586337] border-[#d2d8bc]'} brand-font">
-                                        <i class="fa-solid fa-users mr-1"></i> ${currentPlayersCount} / ${table.maxPlayers}
+                                        <i class="fa-solid fa-users mr-1"></i> ${currentPlayersCount} /${table.maxPlayers}
                                     </span>
                                 </div>
                                 <div class="text-[11px] sm:text-xs text-[#5d4037] font-medium flex flex-wrap items-center gap-x-2.5 gap-y-0.5 brand-font">
@@ -1848,7 +1849,7 @@
             const month = calendarDate.getMonth();
             const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
             const monthTitle = document.getElementById('calendar-month-year');
-            if (monthTitle) monthTitle.innerHTML = `<i class="fa-regular fa-calendar-days mr-1.5 sm:mr-2"></i> ${monthNames[month]} ${year}`;
+            if (monthTitle) monthTitle.innerHTML = `<i class="fa-regular fa-calendar-days mr-1.5 sm:mr-2"></i> ${monthNames[month]}${year}`;
 
             const tbody = document.getElementById('calendar-grid-body');
             if (!tbody) return;
@@ -1901,7 +1902,7 @@
                                 const evBadge = document.createElement('button');
                                 evBadge.className = `w-full text-left text-[9px] sm:text-[11px] font-bold p-0.5 sm:p-1 rounded ${colorConfig.badge} shadow-sm hover:opacity-90 transition-opacity flex items-center justify-between gap-1 min-w-0 brand-font`;
                                 evBadge.innerHTML = `
-                                    <span class="truncate min-w-0 brand-font"><span class="opacity-80 hidden sm:inline">${ev.time}</span> ${ev.title}</span>
+                                    <span class="truncate min-w-0 brand-font"><span class="opacity-80 hidden sm:inline">${ev.time}</span>${ev.title}</span>
                                     <span class="shrink-0 bg-black/20 text-white text-[8px] sm:text-[10px] px-1 py-0.5 rounded-full font-bold flex items-center leading-none brand-font" title="${count} inscrit(s)">
                                         <i class="fa-solid fa-user text-[7px] sm:text-[8px] mr-0.5"></i>${count}
                                     </span>
@@ -2176,8 +2177,7 @@
                     ? `<div class="text-xs text-amber-800/60 italic text-center py-3 brand-font">Aucun jeu enregistré.</div>`
                     : playerGames.map(g => `
                         <div class="bg-white/90 px-2.5 py-1.5 rounded-lg border border-[#e2d5c3] shadow-2xs flex justify-between items-center text-xs font-medium text-[#3e2723] hover:border-goblin transition-colors brand-font">
-                            <span class="truncate pr-2 brand-font">${g.name}</span>
-                            ${isUnlocked ? `
+                            <span class="truncate pr-2 brand-font">${g.name}</span>${isUnlocked ? `
                                 <button onclick="deleteGame('${g.id}', '${player.id}')" class="text-gray-400 hover:text-red-600 font-bold text-sm px-1 transition-colors" title="Retirer ce jeu">&times;</button>
                             ` : ''}
                         </div>
@@ -2224,82 +2224,3 @@
                                 <i class="fa-solid fa-eye mr-1 text-amber-700"></i> Lecture seule.
                             </div>
                         `}
-
-                        <div class="max-h-[220px] overflow-y-auto space-y-1 pr-0.5">
-                            ${gamesListHtml}
-                        </div>
-                    </div>
-                `;
-
-                grid.appendChild(card);
-            });
-
-            const searchInput = document.getElementById('global-search-input');
-            if (searchInput && searchInput.value.trim()) {
-                handleSearch();
-            }
-        }
-
-        // ================= LOGIQUE DE DÉVERROUILLAGE SÉCURITÉ =================
-        function checkTavernAccess() {
-            const hasAccess = localStorage.getItem('gob_tavern_access');
-            const gate = document.getElementById('security-gate');
-
-            if (hasAccess === 'true') {
-                if (gate) gate.style.display = 'none';
-                initAuth();
-            } else {
-                if (gate) gate.classList.remove('hidden');
-            }
-        }
-
-        const gateForm = document.getElementById('form-gatekeeper');
-        if (gateForm) {
-            gateForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const inputVal = document.getElementById('gate-password').value;
-                const errorMsg = document.getElementById('gate-error');
-                const gateCard = document.getElementById('gate-card');
-
-                if (inputVal === TAVERN_SECRET_PASSWORD) {
-                    localStorage.setItem('gob_tavern_access', 'true');
-                    errorMsg.classList.add('hidden');
-                    
-                    gateCard.classList.replace('scale-100', 'scale-110');
-                    document.getElementById('security-gate').classList.add('opacity-0');
-                    
-                    setTimeout(() => {
-                        document.getElementById('security-gate').style.display = 'none';
-                        initAuth();
-                    }, 500);
-                } else {
-                    errorMsg.classList.remove('hidden');
-                    gateCard.animate([
-                        { transform: 'translateX(0)' },
-                        { transform: 'translateX(-10px)' },
-                        { transform: 'translateX(10px)' },
-                        { transform: 'translateX(-10px)' },
-                        { transform: 'translateX(10px)' },
-                        { transform: 'translateX(0)' }
-                    ], { duration: 400 });
-                    
-                    document.getElementById('gate-password').value = '';
-                    setTimeout(() => errorMsg.classList.add('hidden'), 3000);
-                }
-            });
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            checkTavernAccess();
-            
-            const today = new Date().toISOString().split('T')[0];
-
-            const tDate = document.getElementById('tableDate');
-            if(tDate) { tDate.setAttribute('min', today); tDate.value = today; }
-            
-            const eDate = document.getElementById('eventDate');
-            if(eDate) { eDate.setAttribute('min', today); eDate.value = today; }
-        });
-    </script>
-</body>
-</html>
