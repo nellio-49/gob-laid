@@ -6,8 +6,8 @@
     <title>Le Gob' laid - l'Antre</title>
     
     <!-- Icône du site et pour écran d'accueil smartphone -->
-    <link rel="icon" type="image/webp" href="Gemini_Generated_Image_161qbl161qbl161q_2.png">
-    <link rel="apple-touch-icon" href="Gemini_Generated_Image_161qbl161qbl161q_2.png">
+    <link rel="icon" type="image/webp" href="gob.webp">
+    <link rel="apple-touch-icon" href="gob.webp">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -99,13 +99,13 @@
     <!-- ÉCRAN DE SÉCURITÉ : La Porte de la Taverne -->
     <div id="security-gate" class="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center transition-opacity duration-500" style="background-image: linear-gradient(rgba(251, 247, 240, 0.95), rgba(251, 247, 240, 0.95)), url('taverne.webp');">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-6 sm:p-8 relative border-2 border-[#586337] text-center mx-4 transform transition-transform duration-500 scale-100" id="gate-card">
-            <!-- Image mise à jour -->
-            <img src="Gemini_Generated_Image_161qbl161qbl161q_2.png" class="h-24 sm:h-32 mx-auto mb-4 mix-blend-multiply" alt="Le Gob laid">
+            <!-- Image du logo -->
+            <img src="gob.webp" class="h-24 sm:h-32 mx-auto mb-4 mix-blend-multiply" alt="Le Gob laid">
             <h2 class="text-3xl sm:text-4xl font-bold text-[#3e2723] brand-font mb-2">Halte là !</h2>
-            <p class="text-sm sm:text-base text-[#5d4037] mb-6 font-medium">
-                L'accès à l'Antre est réservé aux initiés du club.<br>
-                <strong>Entrez le mot de passe secret :</strong><br>
-                <span class="text-xs text-[#8d6e63] italic block mt-1.5">*Demandez votre mot de passe aux Gobs Chefs sur le Discord</span>
+            <p class="text-sm sm:text-base text-[#5d4037] mb-6 font-medium brand-font">
+                L'accès à l'Antre est réservé aux Gobs du club.<br>
+                <strong>Entrez le mot de passe :</strong><br>
+                <span class="text-xs text-[#8d6e63] italic block mt-1.5 brand-font">*Demandez votre mot de passe sur le Discord</span>
             </p>
             <form id="form-gatekeeper" class="space-y-4">
                 <input type="password" id="gate-password" required class="w-full bg-white border-2 border-[#d4c5b0] rounded-xl py-3 px-4 text-center text-lg sm:text-xl text-[#3e2723] tracking-widest focus:outline-none focus:border-[#586337] shadow-inner font-bold" placeholder="Mot de passe">
@@ -115,8 +115,8 @@
                 </button>
             </form>
             
-            <div id="gate-error" class="hidden mt-4 p-2 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm font-bold flex items-center justify-center">
-                <i class="fa-solid fa-circle-exclamation mr-2"></i> Mot de passe incorrect !
+            <div id="gate-error" class="hidden mt-4 p-2 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm font-bold flex items-center justify-center brand-font">
+                <i class="fa-solid fa-circle-exclamation mr-2"></i> Ah, ben non !
             </div>
         </div>
     </div>
@@ -126,8 +126,7 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row justify-between items-center py-2.5 lg:h-24 gap-3 lg:gap-0">
                 <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('upcoming-page')">
-                    <!-- Image mise à jour -->
-                    <img src="Gemini_Generated_Image_161qbl161qbl161q_2.png" class="h-12 sm:h-20 w-auto object-contain mix-blend-multiply" alt="Logo Le Gob laid" />
+                    <img src="gob.webp" class="h-12 sm:h-20 w-auto object-contain mix-blend-multiply" alt="Logo Le Gob laid" />
                     <div>
                         <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
                         <span class="text-[10px] sm:text-xs text-[#8d6e63] font-semibold tracking-widest uppercase brand-font">l'Antre</span>
@@ -686,6 +685,37 @@
         // SÉCURITÉ DE LA TAVERNE & MOT DE PASSE
         // ==========================================
         const TAVERN_SECRET_PASSWORD = "GOB2026"; 
+
+        const formGatekeeper = document.getElementById('form-gatekeeper');
+        const securityGate = document.getElementById('security-gate');
+        const gateError = document.getElementById('gate-error');
+
+        // Mémorisation de l'accès déverrouillé dans la session
+        if (sessionStorage.getItem('antre_unlocked') === 'true') {
+            if (securityGate) securityGate.classList.add('hidden');
+            initAuth();
+        }
+
+        if (formGatekeeper) {
+            formGatekeeper.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pwd = document.getElementById('gate-password').value;
+
+                if (pwd === TAVERN_SECRET_PASSWORD) {
+                    if (gateError) gateError.classList.add('hidden');
+                    if (securityGate) {
+                        securityGate.style.opacity = '0';
+                        sessionStorage.setItem('antre_unlocked', 'true');
+                        setTimeout(() => {
+                            securityGate.classList.add('hidden');
+                            initAuth();
+                        }, 500);
+                    }
+                } else {
+                    if (gateError) gateError.classList.remove('hidden');
+                }
+            });
+        }
 
         // ==========================================
         // FONCTION D'ENVOI VERS DISCORD (WEBHOOK)
@@ -2224,3 +2254,14 @@
                                 <i class="fa-solid fa-eye mr-1 text-amber-700"></i> Lecture seule.
                             </div>
                         `}
+                        <div class="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                            ${gamesListHtml}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
