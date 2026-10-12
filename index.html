@@ -13,15 +13,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Remplacement de Lora par Cinzel pour harmoniser tous les textes avec l'univers -->
+    <!-- Polices Cinzel et Lacquer -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;900&family=Lacquer&display=swap" rel="stylesheet">
     
     <style>
         body {
-            /* Application de la police des textes généraux */
             font-family: 'Cinzel', serif;
             background-color: #fbf7f0; 
-            /* Arrière-plan Taverne avec calque parchemin à 78 % d'opacité */
             background-image: linear-gradient(rgba(251, 247, 240, 0.78), rgba(251, 247, 240, 0.78)), url('taverne.webp');
             background-size: cover;
             background-position: center;
@@ -30,7 +28,6 @@
             color: #3e2723;
         }
 
-        /* Titres principaux et éléments du thème avec l'effet "peinture" */
         h1, h2, h3, h4, .brand-font {
             font-family: 'Lacquer', 'Cinzel', cursive, serif;
             letter-spacing: 0.03em;
@@ -87,6 +84,29 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- ÉCRAN DE SÉCURITÉ : La Porte de la Taverne -->
+    <div id="security-gate" class="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center transition-opacity duration-500" style="background-image: linear-gradient(rgba(251, 247, 240, 0.95), rgba(251, 247, 240, 0.95)), url('taverne.webp');">
+        <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-6 sm:p-8 relative border-2 border-[#586337] text-center mx-4 transform transition-transform duration-500 scale-100" id="gate-card">
+            <img src="gob.webp" class="h-24 sm:h-32 mx-auto mb-4 drop-shadow-md" alt="Le Gob laid">
+            <h2 class="text-3xl sm:text-4xl font-bold text-[#3e2723] brand-font mb-2">Halte là !</h2>
+            <p class="text-sm sm:text-base text-[#5d4037] mb-6 font-medium">
+                L'accès à l'Antre est réservé aux initiés du club.<br>
+                <strong>Entrez le mot de passe secret :</strong>
+            </p>
+            <form id="form-gatekeeper" class="space-y-4">
+                <input type="password" id="gate-password" required class="w-full bg-white border-2 border-[#d4c5b0] rounded-xl py-3 px-4 text-center text-lg sm:text-xl text-[#3e2723] tracking-widest focus:outline-none focus:border-[#586337] shadow-inner font-bold" placeholder="Mot de passe">
+                
+                <button type="submit" class="w-full bg-goblin text-white font-bold py-3 rounded-xl hover:bg-[#434c29] transition-colors shadow-md text-lg brand-font flex items-center justify-center">
+                    <i class="fa-solid fa-door-open mr-2"></i> Pousser la porte
+                </button>
+            </form>
+            
+            <div id="gate-error" class="hidden mt-4 p-2 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm font-bold flex items-center justify-center">
+                <i class="fa-solid fa-circle-exclamation mr-2"></i> Mot de passe incorrect !
+            </div>
+        </div>
+    </div>
 
     <!-- En-tête avec Navigation globale -->
     <header class="header-bg shadow-sm sticky top-0 z-40">
@@ -649,6 +669,11 @@
         import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
         // ==========================================
+        // SÉCURITÉ DE LA TAVERNE & MOT DE PASSE
+        // ==========================================
+        const TAVERN_SECRET_PASSWORD = "GOB2026"; // <-- Changez ce mot de passe si vous le souhaitez !
+
+        // ==========================================
         // FONCTION D'ENVOI VERS DISCORD (WEBHOOK)
         // ==========================================
         async function notifyDiscord(message) {
@@ -963,9 +988,8 @@
                     });
                     expandedUpcomingCards.add(docRef.id);
 
-                    // --- NOTIFICATION DISCORD ÉVÉNEMENT EN APPROCHE ---
+                    // --- NOTIFICATION DISCORD ---
                     await notifyDiscord(`@everyone 📢 **Nouvel événement en approche !**\n• **Nom :** ${title}\n• **Date/Période :** ${dateText}\n• **Infos :** ${description}`);
-                    // --------------------------------------------------
 
                     showToast("Événement placardé !");
                     e.target.reset();
@@ -980,7 +1004,6 @@
             });
         }
 
-        // --- MODIFICATION & SUPPRESSION DES ÉVÉNEMENTS EN APPROCHE ---
         window.openEditUpcomingModal = function(id) {
             const eventItem = currentUpcoming.find(e => e.id === id);
             if (!eventItem) return;
@@ -1053,7 +1076,7 @@
 
         window.deleteUpcomingEvent = async function(id) {
             if (!currentUser) return;
-            const pin = prompt("Veuillez saisir le code PIN administrateur (9999 par défaut) pour supprimer cet événement :");
+            const pin = prompt("Veuillez saisir le code PIN administrateur pour supprimer cet événement :");
             if (pin !== MASTER_PIN) {
                 return showToast("Code PIN incorrect. Suppression annulée.", true);
             }
@@ -1190,9 +1213,8 @@
                         console.error("Erreur auto-inscription événement :", eErr);
                     }
 
-                    // --- NOTIFICATION DISCORD TABLE ---
+                    // --- NOTIFICATION DISCORD ---
                     await notifyDiscord(`@everyone 🎲 **Nouvelle table proposée dans l'Antre !**\n• **Jeu :** ${gameName}\n• **Hôte :** ${hostName}\n• **Date :** ${date} à ${time}\n• **Places max :** ${maxPlayers}\n${description ? `• **Description :** ${description}` : ''}`);
-                    // ----------------------------------
 
                     showToast("Annonce placardée et inscription à la soirée enregistrée !");
                     e.target.reset();
@@ -1208,7 +1230,6 @@
             });
         }
 
-        // --- MODIFICATION DES TABLES ---
         window.openEditTableModal = function(tableId) {
             const table = currentTables.find(t => t.id === tableId);
             if (!table) return;
@@ -1258,12 +1279,10 @@
                         gameName, hostName, date, time, maxPlayers, description
                     });
 
-                    // Synchronisation avec l'Agenda si la date ou l'hôte a changé
                     if (oldDate !== date) {
                         const oldAffectedPlayers = new Set([oldHost, ...(table.playersList || [])]);
                         const newAffectedPlayers = new Set([hostName, ...(table.playersList || [])]);
 
-                        // Retirer de l'ancien événement
                         const remainingOldTables = currentTables.filter(t => t.date === oldDate && t.id !== id);
                         const oldEvent = currentEvents.find(ev => ev.date === oldDate && !ev.cancelled);
                         if (oldEvent) {
@@ -1278,7 +1297,6 @@
                             }
                         }
 
-                        // Ajouter au nouvel événement
                         const targetNewEvent = currentEvents.find(ev => ev.date === date && !ev.cancelled);
                         if (targetNewEvent) {
                             const newEventRef = getDocRef('events', targetNewEvent.id);
@@ -1305,7 +1323,6 @@
                             });
                         }
                     } else if (oldHost !== hostName) {
-                        // La date n'a pas changé, mais l'hôte a changé
                         const stillInTables = currentTables.some(t =>
                             t.date === date && t.id !== id && (t.hostName === oldHost || (t.playersList || []).includes(oldHost))
                         );
@@ -1584,9 +1601,8 @@
                         description, playersList: [], creatorId: currentUser.uid, createdAt: new Date().toISOString()
                     });
 
-                    // --- NOTIFICATION DISCORD AGENDA ---
+                    // --- NOTIFICATION DISCORD ---
                     await notifyDiscord(`@everyone 🗓️ **Nouvel événement ajouté à l'Agenda !**\n• **Titre :** ${title}\n• **Type :** ${type}\n• **Date :** ${date} à ${time}\n• **Lieu :** ${location || 'Salle polyvalente de Bourg-la-Cave'}`);
-                    // -----------------------------------
 
                     showToast("Événement ajouté au calendrier !");
                     e.target.reset();
@@ -2212,8 +2228,58 @@
             }
         }
 
+        // ================= LOGIQUE DE DÉVERROUILLAGE SÉCURITÉ =================
+        function checkTavernAccess() {
+            const hasAccess = localStorage.getItem('gob_tavern_access');
+            const gate = document.getElementById('security-gate');
+
+            if (hasAccess === 'true') {
+                if (gate) gate.style.display = 'none';
+                initAuth();
+            } else {
+                if (gate) gate.classList.remove('hidden');
+            }
+        }
+
+        const gateForm = document.getElementById('form-gatekeeper');
+        if (gateForm) {
+            gateForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const inputVal = document.getElementById('gate-password').value;
+                const errorMsg = document.getElementById('gate-error');
+                const gateCard = document.getElementById('gate-card');
+
+                if (inputVal === TAVERN_SECRET_PASSWORD) {
+                    localStorage.setItem('gob_tavern_access', 'true');
+                    errorMsg.classList.add('hidden');
+                    
+                    gateCard.classList.replace('scale-100', 'scale-110');
+                    document.getElementById('security-gate').classList.add('opacity-0');
+                    
+                    setTimeout(() => {
+                        document.getElementById('security-gate').style.display = 'none';
+                        initAuth();
+                    }, 500);
+                } else {
+                    errorMsg.classList.remove('hidden');
+                    gateCard.animate([
+                        { transform: 'translateX(0)' },
+                        { transform: 'translateX(-10px)' },
+                        { transform: 'translateX(10px)' },
+                        { transform: 'translateX(-10px)' },
+                        { transform: 'translateX(10px)' },
+                        { transform: 'translateX(0)' }
+                    ], { duration: 400 });
+                    
+                    document.getElementById('gate-password').value = '';
+                    setTimeout(() => errorMsg.classList.add('hidden'), 3000);
+                }
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            initAuth();
+            checkTavernAccess();
+            
             const today = new Date().toISOString().split('T')[0];
 
             const tDate = document.getElementById('tableDate');
