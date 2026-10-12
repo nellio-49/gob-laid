@@ -690,8 +690,9 @@
         const securityGate = document.getElementById('security-gate');
         const gateError = document.getElementById('gate-error');
 
-        // Mémorisation de l'accès déverrouillé dans la session
-        if (sessionStorage.getItem('antre_unlocked') === 'true') {
+        // Mémorisation permanente de l'accès (localStorage)
+        // Vérifie le mot de passe actuel : réclame le mot de passe si celui-ci a changé
+        if (localStorage.getItem('antre_unlocked') === TAVERN_SECRET_PASSWORD) {
             if (securityGate) securityGate.classList.add('hidden');
             initAuth();
         }
@@ -705,7 +706,7 @@
                     if (gateError) gateError.classList.add('hidden');
                     if (securityGate) {
                         securityGate.style.opacity = '0';
-                        sessionStorage.setItem('antre_unlocked', 'true');
+                        localStorage.setItem('antre_unlocked', TAVERN_SECRET_PASSWORD);
                         setTimeout(() => {
                             securityGate.classList.add('hidden');
                             initAuth();
