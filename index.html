@@ -99,7 +99,6 @@
     <!-- ÉCRAN DE SÉCURITÉ : La Porte de la Taverne -->
     <div id="security-gate" class="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center transition-opacity duration-500" style="background-image: linear-gradient(rgba(251, 247, 240, 0.95), rgba(251, 247, 240, 0.95)), url('taverne.webp');">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-6 sm:p-8 relative border-2 border-[#586337] text-center mx-4 transform transition-transform duration-500 scale-100" id="gate-card">
-            <!-- Image du logo -->
             <img src="gob.webp" class="h-24 sm:h-32 mx-auto mb-4 mix-blend-multiply" alt="Le Gob laid">
             <h2 class="text-3xl sm:text-4xl font-bold text-[#3e2723] brand-font mb-2">Halte là !</h2>
             <p class="text-sm sm:text-base text-[#5d4037] mb-6 font-medium brand-font">
@@ -110,8 +109,8 @@
             <form id="form-gatekeeper" class="space-y-4">
                 <div class="relative">
                     <input type="password" id="gate-password" required class="w-full bg-white border-2 border-[#d4c5b0] rounded-xl py-3 pl-12 pr-12 text-center text-lg sm:text-xl text-[#3e2723] tracking-widest focus:outline-none focus:border-[#586337] shadow-inner font-bold" placeholder="Mot de passe">
-                    <!-- Bouton oeil pour afficher/masquer -->
-                    <button type="button" id="toggle-pwd-btn" class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#586337] transition-colors focus:outline-none">
+                    <!-- Bouton oeil pour afficher / masquer -->
+                    <button type="button" id="toggle-pwd-btn" class="absolute inset-y-0 right-3.5 flex items-center text-gray-400 hover:text-[#586337] transition-colors focus:outline-none cursor-pointer" title="Afficher/Masquer le mot de passe">
                         <i class="fa-solid fa-eye text-xl" id="eye-icon"></i>
                     </button>
                 </div>
@@ -696,7 +695,7 @@
         const securityGate = document.getElementById('security-gate');
         const gateError = document.getElementById('gate-error');
         
-        // GESTION DE L'OEIL POUR LE MOT DE PASSE
+        // GESTION DU BOUTON OEIL POUR VOIR LE MOT DE PASSE
         const togglePwdBtn = document.getElementById('toggle-pwd-btn');
         const pwdInput = document.getElementById('gate-password');
         const eyeIcon = document.getElementById('eye-icon');
@@ -743,6 +742,43 @@
         }
 
         // ==========================================
+        // BANDEAU DE DIAGNOSTIC AUTOMATIQUE
+        // (Affiche en clair les erreurs Firebase)
+        // ==========================================
+        function showDiagnostic(source, error) {
+            console.error(source, error);
+            let diag = document.getElementById('firebase-diagnostic-banner');
+            if (!diag) {
+                diag = document.createElement('div');
+                diag.id = 'firebase-diagnostic-banner';
+                diag.className = "fixed top-0 left-0 right-0 z-[110] bg-red-800 text-white p-3.5 shadow-2xl border-b-2 border-red-950 text-xs sm:text-sm";
+                document.body.prepend(diag);
+            }
+            const errStr = (error && (error.message || error.code)) ? (error.message || error.code) : String(error);
+            let explanation = "";
+            
+            if (errStr.includes("permission-denied") || errStr.includes("Missing or insufficient permissions")) {
+                explanation = "<strong>Permissions Firestore bloquées :</strong> Vos règles de sécurité Firestore ont probablement expiré (test mode 30 jours). Dans votre console Firebase > <em>Firestore Database</em> > Onglet <em>Règles</em>, vérifiez que l'accès n'est pas bloqué par une date dépassée.";
+            } else if (errStr.includes("operation-not-allowed") || errStr.includes("admin-restricted-operation")) {
+                explanation = "<strong>Authentification Anonyme désactivée :</strong> Rendez-vous sur votre console Firebase > <em>Authentication</em> > Onglet <em>Sign-in method</em> > Activez le fournisseur <strong>Anonyme</strong>.";
+            } else {
+                explanation = "Détail : " + errStr;
+            }
+
+            diag.innerHTML = `
+                <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <span class="font-bold flex items-center gap-1.5 text-amber-200">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Problème Firebase [${source}]
+                        </span>
+                        <div class="mt-1 text-white">${explanation}</div>
+                    </div>
+                    <button onclick="this.closest('#firebase-diagnostic-banner').remove()" class="bg-white/20 hover:bg-white/30 px-3 py-1 rounded text-xs font-bold uppercase tracking-wider shrink-0 cursor-pointer">Fermer</button>
+                </div>
+            `;
+        }
+
+        // ==========================================
         // FONCTION D'ENVOI VERS DISCORD (WEBHOOK)
         // ==========================================
         async function notifyDiscord(message) {
@@ -785,14 +821,27 @@
         const db = getFirestore(app);
         let currentUser = null;
 
-        // CORRECTION DE LA RACINE DES DONNÉES
-        // Utilisation directe des collections de la base de données principale.
+        // Rétablissement du chemin d'origine (artifacts)
+        // avec possibilité de bascule vers la racine si besoin
+        const useRootStorage = localStorage.getItem('gob_use_root_storage') === 'true';
+
         function getCol(colName) {
-            return collection(db, colName);
+            if (useRootStorage) {
+                return collection(db, colName);
+            }
+            return collection(db, 'artifacts', appId, 'public', 'data', colName);
         }
         function getDocRef(colName, docId) {
-            return doc(db, colName, docId);
+            if (useRootStorage) {
+                return doc(db, colName, docId);
+            }
+            return doc(db, 'artifacts', appId, 'public', 'data', colName, docId);
         }
+
+        window.toggleStorageMode = function() {
+            localStorage.setItem('gob_use_root_storage', useRootStorage ? 'false' : 'true');
+            window.location.reload();
+        };
 
         let calendarDate = new Date();
         const expandedPlayerCards = new Set();
@@ -936,7 +985,7 @@
                 currentUser = auth.currentUser;
                 initFirestoreListeners();
             } catch (error) {
-                console.error("Auth error:", error);
+                showDiagnostic("Authentification Firebase", error);
                 const loader = document.getElementById('loading-indicator');
                 if(loader) loader.innerHTML = "<span class='text-red-600 user-created-text'>Erreur de connexion</span>";
             }
@@ -972,7 +1021,7 @@
                 currentUpcoming.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
                 renderUpcomingEvents();
             }, (error) => {
-                console.error("Firestore error (upcoming):", error);
+                showDiagnostic("Chargement Événements", error);
             });
 
             onSnapshot(tablesCollection, (snapshot) => {
@@ -983,7 +1032,7 @@
                 const loader = document.getElementById('loading-indicator');
                 if(loader) loader.style.display = 'none';
             }, (error) => {
-                console.error("Firestore error (tables):", error);
+                showDiagnostic("Chargement Tables", error);
                 const loader = document.getElementById('loading-indicator');
                 if(loader) loader.innerHTML = "<span class='text-red-600 user-created-text'>Erreur d'accès base</span>";
             });
@@ -994,7 +1043,7 @@
                 currentEvents.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
                 renderCalendar();
             }, (error) => {
-                console.error("Firestore error (events):", error);
+                showDiagnostic("Chargement Agenda", error);
             });
 
             onSnapshot(playersColl, (snapshot) => {
@@ -1005,7 +1054,7 @@
                 allPlayers.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'fr', { sensitivity: 'base' }));
                 renderLudoUI();
             }, (error) => {
-                console.error("Firestore error (players):", error);
+                showDiagnostic("Chargement Joueurs", error);
             });
 
             onSnapshot(gamesColl, (snapshot) => {
@@ -1015,7 +1064,7 @@
                 });
                 renderLudoUI();
             }, (error) => {
-                console.error("Firestore error (games):", error);
+                showDiagnostic("Chargement Jeux", error);
             });
         }
 
@@ -1057,14 +1106,13 @@
                     });
                     expandedUpcomingCards.add(docRef.id);
 
-                    // --- NOTIFICATION DISCORD ---
                     await notifyDiscord(`@everyone 📢 **Nouvel événement en approche !**\n• **Nom :** ${title}\n• **Date/Période :** ${dateText}\n• **Infos :** ${description}`);
 
                     showToast("Événement placardé !");
                     e.target.reset();
                     toggleUpcomingForm();
                 } catch (error) {
-                    console.error("Erreur ajout événement en approche :", error);
+                    showDiagnostic("Ajout Événement", error);
                     showToast("Erreur lors de l'ajout.", true);
                 } finally {
                     btn.innerHTML = originalText;
@@ -1134,7 +1182,7 @@
                     showToast("Événement modifié avec succès !");
                     closeEditUpcomingModal();
                 } catch (error) {
-                    console.error("Erreur modification événement :", error);
+                    showDiagnostic("Modification Événement", error);
                     showToast("Erreur lors de la modification.", true);
                 } finally {
                     btn.innerHTML = originalText;
@@ -1155,7 +1203,7 @@
                 expandedUpcomingCards.delete(id);
                 showToast("Événement retiré.");
             } catch (err) {
-                console.error(err);
+                showDiagnostic("Suppression Événement", err);
                 showToast("Erreur de suppression.", true);
             }
         };
@@ -1167,7 +1215,24 @@
             container.innerHTML = '';
 
             if (currentUpcoming.length === 0) {
-                if (emptyState) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
+                if (emptyState) { 
+                    emptyState.classList.remove('hidden'); 
+                    emptyState.classList.add('flex');
+                    // Message contextuel si base complètement vide
+                    const switchNote = document.getElementById('switch-mode-note');
+                    if (!switchNote) {
+                        const note = document.createElement('div');
+                        note.id = 'switch-mode-note';
+                        note.className = "mt-4 text-xs text-amber-800 bg-amber-100/80 p-2.5 rounded-lg border border-amber-300 brand-font";
+                        note.innerHTML = `
+                            Dossier actuel : <strong>${useRootStorage ? 'Racine directe' : 'Dossier "artifacts"'}</strong>. 
+                            <button onclick="toggleStorageMode()" class="underline font-bold text-goblin ml-1 hover:text-black cursor-pointer">
+                                Cliquez ici pour tester l'autre emplacement
+                            </button>
+                        `;
+                        emptyState.appendChild(note);
+                    }
+                }
             } else {
                 if (emptyState) { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
 
@@ -1207,10 +1272,10 @@
                             ` : ''}
 
                             <div class="pt-3 mt-3 flex justify-end items-center gap-1.5 border-t border-[#e2d5c3]">
-                                <button onclick="openEditUpcomingModal('${item.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font">
+                                <button onclick="openEditUpcomingModal('${item.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font cursor-pointer">
                                     <i class="fa-solid fa-pen mr-1"></i> Modifier
                                 </button>
-                                <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font">
+                                <button onclick="deleteUpcomingEvent('${item.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font cursor-pointer">
                                     <i class="fa-solid fa-trash-can mr-1"></i> Retirer
                                 </button>
                             </div>
@@ -1281,15 +1346,14 @@
                         console.error("Erreur auto-inscription événement :", eErr);
                     }
 
-                    // --- NOTIFICATION DISCORD ---
                     await notifyDiscord(`@everyone 🎲 **Nouvelle table proposée dans l'Antre !**\n• **Jeu :** ${gameName}\n• **Hôte :** ${hostName}\n• **Date :** ${date} à ${time}\n• **Places max :** ${maxPlayers}\n${description ? `• **Description :** ${description}` : ''}`);
 
-                    showToast("Annonce placardée et inscription à la soirée enregistrée !");
+                    showToast("Annonce placardée et inscription enregistrée !");
                     e.target.reset();
                     document.getElementById('tableTime').value = "18:00";
                     toggleTableForm();
                 } catch (error) {
-                    console.error(error);
+                    showDiagnostic("Ajout Table", error);
                     showToast("Erreur lors de l'ajout.", true);
                 } finally {
                     btn.innerHTML = originalText;
@@ -1407,7 +1471,7 @@
                     showToast("Table modifiée avec succès !");
                     closeEditTableModal();
                 } catch (error) {
-                    console.error("Erreur modification table :", error);
+                    showDiagnostic("Modification Table", error);
                     showToast("Erreur lors de la modification.", true);
                 } finally {
                     btn.innerHTML = originalText;
@@ -1466,7 +1530,10 @@
 
                 showToast(`${playerName} a rejoint la table et est inscrit à la soirée !`);
                 if (inputEl) inputEl.value = '';
-            } catch(e) { showToast("Erreur d'inscription.", true); }
+            } catch(e) { 
+                showDiagnostic("Inscription Table", e);
+                showToast("Erreur d'inscription.", true); 
+            }
         };
 
         window.leaveTable = async function(tableId, playerName) {
@@ -1497,7 +1564,7 @@
 
                 showToast(`${playerName} s'est désinscrit de la table.`);
             } catch(e) {
-                console.error(e);
+                showDiagnostic("Désinscription Table", e);
                 showToast("Erreur lors du retrait.", true);
             }
         };
@@ -1536,7 +1603,7 @@
 
                 showToast("Annonce retirée.");
             } catch(e) {
-                console.error(e);
+                showDiagnostic("Annulation Table", e);
                 showToast("Erreur de suppression.", true);
             }
         };
@@ -1570,7 +1637,7 @@
                             <span class="inline-flex items-center bg-amber-100/90 text-[#3e2723] text-[11px] sm:text-xs font-semibold px-2 py-0.5 rounded-md border border-amber-200/80 max-w-full min-w-0 break-words brand-font">
                                 <i class="fa-solid fa-user text-[10px] text-amber-700 mr-1 shrink-0"></i>
                                 <span class="break-words min-w-0 brand-font">${p}</span>
-                                <button onclick="leaveTable('${table.id}', '${p.replace(/'/g, "\\'")}')" class="ml-1.5 text-red-500 hover:text-red-700 font-bold hover:bg-red-100/80 rounded px-1 transition-colors shrink-0" title="Se désinscrire">&times;</button>
+                                <button onclick="leaveTable('${table.id}', '${p.replace(/'/g, "\\'")}')" class="ml-1.5 text-red-500 hover:text-red-700 font-bold hover:bg-red-100/80 rounded px-1 transition-colors shrink-0 cursor-pointer" title="Se désinscrire">&times;</button>
                             </span>
                         `).join('');
 
@@ -1615,7 +1682,7 @@
                                     <label for="join-input-${table.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1 brand-font">Rejoindre cette table :</label>
                                     <div class="flex gap-1.5 sm:gap-2">
                                         <input type="text" id="join-input-${table.id}" placeholder="Votre nom ou pseudo" class="flex-grow min-w-0 bg-white border border-[#d4c5b0] rounded-md py-1 px-2 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
-                                        <button onclick="joinTable('${table.id}', 'join-input-${table.id}',${table.maxPlayers})" class="shrink-0 bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-2.5 sm:px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap brand-font">
+                                        <button onclick="joinTable('${table.id}', 'join-input-${table.id}',${table.maxPlayers})" class="shrink-0 bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-2.5 sm:px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap brand-font cursor-pointer">
                                             <i class="fa-solid fa-user-plus mr-1"></i> S'inscrire
                                         </button>
                                     </div>
@@ -1627,10 +1694,10 @@
                             `}
 
                             <div class="pt-1.5 flex justify-end gap-2">
-                                <button onclick="openEditTableModal('${table.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font">
+                                <button onclick="openEditTableModal('${table.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font cursor-pointer">
                                     <i class="fa-solid fa-pen mr-1.5"></i> Modifier
                                 </button>
-                                <button onclick="deleteTable('${table.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font">
+                                <button onclick="deleteTable('${table.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font cursor-pointer">
                                     <i class="fa-solid fa-trash-can mr-1.5"></i> Annuler la table
                                 </button>
                             </div>
@@ -1669,7 +1736,6 @@
                         description, playersList: [], creatorId: currentUser.uid, createdAt: new Date().toISOString()
                     });
 
-                    // --- NOTIFICATION DISCORD ---
                     await notifyDiscord(`@everyone 🗓️ **Nouvel événement ajouté à l'Agenda !**\n• **Titre :** ${title}\n• **Type :** ${type}\n• **Date :** ${date} à ${time}\n• **Lieu :** ${location || 'Salle polyvalente de Bourg-la-Cave'}`);
 
                     showToast("Événement ajouté au calendrier !");
@@ -1679,6 +1745,7 @@
                     renderCalendar();
                     toggleEventForm();
                 } catch (error) {
+                    showDiagnostic("Ajout Agenda", error);
                     showToast("Erreur lors de l'ajout.", true);
                 } finally {
                     btn.innerHTML = '<i class="fa-solid fa-calendar-check mr-2"></i> Ajouter au Calendrier';
@@ -1735,12 +1802,12 @@
                         location: location || 'Salle polyvalente de Bourg-la-Cave',
                         description
                     });
-                    showToast("Événement de l'agenda modifié !");
+                    showToast("Événement modifié !");
                     closeEditEventModal();
                     calendarDate = new Date(date);
                     renderCalendar();
                 } catch (error) {
-                    console.error("Erreur modification événement agenda :", error);
+                    showDiagnostic("Modification Agenda", error);
                     showToast("Erreur lors de la modification.", true);
                 } finally {
                     btn.innerHTML = originalText;
@@ -1777,7 +1844,7 @@
                 : playersList.map((p) => `
                     <span class="inline-flex items-center bg-amber-100/90 text-[#3e2723] text-xs font-semibold px-2 py-0.5 rounded-md border border-amber-200/80 shadow-2xs brand-font">
                         <i class="fa-solid fa-user text-[10px] text-amber-700 mr-1"></i><span class="brand-font">${p}</span>
-                        <button onclick="leaveEvent('${ev.id}', '${p.replace(/'/g, "\\'")}')" class="ml-1.5 text-red-500 hover:text-red-700 font-bold hover:bg-red-100/80 rounded px-1 transition-colors" title="Se désinscrire">&times;</button>
+                        <button onclick="leaveEvent('${ev.id}', '${p.replace(/'/g, "\\'")}')" class="ml-1.5 text-red-500 hover:text-red-700 font-bold hover:bg-red-100/80 rounded px-1 transition-colors cursor-pointer" title="Se désinscrire">&times;</button>
                     </span>
                 `).join('');
 
@@ -1817,7 +1884,7 @@
                         <label for="join-event-input-${ev.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1 brand-font">Participer à cet événement :</label>
                         <div class="flex gap-2">
                             <input type="text" id="join-event-input-${ev.id}" placeholder="Votre nom ou pseudo" class="flex-grow bg-white border border-[#d4c5b0] rounded-md py-1 px-2.5 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
-                            <button onclick="joinEvent('${ev.id}', 'join-event-input-${ev.id}')" class="bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap brand-font">
+                            <button onclick="joinEvent('${ev.id}', 'join-event-input-${ev.id}')" class="bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap brand-font cursor-pointer">
                                 <i class="fa-solid fa-user-plus mr-1"></i> S'inscrire
                             </button>
                         </div>
@@ -1825,14 +1892,14 @@
 
                     <div class="pt-2 sm:pt-3 border-t border-[#e2d5c3] flex flex-wrap justify-between items-center gap-2 sm:gap-3">
                         <div class="flex items-center gap-1.5">
-                            <button onclick="openEditEventModal('${ev.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center brand-font">
+                            <button onclick="openEditEventModal('${ev.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center brand-font cursor-pointer">
                                 <i class="fa-solid fa-pen mr-1.5"></i> Modifier
                             </button>
-                            <button onclick="deleteEvent('${ev.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center brand-font">
+                            <button onclick="deleteEvent('${ev.id}')" class="bg-white hover:bg-red-50 text-red-600 border border-red-200 hover:border-red-600 font-bold text-xs py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-lg transition-colors flex items-center brand-font cursor-pointer">
                                 <i class="fa-solid fa-trash-can mr-1.5"></i> Supprimer
                             </button>
                         </div>
-                        <button onclick="closeEventModal()" class="bg-goblin text-white font-bold text-xs py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-[#434c29] transition-colors brand-font">
+                        <button onclick="closeEventModal()" class="bg-goblin text-white font-bold text-xs py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg hover:bg-[#434c29] transition-colors brand-font cursor-pointer">
                             Fermer
                         </button>
                     </div>
@@ -1864,7 +1931,7 @@
                 showToast(`${playerName} est inscrit à l'événement !`);
                 openEventModal(eventId);
             } catch(e) {
-                console.error("joinEvent error:", e);
+                showDiagnostic("Inscription Agenda", e);
                 showToast("Erreur d'inscription.", true);
             }
         };
@@ -1877,7 +1944,7 @@
                 showToast(`${playerName} s'est désinscrit.`);
                 openEventModal(eventId);
             } catch(e) {
-                console.error("leaveEvent error:", e);
+                showDiagnostic("Désinscription Agenda", e);
                 showToast("Erreur lors du retrait.", true);
             }
         };
@@ -1894,7 +1961,7 @@
                 closeEventModal();
                 showToast("Événement annulé.");
             } catch(e) {
-                console.error("deleteEvent error:", e);
+                showDiagnostic("Suppression Agenda", e);
                 showToast("Erreur de suppression.", true);
             }
         };
@@ -1955,7 +2022,7 @@
                                 const colorConfig = typeColorMap[ev.type] || typeColorMap['Autre'];
                                 const count = (ev.playersList || []).length;
                                 const evBadge = document.createElement('button');
-                                evBadge.className = `w-full text-left text-[9px] sm:text-[11px] font-bold p-0.5 sm:p-1 rounded ${colorConfig.badge} shadow-sm hover:opacity-90 transition-opacity flex items-center justify-between gap-1 min-w-0 brand-font`;
+                                evBadge.className = `w-full text-left text-[9px] sm:text-[11px] font-bold p-0.5 sm:p-1 rounded ${colorConfig.badge} shadow-sm hover:opacity-90 transition-opacity flex items-center justify-between gap-1 min-w-0 brand-font cursor-pointer`;
                                 evBadge.innerHTML = `
                                     <span class="truncate min-w-0 brand-font"><span class="opacity-80 hidden sm:inline">${ev.time} </span>${ev.title}</span>
                                     <span class="shrink-0 bg-black/20 text-white text-[8px] sm:text-[10px] px-1 py-0.5 rounded-full font-bold flex items-center leading-none brand-font" title="${count} inscrit(s)">
@@ -2033,7 +2100,10 @@
                     e.target.reset();
                     renderLudoUI();
                     focusGameInput(docRef.id);
-                } catch (err) { showToast("Erreur de création.", true); }
+                } catch (err) { 
+                    showDiagnostic("Création Joueur", err);
+                    showToast("Erreur de création.", true); 
+                }
             });
         }
 
@@ -2082,7 +2152,10 @@
                 input.value = '';
                 showToast(`Jeu(x) ajouté(s) à la liste de ${player.name} !`);
                 focusGameInput(playerId);
-            } catch (err) { showToast("Erreur lors de l'ajout.", true); }
+            } catch (err) { 
+                showDiagnostic("Ajout Jeu", err);
+                showToast("Erreur lors de l'ajout.", true); 
+            }
         };
 
         window.deleteGame = async (gameId, playerId) => {
@@ -2097,7 +2170,10 @@
                 await deleteDoc(getDocRef('ludo_jeux', gameId));
                 showToast("Jeu retiré.");
                 focusGameInput(playerId);
-            } catch (err) { showToast("Erreur de suppression.", true); }
+            } catch (err) { 
+                showDiagnostic("Suppression Jeu", err);
+                showToast("Erreur de suppression.", true); 
+            }
         };
 
         window.deletePlayerList = async (playerId) => {
@@ -2125,7 +2201,7 @@
 
                 showToast(`Liste de ${player.name} supprimée.`);
             } catch (err) { 
-                console.error("Erreur suppression joueur:", err);
+                showDiagnostic("Suppression Joueur", err);
                 showToast("Erreur lors de la suppression.", true); 
             }
         };
@@ -2233,7 +2309,7 @@
                     : playerGames.map(g => `
                         <div class="bg-white/90 px-2.5 py-1.5 rounded-lg border border-[#e2d5c3] shadow-2xs flex justify-between items-center text-xs font-medium text-[#3e2723] hover:border-goblin transition-colors brand-font">
                             <span class="truncate pr-2 brand-font">${g.name}</span>${isUnlocked ? `
-                                <button onclick="deleteGame('${g.id}', '${player.id}')" class="text-gray-400 hover:text-red-600 font-bold text-sm px-1 transition-colors" title="Retirer ce jeu">&times;</button>
+                                <button onclick="deleteGame('${g.id}', '${player.id}')" class="text-gray-400 hover:text-red-600 font-bold text-sm px-1 transition-colors cursor-pointer" title="Retirer ce jeu">&times;</button>
                             ` : ''}
                         </div>
                     `).join('');
@@ -2247,11 +2323,11 @@
                         <div class="flex items-center space-x-1.5 shrink-0">
                             <div onclick="event.stopPropagation()">
                                 ${isUnlocked ? `
-                                    <button onclick="lockPlayerList('${player.id}')" class="text-emerald-800 bg-emerald-100/90 hover:bg-amber-100 hover:text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold border border-emerald-300 transition-colors flex items-center shadow-2xs brand-font" title="Verrouiller à nouveau">
+                                    <button onclick="lockPlayerList('${player.id}')" class="text-emerald-800 bg-emerald-100/90 hover:bg-amber-100 hover:text-amber-900 px-1.5 py-0.5 rounded text-[10px] font-bold border border-emerald-300 transition-colors flex items-center shadow-2xs brand-font cursor-pointer" title="Verrouiller à nouveau">
                                         <i class="fa-solid fa-lock-open mr-1 text-[9px]"></i>Ouvert
                                     </button>
                                 ` : `
-                                    <button onclick="openUnlockModal('${player.id}', '${player.name.replace(/'/g, "\\'")}')" class="text-amber-800 hover:text-goblin bg-amber-50 hover:bg-amber-100 px-1.5 py-0.5 rounded text-[10px] font-bold border border-amber-200/80 transition-colors brand-font" title="Déverrouiller avec PIN">
+                                    <button onclick="openUnlockModal('${player.id}', '${player.name.replace(/'/g, "\\'")}')" class="text-amber-800 hover:text-goblin bg-amber-50 hover:bg-amber-100 px-1.5 py-0.5 rounded text-[10px] font-bold border border-amber-200/80 transition-colors brand-font cursor-pointer" title="Déverrouiller avec PIN">
                                         <i class="fa-solid fa-lock mr-1 text-[9px]"></i>PIN
                                     </button>
                                 `}
@@ -2264,13 +2340,13 @@
                         ${isUnlocked ? `
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-[10px] font-bold uppercase tracking-wide text-amber-900 brand-font"><i class="fa-solid fa-gear mr-1"></i>Gestion</span>
-                                <button onclick="deletePlayerList('${player.id}')" class="text-red-500 hover:text-red-700 text-[11px] font-bold transition-colors flex items-center brand-font" title="Supprimer la liste">
+                                <button onclick="deletePlayerList('${player.id}')" class="text-red-500 hover:text-red-700 text-[11px] font-bold transition-colors flex items-center brand-font cursor-pointer" title="Supprimer la liste">
                                     <i class="fa-solid fa-trash-can mr-1"></i> Supprimer
                                 </button>
                             </div>
                             <form onsubmit="event.preventDefault(); addGame('${player.id}', 'input-game-${player.id}');" class="mb-2 flex gap-1.5">
                                 <input type="text" id="input-game-${player.id}" placeholder="Ajouter un jeu..." class="flex-grow bg-[#ffffff] border border-[#d4c5b0] rounded-md py-1 px-2 text-xs text-[#3e2723] focus:outline-none focus:border-goblin">
-                                <button type="submit" class="bg-goblin hover:bg-[#434c29] text-white font-bold px-2 py-1 rounded-md text-xs transition-colors shadow-2xs">
+                                <button type="submit" class="bg-goblin hover:bg-[#434c29] text-white font-bold px-2 py-1 rounded-md text-xs transition-colors shadow-2xs cursor-pointer">
                                     <i class="fa-solid fa-plus"></i>
                                 </button>
                             </form>
