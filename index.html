@@ -108,7 +108,13 @@
                 <span class="text-xs text-[#8d6e63] italic block mt-1.5 brand-font">*Demandez votre mot de passe sur le Discord</span>
             </p>
             <form id="form-gatekeeper" class="space-y-4">
-                <input type="password" id="gate-password" required class="w-full bg-white border-2 border-[#d4c5b0] rounded-xl py-3 px-4 text-center text-lg sm:text-xl text-[#3e2723] tracking-widest focus:outline-none focus:border-[#586337] shadow-inner font-bold" placeholder="Mot de passe">
+                <div class="relative">
+                    <input type="password" id="gate-password" required class="w-full bg-white border-2 border-[#d4c5b0] rounded-xl py-3 pl-12 pr-12 text-center text-lg sm:text-xl text-[#3e2723] tracking-widest focus:outline-none focus:border-[#586337] shadow-inner font-bold" placeholder="Mot de passe">
+                    <!-- Bouton oeil pour afficher/masquer -->
+                    <button type="button" id="toggle-pwd-btn" class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-[#586337] transition-colors focus:outline-none">
+                        <i class="fa-solid fa-eye text-xl" id="eye-icon"></i>
+                    </button>
+                </div>
                 
                 <button type="submit" class="w-full bg-goblin text-white font-bold py-3 rounded-xl hover:bg-[#434c29] transition-colors shadow-md text-lg brand-font flex items-center justify-center">
                     <i class="fa-solid fa-door-open mr-2"></i> Pousser la porte
@@ -689,6 +695,25 @@
         const formGatekeeper = document.getElementById('form-gatekeeper');
         const securityGate = document.getElementById('security-gate');
         const gateError = document.getElementById('gate-error');
+        
+        // GESTION DE L'OEIL POUR LE MOT DE PASSE
+        const togglePwdBtn = document.getElementById('toggle-pwd-btn');
+        const pwdInput = document.getElementById('gate-password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (togglePwdBtn && pwdInput) {
+            togglePwdBtn.addEventListener('click', () => {
+                if (pwdInput.type === 'password') {
+                    pwdInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    pwdInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
 
         // Mémorisation permanente de l'accès (localStorage)
         if (localStorage.getItem('antre_unlocked') === TAVERN_SECRET_PASSWORD) {
@@ -760,11 +785,13 @@
         const db = getFirestore(app);
         let currentUser = null;
 
+        // CORRECTION DE LA RACINE DES DONNÉES
+        // Utilisation directe des collections de la base de données principale.
         function getCol(colName) {
-            return collection(db, 'artifacts', appId, 'public', 'data', colName);
+            return collection(db, colName);
         }
         function getDocRef(colName, docId) {
-            return doc(db, 'artifacts', appId, 'public', 'data', colName, docId);
+            return doc(db, colName, docId);
         }
 
         let calendarDate = new Date();
