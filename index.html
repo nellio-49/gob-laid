@@ -687,63 +687,65 @@
         import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
         // ==========================================
-        // SÉCURITÉ DE LA TAVERNE & MOT DE PASSE
+        // 1. CONFIGURATION & INITIALISATION FIREBASE
+        // (Doit être en premier pour éviter le blocage)
         // ==========================================
-        const TAVERN_SECRET_PASSWORD = "GOB2026"; 
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
+        let firebaseConfig = null;
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                firebaseConfig = JSON.parse(__firebase_config);
+            } else {
+                firebaseConfig = {
+                    apiKey: "AIzaSyBIoi9ziM-v5eQ54LgRoCBLQ22m5QHBLAQ",
+                    authDomain: "site-gob-laid.firebaseapp.com",
+                    projectId: "site-gob-laid",
+                    storageBucket: "site-gob-laid.firebasestorage.app",
+                    messagingSenderId: "57060942174",
+                    appId: "1:57060942174:web:30d9f8cda4ffb5300f6fcf"
+                };
+            }
+        } catch (e) { console.error(e); }
 
-        const formGatekeeper = document.getElementById('form-gatekeeper');
-        const securityGate = document.getElementById('security-gate');
-        const gateError = document.getElementById('gate-error');
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentUser = null;
+
+        const useRootStorage = localStorage.getItem('gob_use_root_storage') === 'true';
+
+        function getCol(colName) {
+            if (useRootStorage) {
+                return collection(db, colName);
+            }
+            return collection(db, 'artifacts', appId, 'public', 'data', colName);
+        }
+        function getDocRef(colName, docId) {
+            if (useRootStorage) {
+                return doc(db, colName, docId);
+            }
+            return doc(db, 'artifacts', appId, 'public', 'data', colName, docId);
+        }
+
+        window.toggleStorageMode = function() {
+            localStorage.setItem('gob_use_root_storage', useRootStorage ? 'false' : 'true');
+            window.location.reload();
+        };
+
+        const upcomingCollection = getCol('upcoming_events');
+        const tablesCollection = getCol('tables');
+        const eventsCollection = getCol('events');
+        const playersColl = getCol('ludo_joueurs');
+        const gamesColl = getCol('ludo_jeux');
         
-        // GESTION DU BOUTON OEIL POUR VOIR LE MOT DE PASSE
-        const togglePwdBtn = document.getElementById('toggle-pwd-btn');
-        const pwdInput = document.getElementById('gate-password');
-        const eyeIcon = document.getElementById('eye-icon');
-
-        if (togglePwdBtn && pwdInput) {
-            togglePwdBtn.addEventListener('click', () => {
-                if (pwdInput.type === 'password') {
-                    pwdInput.type = 'text';
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
-                } else {
-                    pwdInput.type = 'password';
-                    eyeIcon.classList.remove('fa-eye-slash');
-                    eyeIcon.classList.add('fa-eye');
-                }
-            });
-        }
-
-        // Mémorisation permanente de l'accès (localStorage)
-        if (localStorage.getItem('antre_unlocked') === TAVERN_SECRET_PASSWORD) {
-            if (securityGate) securityGate.classList.add('hidden');
-            initAuth();
-        }
-
-        if (formGatekeeper) {
-            formGatekeeper.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const pwd = document.getElementById('gate-password').value;
-
-                if (pwd === TAVERN_SECRET_PASSWORD) {
-                    if (gateError) gateError.classList.add('hidden');
-                    if (securityGate) {
-                        securityGate.style.opacity = '0';
-                        localStorage.setItem('antre_unlocked', TAVERN_SECRET_PASSWORD);
-                        setTimeout(() => {
-                            securityGate.classList.add('hidden');
-                            initAuth();
-                        }, 500);
-                    }
-                } else {
-                    if (gateError) gateError.classList.remove('hidden');
-                }
-            });
-        }
+        let currentUpcoming = [];
+        let currentTables = [];
+        let currentEvents = [];
+        let allPlayers = [];
+        let allGames = [];
 
         // ==========================================
-        // BANDEAU DE DIAGNOSTIC AUTOMATIQUE
-        // (Affiche en clair les erreurs Firebase)
+        // 2. DIAGNOSTIC VISUEL DES ERREURS FIREBASE
         // ==========================================
         function showDiagnostic(source, error) {
             console.error(source, error);
@@ -779,7 +781,59 @@
         }
 
         // ==========================================
-        // FONCTION D'ENVOI VERS DISCORD (WEBHOOK)
+        // 3. SÉCURITÉ DE LA TAVERNE & BOUTON OEIL
+        // ==========================================
+        const TAVERN_SECRET_PASSWORD = "GOB2026"; 
+
+        const formGatekeeper = document.getElementById('form-gatekeeper');
+        const securityGate = document.getElementById('security-gate');
+        const gateError = document.getElementById('gate-error');
+        const togglePwdBtn = document.getElementById('toggle-pwd-btn');
+        const pwdInput = document.getElementById('gate-password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (togglePwdBtn && pwdInput) {
+            togglePwdBtn.addEventListener('click', () => {
+                if (pwdInput.type === 'password') {
+                    pwdInput.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    pwdInput.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        }
+
+        if (localStorage.getItem('antre_unlocked') === TAVERN_SECRET_PASSWORD) {
+            if (securityGate) securityGate.classList.add('hidden');
+            initAuth();
+        }
+
+        if (formGatekeeper) {
+            formGatekeeper.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const pwd = document.getElementById('gate-password').value;
+
+                if (pwd === TAVERN_SECRET_PASSWORD) {
+                    if (gateError) gateError.classList.add('hidden');
+                    if (securityGate) {
+                        securityGate.style.opacity = '0';
+                        localStorage.setItem('antre_unlocked', TAVERN_SECRET_PASSWORD);
+                        setTimeout(() => {
+                            securityGate.classList.add('hidden');
+                            initAuth();
+                        }, 500);
+                    }
+                } else {
+                    if (gateError) gateError.classList.remove('hidden');
+                }
+            });
+        }
+
+        // ==========================================
+        // 4. WEBHOOK DISCORD & CONSTANTES
         // ==========================================
         async function notifyDiscord(message) {
             try {
@@ -790,59 +844,11 @@
                     body: JSON.stringify({ message: message })
                 });
             } catch (e) {
-                console.error("Erreur lors de l'envoi de la notification Discord :", e);
+                console.error("Erreur notification Discord :", e);
             }
         }
 
         const MASTER_PIN = "9999";
-
-        // ==========================================
-        // CONFIGURATION FIREBASE LE GOB' LAID
-        // ==========================================
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
-        let firebaseConfig = null;
-        try {
-            if (typeof __firebase_config !== 'undefined') {
-                firebaseConfig = JSON.parse(__firebase_config);
-            } else {
-                firebaseConfig = {
-                    apiKey: "AIzaSyBIoi9ziM-v5eQ54LgRoCBLQ22m5QHBLAQ",
-                    authDomain: "site-gob-laid.firebaseapp.com",
-                    projectId: "site-gob-laid",
-                    storageBucket: "site-gob-laid.firebasestorage.app",
-                    messagingSenderId: "57060942174",
-                    appId: "1:57060942174:web:30d9f8cda4ffb5300f6fcf"
-                };
-            }
-        } catch (e) { console.error(e); }
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        let currentUser = null;
-
-        // Rétablissement du chemin d'origine (artifacts)
-        // avec possibilité de bascule vers la racine si besoin
-        const useRootStorage = localStorage.getItem('gob_use_root_storage') === 'true';
-
-        function getCol(colName) {
-            if (useRootStorage) {
-                return collection(db, colName);
-            }
-            return collection(db, 'artifacts', appId, 'public', 'data', colName);
-        }
-        function getDocRef(colName, docId) {
-            if (useRootStorage) {
-                return doc(db, colName, docId);
-            }
-            return doc(db, 'artifacts', appId, 'public', 'data', colName, docId);
-        }
-
-        window.toggleStorageMode = function() {
-            localStorage.setItem('gob_use_root_storage', useRootStorage ? 'false' : 'true');
-            window.location.reload();
-        };
-
         let calendarDate = new Date();
         const expandedPlayerCards = new Set();
         const expandedTableCards = new Set();
@@ -975,6 +981,15 @@
             setTimeout(() => { toast.classList.add('translate-y-20', 'opacity-0'); }, 3000);
         };
 
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
         async function initAuth() {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -989,27 +1004,6 @@
                 const loader = document.getElementById('loading-indicator');
                 if(loader) loader.innerHTML = "<span class='text-red-600 user-created-text'>Erreur de connexion</span>";
             }
-        }
-
-        const upcomingCollection = getCol('upcoming_events');
-        const tablesCollection = getCol('tables');
-        const eventsCollection = getCol('events');
-        const playersColl = getCol('ludo_joueurs');
-        const gamesColl = getCol('ludo_jeux');
-        
-        let currentUpcoming = [];
-        let currentTables = [];
-        let currentEvents = [];
-        let allPlayers = [];
-        let allGames = [];
-
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
         }
 
         function initFirestoreListeners() {
@@ -1218,7 +1212,6 @@
                 if (emptyState) { 
                     emptyState.classList.remove('hidden'); 
                     emptyState.classList.add('flex');
-                    // Message contextuel si base complètement vide
                     const switchNote = document.getElementById('switch-mode-note');
                     if (!switchNote) {
                         const note = document.createElement('div');
@@ -1243,7 +1236,6 @@
                     card.className = "parchment-card rounded-xl border-l-4 border-l-[#586337] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden p-3 sm:p-4";
                     
                     card.innerHTML = `
-                        <!-- En-tête cliquable -->
                         <div class="flex justify-between items-start cursor-pointer select-none gap-2 min-w-0" onclick="toggleUpcomingCard('${item.id}')">
                             <div class="flex-grow min-w-0">
                                 <h3 class="text-base sm:text-xl font-bold text-[#3e2723] brand-font break-words leading-snug">${item.title}</h3>${(item.dateText || item.date) ? `<p class="text-xs sm:text-sm text-amber-900 font-semibold mt-0.5 brand-font"><i class="fa-regular fa-clock mr-1 text-[#586337]"></i>${item.dateText || item.date}</p>` : ''}
@@ -1253,7 +1245,6 @@
                             </div>
                         </div>
 
-                        <!-- Contenu dépliable -->
                         <div id="upcoming-content-${item.id}" class="${isExpanded ? '' : 'hidden'} mt-3 pt-3 border-t border-[#e2d5c3]">
                             <p class="text-xs sm:text-sm text-[#5d4037] bg-[#fdfaf5] p-3 rounded-lg border border-[#e2d5c3] whitespace-pre-line brand-font">${item.description}</p>
 
