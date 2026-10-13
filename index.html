@@ -100,16 +100,16 @@
     <div id="security-gate" class="fixed inset-0 z-[100] flex items-center justify-center bg-cover bg-center transition-opacity duration-500" style="background-image: linear-gradient(rgba(251, 247, 240, 0.95), rgba(251, 247, 240, 0.95)), url('Antre.webp');">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-6 sm:p-8 relative border-2 border-[#586337] text-center mx-4 transform transition-transform duration-500 scale-100" id="gate-card">
             <img src="gob2.webp" class="h-24 sm:h-32 mx-auto mb-4 mix-blend-multiply" alt="Le Gob laid">
-            <h2 class="text-3xl sm:text-4xl font-bold text-[#3e2723] brand-font mb-2">Halte là !</h2>
+            <h2 class="text-3xl sm:text-4xl font-bold text-[#3e2723] brand-font mb-2">Halte là&nbsp;!</h2>
             <p class="text-sm sm:text-base text-[#5d4037] mb-6 font-medium brand-font">
                 L'accès à l'Antre est réservé aux Gobs du clan.<br>
-                <strong>Entrez le mot de passe :</strong><br>
+                <strong>Entrez le mot de passe&nbsp;:</strong><br>
                 <span class="text-xs text-[#8d6e63] italic block mt-1.5 brand-font">*Demandez votre mot de passe sur le Discord</span>
             </p>
             <form id="form-gatekeeper" class="space-y-4">
                 <div class="relative">
                     <input type="password" id="gate-password" required class="w-full bg-white border-2 border-[#d4c5b0] rounded-xl py-3 pl-12 pr-12 text-center text-lg sm:text-xl text-[#3e2723] tracking-widest focus:outline-none focus:border-[#586337] shadow-inner font-bold" placeholder="Mot de passe">
-                    <!-- Bouton oeil pour afficher / masquer -->
+                    <!-- Bouton œil pour afficher / masquer -->
                     <button type="button" id="toggle-pwd-btn" class="absolute inset-y-0 right-3.5 flex items-center text-gray-400 hover:text-[#586337] transition-colors focus:outline-none cursor-pointer" title="Afficher/Masquer le mot de passe">
                         <i class="fa-solid fa-eye text-xl" id="eye-icon"></i>
                     </button>
@@ -121,7 +121,7 @@
             </form>
             
             <div id="gate-error" class="hidden mt-4 p-2 bg-red-100 border border-red-300 rounded-lg text-red-700 text-sm font-bold flex items-center justify-center brand-font">
-                <i class="fa-solid fa-circle-exclamation mr-2"></i> Bien essayé !
+                <i class="fa-solid fa-circle-exclamation mr-2"></i> Bien essayé&nbsp;!
             </div>
         </div>
     </div>
@@ -130,7 +130,7 @@
     <header class="header-bg shadow-sm sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row justify-between items-center py-2.5 lg:h-24 gap-3 lg:gap-0">
-                <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('upcoming-page')">
+                <div class="flex items-center space-x-3 sm:space-x-4 cursor-pointer hover:opacity-80 transition-opacity" onclick="switchTab('home-page')">
                     <img src="gob2.webp" class="h-12 sm:h-20 w-auto object-contain mix-blend-multiply" alt="Logo Le Gob laid" />
                     <div>
                         <span class="brand-font font-bold text-xl sm:text-3xl tracking-wider text-goblin drop-shadow-sm block">Le Gob' laid</span>
@@ -138,9 +138,12 @@
                     </div>
                 </div>
 
-                <!-- Navigation en haut à droite (4 Onglets) -->
+                <!-- Navigation en haut à droite (5 Onglets) -->
                 <nav class="flex flex-wrap justify-center items-center bg-[#f0e6d2]/80 p-1 rounded-xl border border-[#d4c5b0] gap-1 shadow-sm w-full sm:w-auto">
-                    <button onclick="switchTab('upcoming-page')" id="nav-upcoming" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center brand-font">
+                    <button onclick="switchTab('home-page')" id="nav-home" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center brand-font">
+                        <i class="fa-solid fa-dungeon mr-1.5"></i> Accueil
+                    </button>
+                    <button onclick="switchTab('upcoming-page')" id="nav-upcoming" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font">
                         <i class="fa-solid fa-bullhorn mr-1.5"></i> Événements
                     </button>
                     <button onclick="switchTab('tables-page')" id="nav-tables" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font">
@@ -173,7 +176,7 @@
     <!-- MODAL : Modifier Événement Agenda -->
     <div id="edit-event-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
-            <button onclick="closeEditEventModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <button onclick="closeEditEventModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold cursor-pointer">&times;</button>
             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font mb-4 flex items-center">
                 <i class="fa-solid fa-pen-to-square text-goblin mr-2"></i> Modifier l'événement de l'agenda
             </h2>
@@ -215,8 +218,8 @@
                 </div>
                 
                 <div class="pt-2 flex justify-end gap-2">
-                    <button type="button" onclick="closeEditEventModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors">Annuler</button>
-                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow">Enregistrer</button>
+                    <button type="button" onclick="closeEditEventModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors cursor-pointer">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow cursor-pointer">Enregistrer</button>
                 </div>
             </form>
         </div>
@@ -225,7 +228,7 @@
     <!-- MODAL : Modifier Événement en approche -->
     <div id="edit-upcoming-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
-            <button onclick="closeEditUpcomingModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <button onclick="closeEditUpcomingModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold cursor-pointer">&times;</button>
             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font mb-4 flex items-center">
                 <i class="fa-solid fa-pen-to-square text-goblin mr-2"></i> Modifier l'événement
             </h2>
@@ -255,8 +258,8 @@
                 </div>
                 
                 <div class="pt-2 flex justify-end gap-2">
-                    <button type="button" onclick="closeEditUpcomingModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors">Annuler</button>
-                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow">Enregistrer</button>
+                    <button type="button" onclick="closeEditUpcomingModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors cursor-pointer">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow cursor-pointer">Enregistrer</button>
                 </div>
             </form>
         </div>
@@ -265,7 +268,7 @@
     <!-- MODAL : Modifier une Table -->
     <div id="edit-table-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
-            <button onclick="closeEditTableModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <button onclick="closeEditTableModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold cursor-pointer">&times;</button>
             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font mb-4 flex items-center">
                 <i class="fa-solid fa-pen-to-square text-goblin mr-2"></i> Modifier la Table
             </h2>
@@ -302,8 +305,8 @@
                 </div>
                 
                 <div class="pt-2 flex justify-end gap-2">
-                    <button type="button" onclick="closeEditTableModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors">Annuler</button>
-                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow">Enregistrer</button>
+                    <button type="button" onclick="closeEditTableModal()" class="px-4 py-2 bg-gray-200 text-gray-700 font-bold rounded-lg text-sm hover:bg-gray-300 transition-colors cursor-pointer">Annuler</button>
+                    <button type="submit" class="px-4 py-2 bg-goblin text-white font-bold rounded-lg text-sm hover:bg-[#434c29] transition-colors shadow cursor-pointer">Enregistrer</button>
                 </div>
             </form>
         </div>
@@ -312,9 +315,9 @@
     <!-- MODAL LA RÉSERVE 1 : Création de Joueur -->
     <div id="modal-create-player" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-md w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
-            <button onclick="closeCreatePlayerModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <button onclick="closeCreatePlayerModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold cursor-pointer">&times;</button>
             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font mb-4 flex items-center">
-                <i class="fa-solid fa-user-shield text-goblin mr-2"></i> Ajouter ma liste de joueur
+                <i class="fa-solid fa-user-shield text-goblin mr-2"></i> Ajouter ma liste de jeu
             </h2>
             <form id="form-create-player" class="space-y-3.5 sm:space-y-4">
                 <div>
@@ -326,7 +329,7 @@
                     <input type="password" id="new-player-pin" maxlength="8" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-goblin" placeholder="****">
                     <p class="text-[11px] text-amber-800 mt-1"><i class="fa-solid fa-lock mr-1"></i>Ce code sécurise votre liste. Vous seul pourrez la modifier.</p>
                 </div>
-                <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 rounded-lg hover:bg-[#434c29] transition-colors shadow text-sm sm:text-base">
+                <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 rounded-lg hover:bg-[#434c29] transition-colors shadow text-sm sm:text-base cursor-pointer">
                     Valider et créer ma liste
                 </button>
             </form>
@@ -336,7 +339,7 @@
     <!-- MODAL LA RÉSERVE 2 : Déverrouillage de Joueur -->
     <div id="modal-unlock-player" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-sm w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-goblin">
-            <button onclick="closeUnlockModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold">&times;</button>
+            <button onclick="closeUnlockModal()" class="absolute top-2 right-3 text-gray-400 hover:text-red-700 text-2xl font-bold cursor-pointer">&times;</button>
             <h2 class="text-lg sm:text-xl font-bold text-[#3e2723] brand-font mb-2 flex items-center">
                 <i class="fa-solid fa-key text-goblin mr-2"></i> Déverrouiller <span id="unlock-player-title" class="ml-1 text-goblin brand-font"></span>
             </h2>
@@ -346,7 +349,7 @@
                 <div>
                     <input type="password" id="unlock-player-pin" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-[#3e2723] focus:outline-none focus:border-goblin text-center text-lg tracking-widest" placeholder="****">
                 </div>
-                <button type="submit" class="w-full bg-goblin text-white font-bold py-2 rounded-lg hover:bg-[#434c29] transition-colors shadow text-sm sm:text-base">
+                <button type="submit" class="w-full bg-goblin text-white font-bold py-2 rounded-lg hover:bg-[#434c29] transition-colors shadow text-sm sm:text-base cursor-pointer">
                     Déverrouiller
                 </button>
             </form>
@@ -355,11 +358,84 @@
 
     <main class="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-10 w-full">
         
+        <!-- ONGLET 0 : ACCUEIL (Posé directement sur le fond de l'Antre) -->
+        <section id="home-page" class="tab-content active">
+            <div class="max-w-4xl mx-auto py-2 sm:py-6">
+                <!-- En-tête de bienvenue -->
+                <div class="text-center mb-8 sm:mb-12">
+                    <h1 class="text-3xl sm:text-5xl font-bold text-goblin mb-3 brand-font drop-shadow">
+                        Bienvenue dans l'Antre du Gob'laid
+                    </h1>
+                    <p class="text-base sm:text-xl text-[#3e2723] font-semibold brand-font max-w-xl mx-auto drop-shadow-xs">
+                        Le repaire pour suivre et organiser toutes les activités du clan.
+                    </p>
+                </div>
+
+                <!-- Grille des fonctionnalités -->
+                <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                    <!-- Événements -->
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/60 border border-[#d4c5b0]/70 backdrop-blur-[2px] shadow-sm">
+                        <div class="bg-goblin text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                            <i class="fa-solid fa-bullhorn text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">Événements</h3>
+                            <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
+                                Les grands rendez-vous, tournois et temps forts du club.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Soirées Torgnoles -->
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/60 border border-[#d4c5b0]/70 backdrop-blur-[2px] shadow-sm">
+                        <div class="bg-amber-600 text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                            <i class="fa-solid fa-dice-d6 text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">Soirées Torgnoles</h3>
+                            <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
+                                Proposez une table de jeu ou rejoignez-en une.
+                                <span class="block text-[11px] text-amber-900 italic mt-1 font-semibold">
+                                    * L'inscription à une table vous ajoute automatiquement à la soirée correspondante sur le calendrier.
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Gob'genda -->
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/60 border border-[#d4c5b0]/70 backdrop-blur-[2px] shadow-sm">
+                        <div class="bg-purple-600 text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                            <i class="fa-regular fa-calendar-days text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">Gob'genda</h3>
+                            <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
+                                Le calendrier du club. Consultez les dates prévues et confirmez votre présence en un clic.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- La Réserve -->
+                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/60 border border-[#d4c5b0]/70 backdrop-blur-[2px] shadow-sm">
+                        <div class="bg-[#586337] text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                            <i class="fa-solid fa-boxes-stacked text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">La Réserve</h3>
+                            <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
+                                La ludothèque partagée du clan. Découvrez qui possède quel jeu et partagez votre propre butin.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- ONGLET 1 : ÉVÉNEMENTS EN APPROCHE -->
-        <section id="upcoming-page" class="tab-content active">
+        <section id="upcoming-page" class="tab-content">
             <div class="text-center mb-6 sm:mb-10">
                 <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">Événements en approche</h1>
-                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium brand-font">Annonces, tournois et festivités à venir dans l'Antre !</p>
+                <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium brand-font">Annonces, tournois et festivités à venir dans l'Antre&nbsp;!</p>
             </div>
 
             <div class="grid lg:grid-cols-3 gap-5 lg:gap-8">
@@ -381,7 +457,7 @@
 
                             <div>
                                 <label for="upcomingDate" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Date / Période *</label>
-                                <input type="text" id="upcomingDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]" placeholder="Ex : 01 juillet, 2026, Samedi 15 Novembre à 14h...">
+                                <input type="text" id="upcomingDate" required class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]" placeholder="Ex : Samedi 15 Novembre à 14h...">
                             </div>
 
                             <div>
@@ -399,7 +475,7 @@
                                 <input type="file" id="upcomingDoc" accept=".pdf,.doc,.docx,.txt" class="w-full bg-white border border-[#d4c5b0] rounded-md py-1.5 px-2 text-xs text-[#3e2723]">
                             </div>
 
-                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3">
+                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3 cursor-pointer">
                                 <i class="fa-solid fa-bullhorn mr-2"></i> Placarder l'événement
                             </button>
                         </form>
@@ -418,7 +494,7 @@
                         <div id="empty-upcoming-state" class="flex flex-col items-center justify-center py-12 sm:py-16 text-amber-900/70">
                             <i class="fa-solid fa-calendar-xmark text-5xl sm:text-7xl mb-3 opacity-40 text-[#586337]"></i>
                             <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">Pas d'événement en vue</p>
-                            <p class="text-sm sm:text-md mt-1 font-medium brand-font">Consultez l’agenda ou proposez le vôtre !</p>
+                            <p class="text-sm sm:text-md mt-1 font-medium brand-font">Consultez l'agenda ou proposez le vôtre&nbsp;!</p>
                         </div>
                     </div>
                 </div>
@@ -478,7 +554,7 @@
                                 <textarea id="description" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Campagne niv 1, ou extension incluse..."></textarea>
                             </div>
 
-                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3">
+                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3 cursor-pointer">
                                 <i class="fa-solid fa-scroll mr-2"></i> Placarder l'annonce
                             </button>
                         </form>
@@ -499,7 +575,7 @@
                         <div id="empty-state" class="hidden flex-col items-center justify-center py-12 sm:py-16 text-amber-900/70">
                             <i class="fa-solid fa-spider text-5xl sm:text-7xl mb-3 opacity-40"></i>
                             <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">La Taverne est vide.</p>
-                            <p class="text-sm sm:text-md mt-1 font-medium brand-font">Soyez le premier à proposer une table !</p>
+                            <p class="text-sm sm:text-md mt-1 font-medium brand-font">Soyez le premier à proposer une table&nbsp;!</p>
                         </div>
                     </div>
                 </div>
@@ -523,13 +599,13 @@
                 <div class="lg:col-span-2">
                     <div class="parchment-card rounded-xl overflow-hidden shadow-lg border border-[#d4c5b0]">
                         <div class="bg-gradient-to-r from-[#586337] to-[#32391e] text-white p-3 sm:p-4 flex justify-between items-center shadow-md">
-                            <button onclick="prevMonth()" class="hover:bg-white/20 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg transition-colors flex items-center font-bold text-xs sm:text-sm brand-font">
+                            <button onclick="prevMonth()" class="hover:bg-white/20 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg transition-colors flex items-center font-bold text-xs sm:text-sm brand-font cursor-pointer">
                                 <i class="fa-solid fa-chevron-left mr-1"></i> <span class="hidden sm:inline">Précédent</span>
                             </button>
                             <h2 id="calendar-month-year" class="text-base sm:text-2xl font-bold brand-font tracking-wide flex items-center">
                                 <i class="fa-regular fa-calendar-days mr-1.5 sm:mr-2"></i> Chargement...
                             </h2>
-                            <button onclick="nextMonth()" class="hover:bg-white/20 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg transition-colors flex items-center font-bold text-xs sm:text-sm brand-font">
+                            <button onclick="nextMonth()" class="hover:bg-white/20 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg transition-colors flex items-center font-bold text-xs sm:text-sm brand-font cursor-pointer">
                                 <span class="hidden sm:inline">Suivant</span> <i class="fa-solid fa-chevron-right ml-1"></i>
                             </button>
                         </div>
@@ -613,7 +689,7 @@
                                 <textarea id="eventDescription" rows="2" class="w-full bg-white border border-[#d4c5b0] rounded-md py-2 sm:py-2.5 px-3 text-sm text-[#3e2723] focus:outline-none focus:border-[#586337] focus:ring-2 focus:ring-[#e8edda] transition-colors shadow-sm" placeholder="Informations complémentaires, lots, tarifs..."></textarea>
                             </div>
 
-                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3">
+                            <button type="submit" class="w-full bg-goblin text-white font-bold py-2.5 sm:py-3 px-4 rounded-md transition-colors duration-200 shadow-md flex justify-center items-center text-base sm:text-lg mt-3 cursor-pointer">
                                 <i class="fa-solid fa-calendar-check mr-2"></i> Ajouter au Calendrier
                             </button>
                         </form>
@@ -627,7 +703,7 @@
             <div class="text-center mb-6 sm:mb-10 flex flex-col items-center">
                 <h1 class="text-2xl sm:text-4xl font-bold text-goblin mb-2 sm:mb-4 brand-font">La réserve</h1>
                 <p class="text-sm sm:text-lg text-[#5d4037] max-w-2xl mx-auto font-medium brand-font mb-4">Consultez le butin des membres et cherchez qui cache quel jeu dans sa Gob'thèque.</p>
-                <button onclick="openCreatePlayerModal()" class="w-full sm:w-auto bg-goblin hover:bg-[#434c29] text-white font-bold py-2 sm:py-2.5 px-6 rounded-xl shadow-md transition-all flex items-center justify-center text-xs sm:text-base whitespace-nowrap mx-auto brand-font">
+                <button onclick="openCreatePlayerModal()" class="w-full sm:w-auto bg-goblin hover:bg-[#434c29] text-white font-bold py-2 sm:py-2.5 px-6 rounded-xl shadow-md transition-all flex items-center justify-center text-xs sm:text-base whitespace-nowrap mx-auto brand-font cursor-pointer">
                     <i class="fa-solid fa-user-plus mr-2"></i> Créer mon butin de jeux
                 </button>
             </div>
@@ -637,12 +713,12 @@
                 <div class="relative">
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 transform -translate-y-1/2 text-goblin text-base sm:text-xl"></i>
                     <input type="text" id="global-search-input" oninput="handleSearch()" class="w-full bg-white border-2 border-[#d4c5b0] focus:border-goblin rounded-xl py-2.5 sm:py-3 pl-10 sm:pl-12 pr-9 text-xs sm:text-base text-[#3e2723] font-medium placeholder-gray-400 focus:outline-none shadow-inner transition-colors" placeholder="Rechercher un jeu (Catan, Zombicide...)...">
-                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#586337] font-bold text-base sm:text-lg">&times;</button>
+                    <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-[#586337] font-bold text-base sm:text-lg cursor-pointer">&times;</button>
                 </div>
 
                 <div id="search-results-container" class="hidden mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#e2d5c3]">
                     <h3 class="text-base sm:text-lg font-bold text-goblin brand-font mb-2 sm:mb-3 flex items-center">
-                        <i class="fa-solid fa-list-check mr-2"></i> Résultats de la recherche :
+                        <i class="fa-solid fa-list-check mr-2"></i> Résultats de la recherche&nbsp;:
                     </h3>
                     <div id="search-results-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4"></div>
                 </div>
@@ -653,8 +729,8 @@
             <div id="empty-players-state" class="hidden flex-col items-center justify-center py-12 sm:py-16 text-amber-900/70 parchment-card rounded-2xl border border-[#d4c5b0]">
                 <i class="fa-solid fa-chess-board text-5xl sm:text-7xl mb-3 opacity-40 text-goblin"></i>
                 <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">Aucune liste de jeu enregistrée.</p>
-                <p class="text-xs sm:text-sm mt-1 font-medium brand-font">Soyez le premier à ajouter votre liste !</p>
-                <button onclick="openCreatePlayerModal()" class="mt-4 bg-goblin hover:bg-[#434c29] text-white font-bold py-2 px-4 rounded-xl shadow transition-all text-xs sm:text-sm brand-font">
+                <p class="text-xs sm:text-sm mt-1 font-medium brand-font">Soyez le premier à ajouter votre liste&nbsp;!</p>
+                <button onclick="openCreatePlayerModal()" class="mt-4 bg-goblin hover:bg-[#434c29] text-white font-bold py-2 px-4 rounded-xl shadow transition-all text-xs sm:text-sm brand-font cursor-pointer">
                     ➕ Créer ma liste
                 </button>
             </div>
@@ -687,9 +763,6 @@
         import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
 
-        // ==========================================
-        // 1. CONFIGURATION & INITIALISATION FIREBASE
-        // ==========================================
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
         let firebaseConfig = null;
         try {
@@ -745,7 +818,6 @@
         let allPlayers = [];
         let allGames = [];
 
-        // Optimisation : compression automatique côté client des images avant envoi
         async function compressImageFile(file, maxWidth = 1200, quality = 0.8) {
             if (!file.type.startsWith('image/')) return file;
             return new Promise((resolve) => {
@@ -777,9 +849,6 @@
             });
         }
 
-        // ==========================================
-        // 2. DIAGNOSTIC VISUEL DES ERREURS FIREBASE
-        // ==========================================
         function showDiagnostic(source, error) {
             console.error(source, error);
             let diag = document.getElementById('firebase-diagnostic-banner');
@@ -793,11 +862,11 @@
             let explanation = "";
             
             if (errStr.includes("permission-denied") || errStr.includes("Missing or insufficient permissions")) {
-                explanation = "<strong>Permissions Firestore bloquées :</strong> Vos règles de sécurité Firestore ont probablement expiré. Dans la console Firebase > <em>Firestore Database</em> > Onglet <em>Règles</em>, vérifiez l'accès.";
+                explanation = "<strong>Permissions Firestore bloquées :</strong> Vos règles de sécurité Firestore ont probablement expiré.";
             } else if (errStr.includes("storage/unauthorized") || errStr.includes("unauthorized")) {
-                explanation = "<strong>Permissions Firebase Storage bloquées :</strong> Dans la console Firebase > <em>Storage</em> > Onglet <em>Règles</em>, assurez-vous d'autoriser l'accès aux utilisateurs authentifiés.";
+                explanation = "<strong>Permissions Firebase Storage bloquées :</strong> Vérifiez les règles d'accès dans Storage.";
             } else if (errStr.includes("operation-not-allowed") || errStr.includes("admin-restricted-operation")) {
-                explanation = "<strong>Authentification Anonyme désactivée :</strong> Rendez-vous sur votre console Firebase > <em>Authentication</em> > Onglet <em>Sign-in method</em> > Activez le fournisseur <strong>Anonyme</strong>.";
+                explanation = "<strong>Authentification Anonyme désactivée :</strong> Activez le fournisseur Anonyme dans Authentication.";
             } else {
                 explanation = "Détail : " + errStr;
             }
@@ -815,9 +884,6 @@
             `;
         }
 
-        // ==========================================
-        // 3. SÉCURITÉ DE LA TAVERNE & BOUTON OEIL
-        // ==========================================
         const TAVERN_SECRET_PASSWORD = "GOB26"; 
 
         const formGatekeeper = document.getElementById('form-gatekeeper');
@@ -867,9 +933,6 @@
             });
         }
 
-        // ==========================================
-        // 4. WEBHOOK DISCORD & CONSTANTES
-        // ==========================================
         async function notifyDiscord(message) {
             try {
                 const WORKER_URL = 'https://gob-laid-proxy.nellio-cps49.workers.dev/'; 
@@ -902,6 +965,7 @@
             const target = document.getElementById(tabId);
             if (target) target.classList.add('active');
 
+            const navHome = document.getElementById('nav-home');
             const navUpcoming = document.getElementById('nav-upcoming');
             const navTables = document.getElementById('nav-tables');
             const navEvents = document.getElementById('nav-events');
@@ -910,6 +974,7 @@
             const activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center brand-font";
             const inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font";
 
+            if (navHome) navHome.className = tabId === 'home-page' ? activeClass : inactiveClass;
             if (navUpcoming) navUpcoming.className = tabId === 'upcoming-page' ? activeClass : inactiveClass;
             if (navTables) navTables.className = tabId === 'tables-page' ? activeClass : inactiveClass;
             if (navEvents) navEvents.className = tabId === 'events-page' ? activeClass : inactiveClass;
@@ -1061,7 +1126,7 @@
                 currentEvents = [];
                 snapshot.forEach((doc) => { currentEvents.push({ id: doc.id, ...doc.data() }); });
                 currentEvents.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
-                renderCalendar();
+                if(document.getElementById('events-page').classList.contains('active')) renderCalendar();
             }, (error) => {
                 showDiagnostic("Chargement Agenda", error);
             });
@@ -1072,7 +1137,7 @@
                     allPlayers.push({ id: docSnap.id, ...docSnap.data() });
                 });
                 allPlayers.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'fr', { sensitivity: 'base' }));
-                renderLudoUI();
+                if(document.getElementById('ludo-page').classList.contains('active')) renderLudoUI();
             }, (error) => {
                 showDiagnostic("Chargement Joueurs", error);
             });
@@ -1082,7 +1147,7 @@
                 snapshot.forEach(docSnap => {
                     allGames.push({ id: docSnap.id, ...docSnap.data() });
                 });
-                renderLudoUI();
+                if(document.getElementById('ludo-page').classList.contains('active')) renderLudoUI();
             }, (error) => {
                 showDiagnostic("Chargement Jeux", error);
             });
@@ -1094,6 +1159,12 @@
             proposeUpcomingForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 if (!currentUser) return showToast("Connexion requise.", true);
+                
+                // Code administrateur requis pour créer un événement
+                const pin = prompt("Veuillez saisir le code PIN administrateur pour créer cet événement :");
+                if (pin !== MASTER_PIN) {
+                    return showToast("Code PIN incorrect. Création annulée.", true);
+                }
 
                 const title = document.getElementById('upcomingTitle').value.trim();
                 const dateText = document.getElementById('upcomingDate').value.trim();
@@ -1111,7 +1182,6 @@
                     let docUrl = null;
                     let docName = null;
 
-                    // Upload optimisé de l'image sur Firebase Storage
                     if (imageInput.files && imageInput.files[0]) {
                         const originalFile = imageInput.files[0];
                         const compressedFile = await compressImageFile(originalFile);
@@ -1121,7 +1191,6 @@
                         imageUrl = await getDownloadURL(imageRef);
                     }
 
-                    // Upload optimisé du document sur Firebase Storage
                     if (docInput.files && docInput.files[0]) {
                         const docFile = docInput.files[0];
                         docName = docFile.name;
@@ -1711,20 +1780,20 @@
                         <div id="table-content-${table.id}" class="${isExpanded ? '' : 'hidden'} mt-2.5 pt-2.5 border-t border-[#e2d5c3]">
                             <div class="text-xs sm:text-sm text-[#5d4037] font-medium mb-2 flex flex-wrap items-center min-w-0 brand-font">
                                 <i class="fa-solid fa-user-tie text-amber-600 mr-1.5 shrink-0"></i> 
-                                <strong class="shrink-0">Hôte :</strong>&nbsp;
+                                <strong class="shrink-0">Hôte&nbsp;:</strong>&nbsp;
                                 <span class="break-words min-w-0 brand-font">${table.hostName}</span>
                             </div>
 
                             ${table.description ? `<p class="text-[#5d4037] mb-2.5 bg-[#fdfaf5] p-2 sm:p-2.5 rounded-lg border border-[#e2d5c3] italic text-xs sm:text-sm break-words overflow-hidden brand-font"><i class="fa-solid fa-quote-left text-gray-300 mr-1.5"></i>${table.description}</p>` : ''}
 
                             <div class="bg-[#fbf7f0] p-2 sm:p-2.5 rounded-lg border border-[#e2d5c3] mb-2.5">
-                                <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 block mb-1.5 brand-font"><i class="fa-solid fa-list-check mr-1"></i> Joueurs inscrits (${currentPlayersCount}) :</span>
+                                <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 block mb-1.5 brand-font"><i class="fa-solid fa-list-check mr-1"></i> Joueurs inscrits (${currentPlayersCount})&nbsp;:</span>
                                 <div class="flex flex-wrap gap-1.5 min-w-0">${playersHtml}</div>
                             </div>
 
                             ${!isFull ? `
                                 <div class="pt-2 border-t border-[#e2d5c3] mb-2.5">
-                                    <label for="join-input-${table.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1 brand-font">Rejoindre cette table :</label>
+                                    <label for="join-input-${table.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1 brand-font">Rejoindre cette table&nbsp;:</label>
                                     <div class="flex gap-1.5 sm:gap-2">
                                         <input type="text" id="join-input-${table.id}" placeholder="Votre nom ou pseudo" class="flex-grow min-w-0 bg-white border border-[#d4c5b0] rounded-md py-1 px-2 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
                                         <button onclick="joinTable('${table.id}', 'join-input-${table.id}',${table.maxPlayers})" class="shrink-0 bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-2.5 sm:px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap brand-font cursor-pointer">
@@ -1763,6 +1832,12 @@
             proposeEventForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 if (!currentUser) return showToast("Connexion requise.", true);
+
+                // Code administrateur requis pour créer un événement dans le calendrier
+                const pin = prompt("Veuillez saisir le code PIN administrateur pour créer cet événement :");
+                if (pin !== MASTER_PIN) {
+                    return showToast("Code PIN incorrect. Création annulée.", true);
+                }
 
                 const title = document.getElementById('eventTitle').value.trim();
                 const type = document.getElementById('eventType').value;
@@ -1910,8 +1985,8 @@
                     <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font">${ev.title}</h2>
 
                     <div class="space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-[#5d4037] font-medium bg-[#fbf7f0] p-2.5 sm:p-3 rounded-lg border border-[#e2d5c3] brand-font">
-                        <p><i class="fa-regular fa-calendar text-[#586337] mr-2"></i><strong>Date :</strong> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
-                        <p><i class="fa-solid fa-location-dot text-[#586337] mr-2"></i><strong>Lieu :</strong> ${ev.location}</p>
+                        <p><i class="fa-regular fa-calendar text-[#586337] mr-2"></i><strong>Date&nbsp;:</strong> ${formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1)}</p>
+                        <p><i class="fa-solid fa-location-dot text-[#586337] mr-2"></i><strong>Lieu&nbsp;:</strong> ${ev.location}</p>
                     </div>
 
                     ${ev.description ? `
@@ -1921,12 +1996,12 @@
                     ` : ''}
 
                     <div class="bg-[#fbf7f0] p-2.5 rounded-lg border border-[#e2d5c3]">
-                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 block mb-1.5 brand-font"><i class="fa-solid fa-users mr-1"></i> Participants inscrits (${playersCount}) :</span>
+                        <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 block mb-1.5 brand-font"><i class="fa-solid fa-users mr-1"></i> Participants inscrits (${playersCount})&nbsp;:</span>
                         <div class="flex flex-wrap gap-1.5">${playersHtml}</div>
                     </div>
 
                     <div class="pt-2 border-t border-[#e2d5c3]">
-                        <label for="join-event-input-${ev.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1 brand-font">Participer à cet événement :</label>
+                        <label for="join-event-input-${ev.id}" class="block text-[11px] sm:text-xs font-bold text-[#5d4037] mb-1 brand-font">Participer à cet événement&nbsp;:</label>
                         <div class="flex gap-2">
                             <input type="text" id="join-event-input-${ev.id}" placeholder="Votre nom ou pseudo" class="flex-grow bg-white border border-[#d4c5b0] rounded-md py-1 px-2.5 text-xs sm:text-sm text-[#3e2723] focus:outline-none focus:border-[#586337]">
                             <button onclick="joinEvent('${ev.id}', 'join-event-input-${ev.id}')" class="bg-goblin hover:bg-[#434c29] text-white font-bold text-xs px-3 py-1 rounded-md transition-colors shadow-2xs flex items-center whitespace-nowrap brand-font cursor-pointer">
@@ -2302,7 +2377,7 @@
                                 <i class="fa-solid fa-dice text-amber-700 mr-1.5"></i>${item.displayName}
                             </h4>
                             <div class="text-xs text-[#5d4037] brand-font">
-                                <span class="font-bold text-amber-900 brand-font">Possédé par (${item.owners.length}) :</span>
+                                <span class="font-bold text-amber-900 brand-font">Possédé par (${item.owners.length})&nbsp;:</span>
                                 <div class="flex flex-wrap gap-1 mt-1">
                                     ${item.owners.map(owner => `
                                         <span class="bg-amber-100 text-amber-900 px-1.5 py-0.5 rounded-md font-semibold border border-amber-200 text-[11px] brand-font">
