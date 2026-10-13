@@ -677,9 +677,9 @@
 
     <!-- Application Unifiée - Firebase Le Gob' laid -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
         // ==========================================
         // SÉCURITÉ DE LA TAVERNE & MOT DE PASSE
@@ -691,7 +691,6 @@
         const gateError = document.getElementById('gate-error');
 
         // Mémorisation permanente de l'accès (localStorage)
-        // Vérifie le mot de passe actuel : réclame le mot de passe si celui-ci a changé
         if (localStorage.getItem('antre_unlocked') === TAVERN_SECRET_PASSWORD) {
             if (securityGate) securityGate.classList.add('hidden');
             initAuth();
@@ -943,9 +942,7 @@
             onSnapshot(upcomingCollection, (snapshot) => {
                 currentUpcoming = [];
                 snapshot.forEach((doc) => { currentUpcoming.push({ id: doc.id, ...doc.data() }); });
-                
                 currentUpcoming.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
-
                 renderUpcomingEvents();
             }, (error) => {
                 console.error("Firestore error (upcoming):", error);
@@ -1880,7 +1877,7 @@
             const month = calendarDate.getMonth();
             const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
             const monthTitle = document.getElementById('calendar-month-year');
-            if (monthTitle) monthTitle.innerHTML = `<i class="fa-regular fa-calendar-days mr-1.5 sm:mr-2"></i> ${monthNames[month]}${year}`;
+            if (monthTitle) monthTitle.innerHTML = `<i class="fa-regular fa-calendar-days mr-1.5 sm:mr-2"></i> ${monthNames[month]} ${year}`;
 
             const tbody = document.getElementById('calendar-grid-body');
             if (!tbody) return;
@@ -1933,7 +1930,7 @@
                                 const evBadge = document.createElement('button');
                                 evBadge.className = `w-full text-left text-[9px] sm:text-[11px] font-bold p-0.5 sm:p-1 rounded ${colorConfig.badge} shadow-sm hover:opacity-90 transition-opacity flex items-center justify-between gap-1 min-w-0 brand-font`;
                                 evBadge.innerHTML = `
-                                    <span class="truncate min-w-0 brand-font"><span class="opacity-80 hidden sm:inline">${ev.time}</span>${ev.title}</span>
+                                    <span class="truncate min-w-0 brand-font"><span class="opacity-80 hidden sm:inline">${ev.time} </span>${ev.title}</span>
                                     <span class="shrink-0 bg-black/20 text-white text-[8px] sm:text-[10px] px-1 py-0.5 rounded-full font-bold flex items-center leading-none brand-font" title="${count} inscrit(s)">
                                         <i class="fa-solid fa-user text-[7px] sm:text-[8px] mr-0.5"></i>${count}
                                     </span>
