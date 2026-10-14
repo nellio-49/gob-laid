@@ -371,15 +371,18 @@
                     </p>
                 </div>
 
-                <!-- Grille des fonctionnalités -->
+              <!-- Grille des fonctionnalités (cliquables) -->
                 <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <!-- Événements -->
-                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] backdrop-blur-[2px] shadow-md">
-                        <div class="bg-goblin text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                    <div onclick="switchTab('upcoming-page')" class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-goblin hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-0.5 group">
+                        <div class="bg-goblin group-hover:bg-[#434c29] text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center transition-colors">
                             <i class="fa-solid fa-bullhorn text-lg"></i>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">Événements</h3>
+                        <div class="flex-grow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-bold text-[#3e2723] group-hover:text-goblin brand-font mb-0.5 transition-colors">Événements</h3>
+                                <i class="fa-solid fa-arrow-right text-xs text-[#8d6e63] group-hover:text-goblin group-hover:translate-x-1 transition-all"></i>
+                            </div>
                             <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
                                 Les grands rendez-vous, tournois et temps forts du clan.
                             </p>
@@ -387,12 +390,15 @@
                     </div>
 
                     <!-- Soirées Torgnoles -->
-                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] backdrop-blur-[2px] shadow-md">
-                        <div class="bg-goblin text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                    <div onclick="switchTab('tables-page')" class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-goblin hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-0.5 group">
+                        <div class="bg-goblin group-hover:bg-[#434c29] text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center transition-colors">
                             <i class="fa-solid fa-dice-d6 text-lg"></i>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">Soirées Torgnoles</h3>
+                        <div class="flex-grow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-bold text-[#3e2723] group-hover:text-goblin brand-font mb-0.5 transition-colors">Soirées Torgnoles</h3>
+                                <i class="fa-solid fa-arrow-right text-xs text-[#8d6e63] group-hover:text-goblin group-hover:translate-x-1 transition-all"></i>
+                            </div>
                             <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
                                 Proposez une table de jeu ou rejoignez-en une.
                                 <span class="block text-[11px] text-amber-900 italic mt-1 font-semibold">
@@ -403,12 +409,15 @@
                     </div>
 
                     <!-- Gob'genda -->
-                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] backdrop-blur-[2px] shadow-md">
-                        <div class="bg-goblin text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                    <div onclick="switchTab('events-page')" class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-goblin hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-0.5 group">
+                        <div class="bg-goblin group-hover:bg-[#434c29] text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center transition-colors">
                             <i class="fa-regular fa-calendar-days text-lg"></i>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">Gob'genda</h3>
+                        <div class="flex-grow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-bold text-[#3e2723] group-hover:text-goblin brand-font mb-0.5 transition-colors">Gob'genda</h3>
+                                <i class="fa-solid fa-arrow-right text-xs text-[#8d6e63] group-hover:text-goblin group-hover:translate-x-1 transition-all"></i>
+                            </div>
                             <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
                                 Le calendrier du clan. Consultez les dates prévues et confirmez votre présence en un clic.
                             </p>
@@ -416,19 +425,21 @@
                     </div>
 
                     <!-- La Réserve -->
-                    <div class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] backdrop-blur-[2px] shadow-md">
-                        <div class="bg-goblin text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center">
+                    <div onclick="switchTab('ludo-page')" class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-goblin hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-0.5 group">
+                        <div class="bg-goblin group-hover:bg-[#434c29] text-white w-11 h-11 rounded-xl shadow-md shrink-0 flex items-center justify-center transition-colors">
                             <i class="fa-solid fa-boxes-stacked text-lg"></i>
                         </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-[#3e2723] brand-font mb-0.5">La Réserve</h3>
+                        <div class="flex-grow">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-bold text-[#3e2723] group-hover:text-goblin brand-font mb-0.5 transition-colors">La Réserve</h3>
+                                <i class="fa-solid fa-arrow-right text-xs text-[#8d6e63] group-hover:text-goblin group-hover:translate-x-1 transition-all"></i>
+                            </div>
                             <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
                                 La ludothèque partagée du clan. Découvrez qui possède quel jeu et partagez votre propre butin.
                             </p>
                         </div>
                     </div>
                 </div>
-
                 <!-- Note Discord sous les rubriques -->
                 <p class="text-center text-xs sm:text-sm text-[#f3ece0] font-semibold mt-6 sm:mt-8 brand-font flex items-center justify-center gap-2 drop-shadow">
                     <i class="fa-brands fa-discord text-[#8f9e73] text-base"></i>
