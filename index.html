@@ -138,7 +138,7 @@
                     </div>
                 </div>
 
-                <!-- Navigation en haut à droite (5 Onglets) -->
+                <!-- Navigation en haut à droite (6 Onglets) -->
                 <nav class="flex flex-wrap justify-center items-center bg-[#f0e6d2]/80 p-1 rounded-xl border border-[#d4c5b0] gap-1 shadow-sm w-full sm:w-auto">
                     <button onclick="switchTab('home-page')" id="nav-home" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center brand-font">
                         <i class="fa-solid fa-dungeon mr-1.5"></i> Accueil
@@ -155,6 +155,9 @@
                     <button onclick="switchTab('ludo-page')" id="nav-ludo" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font">
                         <i class="fa-solid fa-boxes-stacked mr-1.5"></i> Réserve
                     </button>
+                    <button onclick="switchTab('clan-page')" id="nav-clan" class="px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font">
+                        <i class="fa-solid fa-shield-halved mr-1.5"></i> Clan
+                    </button>
                 </nav>
             </div>
         </div>
@@ -170,6 +173,17 @@
     <div id="event-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3 sm:p-4">
         <div class="parchment-card max-w-lg w-full rounded-2xl shadow-2xl p-4 sm:p-6 relative border-2 border-[#586337]">
             <div id="event-modal-content"></div>
+        </div>
+    </div>
+
+    <!-- MODAL : Zoom Carte de membre (Clan) -->
+    <div id="card-zoom-modal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 cursor-pointer" onclick="closeCardZoomModal()">
+        <div class="parchment-card max-w-2xl w-full rounded-2xl shadow-2xl p-3 sm:p-5 relative border-2 border-[#586337]" onclick="event.stopPropagation()">
+            <button onclick="closeCardZoomModal()" class="absolute top-2 right-3 text-gray-500 hover:text-red-700 text-2xl font-bold cursor-pointer">&times;</button>
+            <h3 id="card-zoom-title" class="text-lg sm:text-xl font-bold text-[#3e2723] brand-font mb-3 text-center"></h3>
+            <div class="rounded-xl overflow-hidden border border-[#d4c5b0] bg-black/10 flex justify-center">
+                <img id="card-zoom-img" src="" alt="Carte de membre" class="w-full max-h-[75vh] object-contain block rounded-lg">
+            </div>
         </div>
     </div>
 
@@ -371,7 +385,7 @@
                     </p>
                 </div>
 
-              <!-- Grille des fonctionnalités (cliquables) -->
+                <!-- Grille des fonctionnalités (cliquables) -->
                 <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
                     <!-- Événements -->
                     <div onclick="switchTab('upcoming-page')" class="flex items-start gap-3.5 p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-goblin hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer transform hover:-translate-y-0.5 group">
@@ -386,7 +400,7 @@
                             <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
                                 Les grands rendez-vous, tournois et temps forts du clan.
                                 <span class="block text-[11px] text-amber-900 italic mt-1 font-semibold">
-                                    * Seul un "Grand Concasseur" peut créer un événement.
+                                    * Seul un « Grand Concasseur » peut créer un événement.
                                 </span>
                             </p>
                         </div>
@@ -424,7 +438,7 @@
                             <p class="text-xs sm:text-sm text-[#5d4037] font-medium brand-font">
                                 Le calendrier du clan. Consultez les dates prévues et confirmez votre présence en un clic.
                                 <span class="block text-[11px] text-amber-900 italic mt-1 font-semibold">
-                                    * Seul un "Grand Concasseur" peut créer un événement.
+                                    * Seul un « Grand Concasseur » peut créer un événement.
                                 </span>
                             </p>
                         </div>
@@ -505,9 +519,9 @@
                     </div>
                 </div>
 
-                <!-- Fenêtre des Événements en approche -->
+                <!-- Fenêtre des Événements en approche (transparence accentuée) -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white/70 rounded-xl p-3 sm:p-6 min-h-[400px] sm:min-h-[500px] backdrop-blur-md border border-[#e2d5c3]/50 shadow-lg">
+                    <div class="bg-white/30 rounded-xl p-3 sm:p-6 min-h-[400px] sm:min-h-[500px] backdrop-blur-md border border-[#e2d5c3]/50 shadow-lg">
                         <div class="flex justify-between items-end mb-4 sm:mb-6 border-b-2 border-[#d4c5b0]/50 pb-2 sm:pb-3">
                             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font"><i class="fa-solid fa-flag text-[#586337] mr-2"></i> Événements à venir</h2>
                         </div>
@@ -584,8 +598,9 @@
                     </div>
                 </div>
 
+                <!-- Fenêtre des Tables Prévues (transparence accentuée) -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white/70 rounded-xl p-3 sm:p-6 min-h-[400px] sm:min-h-[500px] backdrop-blur-md border border-[#e2d5c3]/50 shadow-lg">
+                    <div class="bg-white/30 rounded-xl p-3 sm:p-6 min-h-[400px] sm:min-h-[500px] backdrop-blur-md border border-[#e2d5c3]/50 shadow-lg">
                         <div class="flex justify-between items-end mb-4 sm:mb-6 border-b-2 border-[#d4c5b0]/50 pb-2 sm:pb-3">
                             <h2 class="text-xl sm:text-2xl font-bold text-[#3e2723] brand-font"><i class="fa-regular fa-calendar-days text-[#586337] mr-2"></i> Tables Prévues</h2>
                             <div class="text-xs sm:text-sm font-medium text-amber-800 brand-font" id="loading-indicator">
@@ -597,7 +612,7 @@
                         
                         <div id="empty-state" class="hidden flex-col items-center justify-center py-12 sm:py-16 text-amber-900/70">
                             <i class="fa-solid fa-spider text-5xl sm:text-7xl mb-3 opacity-40"></i>
-                            <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">L'Antre est vide.</p>
+                            <p class="text-lg sm:text-xl font-bold brand-font text-amber-950/70">La Taverne est vide.</p>
                             <p class="text-sm sm:text-md mt-1 font-medium brand-font">Soyez le premier à proposer une table&nbsp;!</p>
                         </div>
                     </div>
@@ -756,6 +771,91 @@
                 <button onclick="openCreatePlayerModal()" class="mt-4 bg-goblin hover:bg-[#434c29] text-white font-bold py-2 px-4 rounded-xl shadow transition-all text-xs sm:text-sm brand-font cursor-pointer">
                     ➕ Créer ma liste
                 </button>
+            </div>
+        </section>
+
+        <!-- ONGLET 5 : LE CLAN -->
+        <section id="clan-page" class="tab-content">
+            <div class="text-center mb-6 sm:mb-10">
+                <h1 class="text-2xl sm:text-4xl font-bold text-[#fbf7f0] mb-2 sm:mb-3 brand-font drop-shadow-md">
+                    La hiérarchie du clan
+                </h1>
+                <p class="text-sm sm:text-lg text-[#f3ece0] max-w-2xl mx-auto font-medium brand-font drop-shadow">
+                    Le clan se compose de quatre rangs.
+                </p>
+            </div>
+
+            <!-- Grille des 4 rangs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto">
+                
+                <!-- Rang 1 : Ronge-os -->
+                <div class="flex flex-col p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-[#586337] hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-xl transition-all duration-200">
+                    <div class="flex items-center justify-between mb-3 border-b border-[#e2d5c3] pb-2">
+                        <span class="text-xs font-bold text-[#8d6e63] uppercase tracking-wider brand-font">Rang I</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#e8edda] text-[#586337] brand-font">Novice</span>
+                    </div>
+                    <div class="overflow-hidden rounded-lg border border-[#d4c5b0] bg-black/10 cursor-zoom-in group" onclick="openCardZoom('1.png', 'Ronge-os')">
+                        <img src="1.png" alt="Carte Ronge-os" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="text-lg font-bold text-[#3e2723] brand-font mt-3 mb-1 text-center">Ronge-os</h3>
+                    <p class="mt-auto pt-2 text-center text-[11px] sm:text-xs text-amber-900 italic font-semibold brand-font border-t border-[#e2d5c3]">
+                        * Remise dès la première inscription au clan.
+                    </p>
+                </div>
+
+                <!-- Rang 2 : Brise-os -->
+                <div class="flex flex-col p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-[#586337] hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-xl transition-all duration-200">
+                    <div class="flex items-center justify-between mb-3 border-b border-[#e2d5c3] pb-2">
+                        <span class="text-xs font-bold text-[#8d6e63] uppercase tracking-wider brand-font">Rang II</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 brand-font">Initié</span>
+                    </div>
+                    <div class="overflow-hidden rounded-lg border border-[#d4c5b0] bg-black/10 cursor-zoom-in group" onclick="openCardZoom('2.png', 'Brise-os')">
+                        <img src="2.png" alt="Carte Brise-os" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="text-lg font-bold text-[#3e2723] brand-font mt-3 mb-1 text-center">Brise-os</h3>
+                    <p class="mt-auto pt-2 text-center text-[11px] sm:text-xs text-amber-900 italic font-semibold brand-font border-t border-[#e2d5c3]">
+                        * Remise après un an, selon l'assiduité aux activités.
+                    </p>
+                </div>
+
+                <!-- Rang 3 : Concasseur -->
+                <div class="flex flex-col p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-[#586337] hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-xl transition-all duration-200">
+                    <div class="flex items-center justify-between mb-3 border-b border-[#e2d5c3] pb-2">
+                        <span class="text-xs font-bold text-[#8d6e63] uppercase tracking-wider brand-font">Rang III</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800 brand-font">Actif</span>
+                    </div>
+                    <div class="overflow-hidden rounded-lg border border-[#d4c5b0] bg-black/10 cursor-zoom-in group" onclick="openCardZoom('3.png', 'Concasseur')">
+                        <img src="3.png" alt="Carte Concasseur" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="text-lg font-bold text-[#3e2723] brand-font mt-3 mb-1 text-center">Concasseur</h3>
+                    <p class="mt-auto pt-2 text-center text-[11px] sm:text-xs text-amber-900 italic font-semibold brand-font border-t border-[#e2d5c3]">
+                        * Remise en récompense de l'engagement dans le clan.
+                    </p>
+                </div>
+
+                <!-- Rang 4 : Grand Concasseur -->
+                <div class="flex flex-col p-4 rounded-xl bg-[#fbf7f0]/90 border border-[#d4c5b0] hover:border-[#586337] hover:bg-white backdrop-blur-[2px] shadow-md hover:shadow-xl transition-all duration-200">
+                    <div class="flex items-center justify-between mb-3 border-b border-[#e2d5c3] pb-2">
+                        <span class="text-xs font-bold text-[#8d6e63] uppercase tracking-wider brand-font">Rang IV</span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-900 border border-yellow-300 brand-font">Leader</span>
+                    </div>
+                    <div class="overflow-hidden rounded-lg border border-[#d4c5b0] bg-black/10 cursor-zoom-in group" onclick="openCardZoom('4.jpg', 'Grand Concasseur')">
+                        <img src="4.jpg" alt="Carte Grand Concasseur" class="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <h3 class="text-lg font-bold text-[#3e2723] brand-font mt-3 mb-1 text-center">Grand Concasseur</h3>
+                    <p class="mt-auto pt-2 text-center text-[11px] sm:text-xs text-amber-900 italic font-semibold brand-font border-t border-[#e2d5c3]">
+                        * Remise aux membres les plus méritants.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Bannière d'avertissement -->
+            <div class="mt-8 max-w-3xl mx-auto p-4 rounded-xl bg-amber-100/90 border border-amber-300/90 shadow-md text-amber-950 flex items-center gap-3.5 brand-font">
+                <i class="fa-solid fa-triangle-exclamation text-amber-700 text-xl sm:text-2xl shrink-0"></i>
+                <p class="text-xs sm:text-sm font-semibold leading-relaxed">
+                    <strong>Attention&nbsp;:</strong> tout membre du clan doit pouvoir présenter sa carte à un camarade. Tout manquement entraînera une sanction… ou d'offrir une boisson&nbsp;!
+                </p>
             </div>
         </section>
 
@@ -993,6 +1093,7 @@
             const navTables = document.getElementById('nav-tables');
             const navEvents = document.getElementById('nav-events');
             const navLudo = document.getElementById('nav-ludo');
+            const navClan = document.getElementById('nav-clan');
 
             const activeClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all bg-[#586337] text-white shadow-sm flex items-center brand-font";
             const inactiveClass = "px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-lg font-bold text-[11px] sm:text-sm transition-all text-[#5d4037] hover:text-[#586337] hover:bg-white/80 flex items-center brand-font";
@@ -1002,9 +1103,26 @@
             if (navTables) navTables.className = tabId === 'tables-page' ? activeClass : inactiveClass;
             if (navEvents) navEvents.className = tabId === 'events-page' ? activeClass : inactiveClass;
             if (navLudo) navLudo.className = tabId === 'ludo-page' ? activeClass : inactiveClass;
+            if (navClan) navClan.className = tabId === 'clan-page' ? activeClass : inactiveClass;
 
             if (tabId === 'events-page') renderCalendar();
             if (tabId === 'ludo-page') renderLudoUI();
+        };
+
+        window.openCardZoom = function(imgSrc, title) {
+            const modal = document.getElementById('card-zoom-modal');
+            const img = document.getElementById('card-zoom-img');
+            const titleEl = document.getElementById('card-zoom-title');
+            if (modal && img) {
+                img.src = imgSrc;
+                if (titleEl) titleEl.textContent = title;
+                modal.classList.remove('hidden');
+            }
+        };
+
+        window.closeCardZoomModal = function() {
+            const modal = document.getElementById('card-zoom-modal');
+            if (modal) modal.classList.add('hidden');
         };
 
         window.toggleUpcomingForm = function() {
