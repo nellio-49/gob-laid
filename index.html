@@ -265,10 +265,18 @@
                 <div>
                     <label for="edit-upcoming-image" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Remplacer l'affiche / image (Optionnel)</label>
                     <input type="file" id="edit-upcoming-image" accept="image/*" class="w-full bg-white border border-[#d4c5b0] rounded-md py-1.5 px-2 text-xs text-[#3e2723]">
+                    <div id="remove-image-wrapper" class="hidden mt-1.5 flex items-center">
+                        <input type="checkbox" id="remove-upcoming-image" class="mr-2 cursor-pointer w-4 h-4 text-red-600 focus:ring-red-500 rounded">
+                        <label for="remove-upcoming-image" class="text-xs text-red-600 font-bold cursor-pointer hover:underline">Supprimer l'affiche existante</label>
+                    </div>
                 </div>
                 <div>
                     <label for="edit-upcoming-doc" class="block text-xs sm:text-sm font-bold text-[#5d4037] mb-1">Remplacer le document joint (Optionnel)</label>
                     <input type="file" id="edit-upcoming-doc" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,image/*" class="w-full bg-white border border-[#d4c5b0] rounded-md py-1.5 px-2 text-xs text-[#3e2723]">
+                    <div id="remove-doc-wrapper" class="hidden mt-1.5 flex items-center">
+                        <input type="checkbox" id="remove-upcoming-doc" class="mr-2 cursor-pointer w-4 h-4 text-red-600 focus:ring-red-500 rounded">
+                        <label for="remove-upcoming-doc" class="text-xs text-red-600 font-bold cursor-pointer hover:underline">Supprimer le document existant</label>
+                    </div>
                 </div>
                 
                 <div class="pt-2 flex justify-end gap-2">
@@ -855,7 +863,6 @@
                 <i class="fa-solid fa-triangle-exclamation text-amber-700 text-xl sm:text-2xl shrink-0"></i>
                 <p class="text-xs sm:text-sm font-semibold leading-relaxed">
                     <strong>Attention&nbsp;:</strong> carte oubliée, tournée payée ! Tout Gob contrôlé sans sa carte devra s'acquitter d'une boisson d'office&nbsp;!
-    </p>&nbsp;
                 </p>
             </div>
         </section>
@@ -884,7 +891,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, setDoc, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove, deleteField } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-storage.js";
 
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'le-gob-laid-app';
@@ -1394,6 +1401,24 @@
             document.getElementById('edit-upcoming-image').value = '';
             document.getElementById('edit-upcoming-doc').value = '';
 
+            const removeImgWrapper = document.getElementById('remove-image-wrapper');
+            const removeImgCheckbox = document.getElementById('remove-upcoming-image');
+            if (eventItem.imageUrl || eventItem.imageBase64) {
+                removeImgWrapper.classList.remove('hidden');
+                removeImgCheckbox.checked = false;
+            } else {
+                removeImgWrapper.classList.add('hidden');
+            }
+
+            const removeDocWrapper = document.getElementById('remove-doc-wrapper');
+            const removeDocCheckbox = document.getElementById('remove-upcoming-doc');
+            if (eventItem.docUrl || eventItem.docBase64) {
+                removeDocWrapper.classList.remove('hidden');
+                removeDocCheckbox.checked = false;
+            } else {
+                removeDocWrapper.classList.add('hidden');
+            }
+
             document.getElementById('edit-upcoming-modal').classList.remove('hidden');
         };
 
@@ -1413,6 +1438,8 @@
                 const description = document.getElementById('edit-upcoming-description').value.trim();
                 const imageInput = document.getElementById('edit-upcoming-image');
                 const docInput = document.getElementById('edit-upcoming-doc');
+                const removeImgChecked = document.getElementById('remove-upcoming-image').checked;
+                const removeDocChecked = document.getElementById('remove-upcoming-doc').checked;
 
                 const btn = e.target.querySelector('button[type="submit"]');
                 const originalText = btn.innerHTML;
@@ -1426,7 +1453,10 @@
                         description
                     };
 
-                    if (imageInput.files && imageInput.files[0]) {
+                    if (removeImgChecked) {
+                        updateData.imageUrl = deleteField();
+                        updateData.imageBase64 = deleteField();
+                    } else if (imageInput.files && imageInput.files[0]) {
                         const originalFile = imageInput.files[0];
                         const compressedFile = await compressImageFile(originalFile);
                         const base64Img = await fileToBase64(compressedFile);
@@ -1434,7 +1464,11 @@
                         updateData.imageBase64 = base64Img;
                     }
 
-                    if (docInput.files && docInput.files[0]) {
+                    if (removeDocChecked) {
+                        updateData.docName = deleteField();
+                        updateData.docUrl = deleteField();
+                        updateData.docBase64 = deleteField();
+                    } else if (docInput.files && docInput.files[0]) {
                         const docFile = docInput.files[0];
                         if (docFile.size > 800 * 1024) {
                             throw new Error("Le document dépasse 800 Ko. Veuillez l'alléger.");
@@ -1506,6 +1540,7 @@
                     const isExpanded = expandedUpcomingCards.has(item.id);
                     const imageSrc = item.imageUrl || item.imageBase64;
                     const docHref = item.docUrl || item.docBase64;
+                    const isDocImage = docHref && docHref.startsWith('data:image/');
 
                     const card = document.createElement('div');
                     card.className = "parchment-card rounded-xl border-l-4 border-l-[#586337] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden p-3 sm:p-4";
@@ -1529,13 +1564,19 @@
                                 </div>
                             ` : ''}
 
-                            ${docHref ? `
-                                <div class="pt-3">
-                                    <a href="${docHref}" target="_blank" rel="noopener noreferrer" download="${item.docName || 'document'}" class="inline-flex items-center bg-[#586337] hover:bg-[#434c29] text-white text-xs font-bold py-2 px-3 rounded-lg shadow transition-colors brand-font">
-                                        <i class="fa-solid fa-file-arrow-down mr-2 text-sm"></i> Télécharger le document (${item.docName || 'Document joint'})
-                                    </a>
-                                </div>
-                            ` : ''}
+                            ${docHref ? (
+                                isDocImage ? `
+                                    <div class="mt-3 rounded-xl overflow-hidden border border-[#d4c5b0] max-h-96 flex justify-center bg-black/5 p-1">
+                                        <img src="${docHref}" alt="${item.docName || 'Document joint'}" loading="lazy" class="object-contain max-h-96 w-full block rounded-lg shadow-sm">
+                                    </div>
+                                ` : `
+                                    <div class="pt-3">
+                                        <a href="${docHref}" target="_blank" rel="noopener noreferrer" download="${item.docName || 'document'}" class="inline-flex items-center bg-[#586337] hover:bg-[#434c29] text-white text-xs font-bold py-2 px-3 rounded-lg shadow transition-colors brand-font">
+                                            <i class="fa-solid fa-file-arrow-down mr-2 text-sm"></i> Télécharger le document (${item.docName || 'Document joint'})
+                                        </a>
+                                    </div>
+                                `
+                            ) : ''}
 
                             <div class="pt-3 mt-3 flex justify-end items-center gap-1.5 border-t border-[#e2d5c3]">
                                 <button onclick="openEditUpcomingModal('${item.id}')" class="bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-600 font-bold text-xs py-1 px-2.5 rounded-lg transition-colors shadow-2xs flex items-center brand-font cursor-pointer">
@@ -2446,6 +2487,30 @@
                 showToast("Erreur de suppression.", true); 
             }
         };
+        
+        window.editGame = async (gameId, playerId, currentName) => {
+            const player = allPlayers.find(p => p.id === playerId);
+            const unlockedPins = getUnlockedPins();
+
+            if (!player || unlockedPins[playerId] !== player.pin) {
+                return showToast("Seul le propriétaire peut modifier ce jeu !", true);
+            }
+
+            const newName = prompt("Modifier le nom du jeu :", currentName);
+            if (newName !== null) {
+                const trimmedName = newName.trim();
+                if (trimmedName && trimmedName !== currentName) {
+                    try {
+                        await updateDoc(getDocRef('ludo_jeux', gameId), { name: trimmedName });
+                        showToast("Jeu modifié.");
+                        focusGameInput(playerId);
+                    } catch (err) {
+                        showDiagnostic("Modification Jeu", err);
+                        showToast("Erreur de modification.", true);
+                    }
+                }
+            }
+        };
 
         window.deletePlayerList = async (playerId) => {
             const player = allPlayers.find(p => p.id === playerId);
@@ -2580,7 +2645,10 @@
                     : playerGames.map(g => `
                         <div class="bg-white/90 px-2.5 py-1.5 rounded-lg border border-[#e2d5c3] shadow-2xs flex justify-between items-center text-xs font-medium text-[#3e2723] hover:border-goblin transition-colors brand-font">
                             <span class="truncate pr-2 brand-font">${g.name}</span>${isUnlocked ? `
-                                <button onclick="deleteGame('${g.id}', '${player.id}')" class="text-gray-400 hover:text-red-600 font-bold text-sm px-1 transition-colors cursor-pointer" title="Retirer ce jeu">&times;</button>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button onclick="editGame('${g.id}', '${player.id}', '${g.name.replace(/'/g, "\\'")}')" class="text-blue-500 hover:text-blue-700 font-bold text-sm px-1 transition-colors cursor-pointer" title="Modifier ce jeu"><i class="fa-solid fa-pen"></i></button>
+                                    <button onclick="deleteGame('${g.id}', '${player.id}')" class="text-gray-400 hover:text-red-600 font-bold text-sm px-1 transition-colors cursor-pointer" title="Retirer ce jeu">&times;</button>
+                                </div>
                             ` : ''}
                         </div>
                     `).join('');
